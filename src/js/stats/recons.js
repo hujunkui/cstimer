@@ -1,4 +1,96 @@
 var recons = execMain(function() {
+	var ollfilter = ['PLL', 'Point-1', 'Point-2', 'Point-3', 'Point-4', 'Square-5', 'Square-6', 'SLBS-7', 'SLBS-8', 'Fish-9', 'Fish-10', 'SLBS-11', 'SLBS-12', 'Knight-13', 'Knight-14', 'Knight-15', 'Knight-16', 'Point-17', 'Point-18', 'Point-19', 'CO-20', 'OCLL-21', 'OCLL-22', 'OCLL-23', 'OCLL-24', 'OCLL-25', 'OCLL-26', 'OCLL-27', 'CO-28', 'Awkward-29', 'Awkward-30', 'P-31', 'P-32', 'T-33', 'C-34', 'Fish-35', 'W-36', 'Fish-37', 'W-38', 'BLBS-39', 'BLBS-40', 'Awkward-41', 'Awkward-42', 'P-43', 'P-44', 'T-45', 'C-46', 'L-47', 'L-48', 'L-49', 'L-50', 'I-51', 'I-52', 'L-53', 'L-54', 'I-55', 'I-56', 'CO-57'];
+	var pllfilter = [
+		'H', 'Ua', 'Ub', 'Z',
+		'Aa', 'Ab', 'E', 'F',
+		'Ga', 'Gb', 'Gc', 'Gd',
+		'Ja', 'Jb', 'Na', 'Nb',
+		'Ra', 'Rb', 'T', 'V', 'Y'
+	];
+	var ollAlg = [
+		"R U U' R'",
+		"R U2 R2 F R F' U2 R' F R F'",
+		"y' R U' R2 D' r U r' D R2 U R'",
+		"y R' F2 R2 U2 R' F R U2 R2 F2 R",
+		"y' R' F2 R2 U2 R' F' R U2 R2 F2 R",
+		"r' U2 R U R' U r",
+		"r U2 R' U' R U' r'",
+		"r U R' U R U2 r'",
+		"y2 r' U' R U' R' U2 r",
+		"y R U R' U' R' F R2 U R' U' F'",
+		"R U R' U R' F R F' R U2 R'",
+		"r' R2 U R' U R U2 R' U M'",
+		"y' M' R' U' R U' R' U2 R U' M",
+		"F U R U2 R' U' R U R' F'",
+		"R' F R U R' F' R F U' F'",
+		"r' U' r R' U' R U r' U r",
+		"r U r' R U R' U' r U' r'",
+		"R U R' U R' F R F' U2 R' F R F'",
+		"y R U2 R2 F R F' U2 M' U R U' r'",
+		"y S' R U R' S U' R' F R F'",
+		"r U R' U' M2 U R U' R' U' M'",
+		"R U R' U R U' R' U R U2 R'",
+		"R U2 R2 U' R2 U' R2 U2 R",
+		"R2 D R' U2 R D' R' U2 R'",
+		"r U R' U' r' F R F'",
+		"y F' r U R' U' r' F R",
+		"y R U2 R' U' R U' R'",
+		"R U R' U R U2 R'",
+		"r U R' U' M U R U' R'",
+		"r2 D' r U r' D r2 U' r' U' r",
+		"y' r' D' r U' r' D r2 U' r' U r U r'",
+		"R' U' F U R U' R' F' R",
+		"S R U R' U' R' F R f'",
+		"R U R' U' R' F R F'",
+		"y f R f' U' r' U' R U M'",
+		"R U2 R2 F R F' R U2 R''",
+		"y2 L' U' L U' L' U L U L F' L' F",
+		"F R U' R' U' R U R' F'",
+		"R U R' U R U' R' U' R' F R F'",
+		"y' f' r U r' U' r' F r S",
+		"y R' F R U R' U' F' U R",
+		"y2 R U R' U R U2 R' F R U R' U' F'",
+		"R' U' R U' R' U2 R F R U R' U' F'",
+		"y R' U' F' U F R",
+		"y2 F U R U' R' F'",
+		"F R U R' U' F'",
+		"R' U' R' F R F' U R",
+		"F' L' U' L U L' U' L U F",
+		"F R U R' U' R U R' U' F'",
+		"y2 r U' r2 U r2 U r2 U' r",
+		"r' U r2 U' r2 U' r2 U r'",
+		"y2 F U R U' R' U R U' R' F'",
+		"y2 R' F' U' F U' R U R' U R",
+		"r' U' R U' R' U R U' R' U2 r",
+		"r U R' U R U' R' U R U2 r'",
+		"y R' F U R U' R2 F' R2 U R' U' R",
+		"r U r' U R U' R' U R U' R' r U' r''",
+		"R U R' U' M' U R U' r'"
+	]
+	var pllAlg = [
+		"M2' U' M2' U2' M2' U' M2'",
+		"M2' U' M' U2' M U' M2'",
+		"M U2' M2' U2' M U' M2' U' M2'",
+		"M2' U M' U2' M U M2'",
+		"x R' U R' D2' R U' R' D2' R2' x'",
+		"x R2' D2' R U R' D2' R U' R x'",
+		"x' D R U R' D' R U' R' D R U' R' D' R U R' x y'",
+		"R' U' R U' R' U R U R2' F' R U R U' R' F U R y'",
+		"R2' U R' U R' U' R U' R2' D U' R' U R D'",
+		"R' U' R D' U R2' U R' U R U' R U' R2' D",
+		"R2' U' R U' R U R' U R2' D' U R U' R' D",
+		"D' R U R' U' D R2' U' R U' R' U R' U R2'",
+		"L' R' U2' R U R' U2' L U' R y'",
+		"R U R2' F' R U R U' R' F R U' R'",
+		"R U R' U2' R U R2' F' R U R U' R' F R U' R' U' R U' R'",
+		"F r' F' r U r U' r2' D' F r U r' F' D r",
+		"R U2' R D R' U R D' R' U' R' U R U R' y'",
+		"R' U R U R' U' R' D' R U R' D R U2' R",
+		"F R U' R' U R U R2' F' R U R U' R'",
+		"D2' R' U R D' R2' U' R' U R' U R' D' R U2' R'",
+		"F R' F' R U R U' R' F R U' R' U R U R' F'",
+	]
+
 	var isEnable;
 	var titleStr = TOOLS_RECONS_TITLE.split('|');
 
@@ -9,7 +101,7 @@ var recons = execMain(function() {
 	var methodSelect = $('<select>');
 	var requestBack = $('<span class="click" />');
 	var tableTh = $('<tr>').append($('<th style="padding:0;">').append(methodSelect),
-		'<th>' + titleStr[0] + '</th><th>' + titleStr[1] + '</th><th>' + titleStr[2] + '</th><th>' + titleStr[3] + '</th>');
+		'<th>' + titleStr[0] + '</th><th>' + titleStr[1] + '</th><th>' + titleStr[2] + '</th><th>' + titleStr[3] + '</th><th>' + titleStr[4] + '</th><th>' + "Case" +'</th>');
 
 	function parseMove(moveStr) {
 		var movere = /^([URFDLB]w?|[EMSyxz]|2-2[URFDLB]w)(['2]?)@(\d+)$/;
@@ -113,6 +205,7 @@ var recons = execMain(function() {
 
 	// data = [[name, insp, exec, turn], ...]
 	function renderResult(stepData, tidx, isPercent, scramble, solve) {
+		var ident = cubeutil.getIdentData("PLL");
 		var maxSubt = 0;
 		var sumSubt = 0;
 		var stepSData = [];
@@ -139,8 +232,11 @@ var recons = execMain(function() {
 			'<tr style="$0" data="$1">' +
 			'<td style="padding-bottom:0;padding-top:0;">$4</td>' +
 			'<td style="padding-bottom:0;padding-top:0;">$5</td>' +
+			'<td style="padding-bottom:0;padding-top:0;">$10</td>' +
 			'<td style="padding-bottom:0;padding-top:0;">$6</td>' +
 			'<td style="padding-bottom:0;padding-top:0;">$7</td>' +
+			// '<td style="padding-bottom:0;padding-top:0;">$9</td>' +
+			'<td style="padding-bottom:0;padding-top:0;" width="50"><img src="$11" alt="" style="display: block"></td>' +
 			'</tr>';
 
 		var str = [];
@@ -157,7 +253,7 @@ var recons = execMain(function() {
 			if (isSuperStep) {
 				curSIdx = sDataIdx[i];
 				var sval = stepSData[curSIdx];
-				var trsdata = [
+				let trsdata = [
 					'',
 					sval[0],
 					sval[1] / maxSubt * 100,
@@ -165,17 +261,38 @@ var recons = execMain(function() {
 					isPercent ? Math.round(sval[1] / sumSubt * 1000) / 10 + '%' : kernel.pretty(sval[1]),
 					isPercent ? Math.round(sval[2] / sumSubt * 1000) / 10 + '%' : kernel.pretty(sval[2]),
 					Math.round(sval[3] * 10) / 10,
-					sval[3] > 0 && sval[1] + sval[2] > 0 ? Math.round(sval[3] / (sval[1] + sval[2]) * 10000 ) / 10 : 'N/A',
-					'click sstep'
+					sval[3] > 0 && sval[2] > 0 ? Math.round(sval[3] / (sval[2]) * 10000 ) / 10 : 'N/A',
+					'click sstep',
+					sval[4] === undefined ? "" : sval[4],
+					kernel.pretty(sval[1] + sval[2])
 				];
-				var curTr = trTpl;
-				for (var j = 0; j < 9; j++) {
-					curTr = curTr.replace(new RegExp('\\$' + j, 'g'), trsdata[j]);
+				if (i == 6) {
+					trsdata[11] = "http://cubiclealgdbimagegen.azurewebsites.net/generator?&puzzle=3&case=" +
+						encodeURIComponent(pllAlg[pllfilter.indexOf(val[4])]) +
+						"&view=plan&stage=pll"
 				}
+				else if (i == 5) {
+					if (val[4].includes("-")) {
+						let index = sval[4].split("-")[1];
+						trsdata[11] = "https://cubiclealgdbimagegen.azurewebsites.net/generator?&puzzle=3&case=" +
+							encodeURIComponent(ollAlg[index]) +
+							"&view=plan&stage=oll"
+					} else {
+						trsdata[11] = "/";
+					}
+
+				} else  {
+					trsdata[11] = "/";
+				}
+				let curTr = trTpl;
+				curTr = curTr.replace(/\$\d+/g, function(match) {
+					let index = parseInt(match.substr(1));
+					return trsdata[index];
+				});
 				str.push(curTr);
 			}
 
-			var trdata = [
+			let trdata = [
 				sDataIdx[i] == curSIdx ? 'display:none;' : '',
 				val[0],
 				val[1] / maxSubt * 100,
@@ -183,18 +300,44 @@ var recons = execMain(function() {
 				isPercent ? Math.round(val[1] / sumSubt * 1000) / 10 + '%' : kernel.pretty(val[1]),
 				isPercent ? Math.round(val[2] / sumSubt * 1000) / 10 + '%' : kernel.pretty(val[2]),
 				Math.round(val[3] * 10) / 10,
-				val[3] > 0 && val[1] + val[2] > 0 ? Math.round(val[3] / (val[1] + val[2]) * 10000 ) / 10 : 'N/A',
-				''
+				val[3] > 0 && val[2] > 0 ? Math.round(val[3] / (val[2]) * 10000 ) / 10 : 'N/A',
+				'',
+				val[4] === undefined ? "" : val[4],
+				kernel.pretty(val[1] + val[2]),
 			];
-			var curTr = trTpl;
-			for (var j = 0; j < 9; j++) {
-				curTr = curTr.replace(new RegExp('\\$' + j, 'g'),  trdata[j]);
+			if (i == 6) {
+				console.log(val[4])
+				trdata[11] = "http://cubiclealgdbimagegen.azurewebsites.net/generator?&puzzle=3&case=" +
+					encodeURIComponent(pllAlg[pllfilter.indexOf(val[4])]) +
+					"&view=plan&stage=pll"
 			}
+			else if (i == 5) {
+				console.log(val[4])
+				if (val[4].includes("-")) {
+					let index = val[4].split("-")[1];
+					trdata[11] = "https://cubiclealgdbimagegen.azurewebsites.net/generator?&puzzle=3&case=" +
+						encodeURIComponent(ollAlg[index]) +
+						"&view=plan&stage=oll"
+					console.log(trdata[11])
+					console.log(ollAlg[index])
+				} else {
+					trdata[11] = "/";
+				}
+
+			} else  {
+				trdata[11] = "/";
+			}
+			let curTr = trTpl;
+			curTr = curTr.replace(/\$\d+/g, function(match) {
+				let index = parseInt(match.substr(1));
+				return trdata[index];
+			});
 			str.push(curTr);
 		}
 		var endTr = $('<tr>').append(tidx ? $('<td>').append(requestBack) : $('<td style="padding:0;">').append(rangeSelect),
 			'<td>' + (isPercent ? Math.round(totIns / sumSubt * 1000) / 10 + '%' : kernel.pretty(totIns)) + '</td>' +
-			'<td>' + (isPercent ? Math.round(totExec / sumSubt * 1000) / 10 + '%' : kernel.pretty(totExec)) + '</td>',
+			'<td>' + (isPercent ? Math.round(totExec / sumSubt * 1000) / 10 + '%' : kernel.pretty(totExec)) + '</td>' +
+			'<td>' + (isPercent ? Math.round(totExec / sumSubt * 1000) / 10 + '%' : kernel.pretty(totExec + totIns)) + '</td>',
 			$('<td>').append((scramble || solve) ? reconsClick : Math.round(totMov * 10) / 10),
 			'<td>' + (totMov > 0 && totIns + totExec > 0 ? Math.round(totMov / (totIns + totExec) * 10000 ) / 10 : 'N/A') + '</td>');
 		table.empty().append(tableTh);
@@ -232,6 +375,11 @@ var recons = execMain(function() {
 		update();
 	}
 
+	/**
+	 * 复盘信息（点击历史数据时）
+	 * @param signal
+	 * @param value
+	 */
 	function reqRecons(signal, value) {
 		if (!isEnable) {
 			return;
@@ -241,6 +389,7 @@ var recons = execMain(function() {
 		method = method.replace('%', '');
 		var times = value[0];
 		var rec = calcRecons(times, method);
+
 		if (!rec) {
 			renderEmpty(true);
 			return;
@@ -253,9 +402,16 @@ var recons = execMain(function() {
 			stepData.push([steps[i], curData[1] - curData[0], curData[2] - curData[1], curData[3]]);
 		}
 		var solve = cubeutil.getPrettyReconstruction(rec.rawMoves, method).prettySolve;
+		var pll = stats.getExtraInfo('recons_cf4op_' + 'PLL', value[1]);
+		var oll = stats.getExtraInfo('recons_cf4op_' + 'OLL', value[1]);
+		stepData[6][4] = scramble_333.getPLLImage(pll[0])[2];
+		stepData[5][4] = scramble_333.getOLLImage(oll[0])[2];
 		renderResult(stepData, value[1] + 1, isPercent, times[1], solve);
 	}
 
+	/**
+	 * 实时复盘数据展示
+	 */
 	function update() {
 		if (!isEnable) {
 			return;
@@ -268,8 +424,16 @@ var recons = execMain(function() {
 			nrec = Math.min(5, nsolv);
 		} else if (nrec == 'mo12') {
 			nrec = Math.min(12, nsolv);
+		} else if (nrec == 'mo50') {
+			nrec = Math.min(50, nsolv);
 		} else if (nrec == 'mo100') {
 			nrec = Math.min(100, nsolv);
+		} else if (nrec == 'mo200') {
+			nrec = Math.min(200, nsolv);
+		} else if (nrec == 'mo500') {
+			nrec = Math.min(500, nsolv);
+		} else if (nrec == 'mo1000') {
+			nrec = Math.min(1000, nsolv);
 		} else {
 			nrec = nsolv;
 		}
@@ -285,10 +449,15 @@ var recons = execMain(function() {
 		var stepData = [];
 		for (var s = nsolv - 1; s >= nsolv - nrec; s--) {
 			var rec = stats.getExtraInfo('recons_' + method, s);
+			var pll = stats.getExtraInfo('recons_cf4op_' + 'PLL', s);
+			var oll = stats.getExtraInfo('recons_cf4op_' + 'OLL', s);
 			if (!rec) {
 				continue;
 			}
 			var data = rec.data;
+			if (data[0][2] - data[0][0] >= 3000 || data[1][2] - data[1][0] >= 3000) {
+				continue;
+			}
 			nvalid++;
 			for (var i = steps.length - 1; i >= 0; i--) {
 				var curData = data[i] || [0, 0, 0, 0];
@@ -299,6 +468,7 @@ var recons = execMain(function() {
 				stepData[sidx][3] += curData[3];
 			}
 		}
+		console.log(nvalid)
 		if (nvalid == 0) {
 			renderEmpty(false);
 			return;
@@ -310,6 +480,8 @@ var recons = execMain(function() {
 		}
 		if (nrec == 1) {
 			var solve = cubeutil.getPrettyReconstruction(rec.rawMoves, method).prettySolve;
+			stepData[6][4] = scramble_333.getPLLImage(pll[0])[2];
+			stepData[5][4] = scramble_333.getOLLImage(oll[0])[2];
 			renderResult(stepData, null, isPercent, stats.timesAt(nsolv - 1)[1], solve);
 		} else {
 			renderResult(stepData, null, isPercent);
@@ -391,7 +563,7 @@ var recons = execMain(function() {
 			cumStepMetric.bind(null, 'cf4op', false),
 			['CFOP ' + titleStr[1], kernel.pretty]);
 		kernel.regListener('recons', 'reqrec', reqRecons);
-		var ranges = ['single', 'mo5', 'mo12', 'mo100', 'all'];
+		var ranges = ['single', 'mo5', 'mo12', 'mo50','mo100','mo200','mo500','mo1000', 'all'];
 		for (var i = 0; i < ranges.length; i++) {
 			rangeSelect.append('<option value="' + ranges[i] + '">' + ranges[i] + '</option>');
 		}
@@ -417,6 +589,17 @@ var caseStat = execMain(function() {
 	var methodSelect = $('<select>');
 	var tableTh = $('<tr>').append($('<th colspan=2 style="padding:0;">').append(methodSelect),
 		'<th>N</th><th>' + titleStr[0] + '</th><th>' + titleStr[1] + '</th><th>' + titleStr[2] + '</th><th>' + titleStr[3] + '</th>');
+	function sortBySecondDim(arr) {
+		arr.sort(function(a, b) {
+			if (a[2] / a[0] < b[2]/ a[0]) {
+				return 1;
+			}
+			if (a[2]/ a[0] > b[2]/ a[0]) {
+				return -1;
+			}
+			return 0;
+		});
+	}
 
 	function update() {
 		if (!isEnable) {
@@ -465,7 +648,7 @@ var caseStat = execMain(function() {
 			}
 			maxSubt = Math.max(maxSubt, (caseCnts[i][1] + caseCnts[i][2]) / caseCnts[i][0]);
 		}
-
+		sortBySecondDim(caseCnts)
 		for (var i = ident[2]; i < ident[3]; i++) {
 			if (!caseCnts[i]) {
 				continue;
@@ -484,6 +667,7 @@ var caseStat = execMain(function() {
 				Math.round(caseCnt[3] / caseCnt[0] * 10) / 10,
 				Math.round(caseCnt[3] / (caseCnt[1] + caseCnt[2]) * 10000) / 10
 			];
+			console.log(trdata)
 			var curTr = trTpl;
 			for (var j = 0; j < 8; j++) {
 				curTr = curTr.replace(new RegExp('\\$' + j, 'g'), trdata[j]);
@@ -646,9 +830,9 @@ var scatter = execMain(function() {
 			ctx.closePath();
 		}
 		var spanT = '<span style="color:$">$</span>';
-		slowSpan.html(' ' + 
-			spanT.replace('$', '#f00').replace('$', kernel.pretty(slow0 * finalTime)) + ' ' + 
-			spanT.replace('$', '#00f').replace('$', kernel.pretty(slow1 * finalTime)) + ' ' + 
+		slowSpan.html(' ' +
+			spanT.replace('$', '#f00').replace('$', kernel.pretty(slow0 * finalTime)) + ' ' +
+			spanT.replace('$', '#00f').replace('$', kernel.pretty(slow1 * finalTime)) + ' ' +
 			spanT.replace('$', '#888').replace('$', kernel.pretty((1 - slow0 - slow1) * finalTime))
 		);
 	}
@@ -741,14 +925,14 @@ var scatter = execMain(function() {
 		}
 		var span = '<span class="click" data="%" style="font-family: iconfont, Arial;display:inline-block;width:2em;">$</span>';
 		fdiv.empty().append(methodSelect, slowSpan, scatterDiv.empty().append(canvas
-/*		, '<br>', [
-			span.replace('$', '\ue80e').replace('%', 'x'),
-			span.replace('$', '&lt;').replace('%', 'p'),
-			span.replace('$', '&gt;').replace('%', 'm'),
-			span.replace('$', '\ue80f').replace('%', 'l'),
-			span.replace('$', '\ue810').replace('%', 's')
-		].join('')
-*/		).unbind('click').click(procClick));
+			/*		, '<br>', [
+                        span.replace('$', '\ue80e').replace('%', 'x'),
+                        span.replace('$', '&lt;').replace('%', 'p'),
+                        span.replace('$', '&gt;').replace('%', 'm'),
+                        span.replace('$', '\ue80f').replace('%', 'l'),
+                        span.replace('$', '\ue810').replace('%', 's')
+                    ].join('')
+            */		).unbind('click').click(procClick));
 		methodSelect.unbind('change').change(procClick);
 		updateScatter();
 	}
