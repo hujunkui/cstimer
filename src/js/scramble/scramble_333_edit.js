@@ -787,6 +787,31 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 		image.llImage(llParam[0], llParam[1], canvas);
 	}
 
+	/**
+	 * 获取pll svg 图片
+	 */
+	function getPLLSvgImage(cases) {
+		let pllCase = pllImgParam[cases];
+		return [pllfilter[cases],"UUUUUUUUU" + pllCase];
+	}
+
+	/**
+	 * 获取oll svg 图片
+	 */
+	function getOllSvgImage(cases) {
+		var face = '';
+		var val = ollImgParam[cases];
+		for (var i = 0; i < 21; i++) {
+			if (i === 4) {
+				face += 'U';
+			} else {
+				face += (val & 1) ? 'U' : 'G';
+				val >>= 1;
+			}
+		}
+		return [ollfilter[cases],face];
+	}
+
 	var oll_map = [
 		[0x0000, 0x0000], // PLL
 		[0x1111, 0x1212], // Point-1
@@ -966,7 +991,9 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 		getELLScramble: getELLScramble,
 		getAnyScramble: getAnyScramble,
 		getPLLImage: getPLLImage,
+		getPLLSvgImage: getPLLSvgImage,
 		getOLLImage: getOLLImage,
+		getOllSvgImage: getOllSvgImage,
 		genFacelet: genFacelet,
 		solvFacelet: solvFacelet
 	};

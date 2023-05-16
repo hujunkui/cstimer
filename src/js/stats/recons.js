@@ -1,96 +1,67 @@
 var recons = execMain(function() {
-	var ollfilter = ['PLL', 'Point-1', 'Point-2', 'Point-3', 'Point-4', 'Square-5', 'Square-6', 'SLBS-7', 'SLBS-8', 'Fish-9', 'Fish-10', 'SLBS-11', 'SLBS-12', 'Knight-13', 'Knight-14', 'Knight-15', 'Knight-16', 'Point-17', 'Point-18', 'Point-19', 'CO-20', 'OCLL-21', 'OCLL-22', 'OCLL-23', 'OCLL-24', 'OCLL-25', 'OCLL-26', 'OCLL-27', 'CO-28', 'Awkward-29', 'Awkward-30', 'P-31', 'P-32', 'T-33', 'C-34', 'Fish-35', 'W-36', 'Fish-37', 'W-38', 'BLBS-39', 'BLBS-40', 'Awkward-41', 'Awkward-42', 'P-43', 'P-44', 'T-45', 'C-46', 'L-47', 'L-48', 'L-49', 'L-50', 'I-51', 'I-52', 'L-53', 'L-54', 'I-55', 'I-56', 'CO-57'];
-	var pllfilter = [
-		'H', 'Ua', 'Ub', 'Z',
-		'Aa', 'Ab', 'E', 'F',
-		'Ga', 'Gb', 'Gc', 'Gd',
-		'Ja', 'Jb', 'Na', 'Nb',
-		'Ra', 'Rb', 'T', 'V', 'Y'
-	];
-	var ollAlg = [
-		"R U U' R'",
-		"R U2 R2 F R F' U2 R' F R F'",
-		"y' R U' R2 D' r U r' D R2 U R'",
-		"y R' F2 R2 U2 R' F R U2 R2 F2 R",
-		"y' R' F2 R2 U2 R' F' R U2 R2 F2 R",
-		"r' U2 R U R' U r",
-		"r U2 R' U' R U' r'",
-		"r U R' U R U2 r'",
-		"y2 r' U' R U' R' U2 r",
-		"y R U R' U' R' F R2 U R' U' F'",
-		"R U R' U R' F R F' R U2 R'",
-		"r' R2 U R' U R U2 R' U M'",
-		"y' M' R' U' R U' R' U2 R U' M",
-		"F U R U2 R' U' R U R' F'",
-		"R' F R U R' F' R F U' F'",
-		"r' U' r R' U' R U r' U r",
-		"r U r' R U R' U' r U' r'",
-		"R U R' U R' F R F' U2 R' F R F'",
-		"y R U2 R2 F R F' U2 M' U R U' r'",
-		"y S' R U R' S U' R' F R F'",
-		"r U R' U' M2 U R U' R' U' M'",
-		"R U R' U R U' R' U R U2 R'",
-		"R U2 R2 U' R2 U' R2 U2 R",
-		"R2 D R' U2 R D' R' U2 R'",
-		"r U R' U' r' F R F'",
-		"y F' r U R' U' r' F R",
-		"y R U2 R' U' R U' R'",
-		"R U R' U R U2 R'",
-		"r U R' U' M U R U' R'",
-		"r2 D' r U r' D r2 U' r' U' r",
-		"y' r' D' r U' r' D r2 U' r' U r U r'",
-		"R' U' F U R U' R' F' R",
-		"S R U R' U' R' F R f'",
-		"R U R' U' R' F R F'",
-		"y f R f' U' r' U' R U M'",
-		"R U2 R2 F R F' R U2 R''",
-		"y2 L' U' L U' L' U L U L F' L' F",
-		"F R U' R' U' R U R' F'",
-		"R U R' U R U' R' U' R' F R F'",
-		"y' f' r U r' U' r' F r S",
-		"y R' F R U R' U' F' U R",
-		"y2 R U R' U R U2 R' F R U R' U' F'",
-		"R' U' R U' R' U2 R F R U R' U' F'",
-		"y R' U' F' U F R",
-		"y2 F U R U' R' F'",
-		"F R U R' U' F'",
-		"R' U' R' F R F' U R",
-		"F' L' U' L U L' U' L U F",
-		"F R U R' U' R U R' U' F'",
-		"y2 r U' r2 U r2 U r2 U' r",
-		"r' U r2 U' r2 U' r2 U r'",
-		"y2 F U R U' R' U R U' R' F'",
-		"y2 R' F' U' F U' R U R' U R",
-		"r' U' R U' R' U R U' R' U2 r",
-		"r U R' U R U' R' U R U2 r'",
-		"y R' F U R U' R2 F' R2 U R' U' R",
-		"r U r' U R U' R' U R U' R' r U' r''",
-		"R U R' U' M' U R U' r'"
-	]
-	var pllAlg = [
-		"M2' U' M2' U2' M2' U' M2'",
-		"M2' U' M' U2' M U' M2'",
-		"M U2' M2' U2' M U' M2' U' M2'",
-		"M2' U M' U2' M U M2'",
-		"x R' U R' D2' R U' R' D2' R2' x'",
-		"x R2' D2' R U R' D2' R U' R x'",
-		"x' D R U R' D' R U' R' D R U' R' D' R U R' x y'",
-		"R' U' R U' R' U R U R2' F' R U R U' R' F U R y'",
-		"R2' U R' U R' U' R U' R2' D U' R' U R D'",
-		"R' U' R D' U R2' U R' U R U' R U' R2' D",
-		"R2' U' R U' R U R' U R2' D' U R U' R' D",
-		"D' R U R' U' D R2' U' R U' R' U R' U R2'",
-		"L' R' U2' R U R' U2' L U' R y'",
-		"R U R2' F' R U R U' R' F R U' R'",
-		"R U R' U2' R U R2' F' R U R U' R' F R U' R' U' R U' R'",
-		"F r' F' r U r U' r2' D' F r U r' F' D r",
-		"R U2' R D R' U R D' R' U' R' U R U R' y'",
-		"R' U R U R' U' R' D' R U R' D R U2' R",
-		"F R U' R' U R U R2' F' R U R U' R'",
-		"D2' R' U R D' R2' U' R' U R' U R' D' R U2' R'",
-		"F R' F' R U R U' R' F R U' R' U R U R' F'",
-	]
+	let svgTemplate = `<?xml version='1.0' standalone='no'?>
+<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN'
+        'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
 
+<svg version='1.1' xmlns='http://www.w3.org/2000/svg'
+     viewBox='-0.9 -0.9 1.8 1.8'>
+    <g style='stroke-width:0.1;stroke-linejoin:round;opacity:1'>
+        <polygon fill='#000000' stroke='#000000'
+                 points='-0.52222222222222,-0.52222222222222 0.52222222222222,-0.52222222222222 0.52222222222222,0.52222222222222 -0.52222222222222,0.52222222222222'/>
+    </g>
+    <g style='opacity:1;stroke-opacity:0.5;stroke-width:0;stroke-linejoin:round'>
+
+        <polygon fill='{1}' stroke='#000000'
+                 points='-0.52777777777778,-0.52777777777778 -0.21296296296296,-0.52777777777778 -0.21296296296296,-0.21296296296296 -0.52777777777778,-0.21296296296296'/>
+        <polygon fill='{2}' stroke='#000000'
+                 points='-0.15740740740741,-0.52777777777778 0.15740740740741,-0.52777777777778 0.15740740740741,-0.21296296296296 -0.15740740740741,-0.21296296296296'/>
+        <polygon fill='{3}' stroke='#000000'
+                 points='0.21296296296296,-0.52777777777778 0.52777777777778,-0.52777777777778 0.52777777777778,-0.21296296296296 0.21296296296296,-0.21296296296296'/>
+        <polygon fill='{4}' stroke='#000000'
+                 points='-0.52777777777778,-0.15740740740741 -0.21296296296296,-0.15740740740741 -0.21296296296296,0.15740740740741 -0.52777777777778,0.15740740740741'/>
+        <polygon fill='{5}' stroke='#000000'
+                 points='-0.15740740740741,-0.15740740740741 0.15740740740741,-0.15740740740741 0.15740740740741,0.15740740740741 -0.15740740740741,0.15740740740741'/>
+        <polygon fill='{6}' stroke='#000000'
+                 points='0.21296296296296,-0.15740740740741 0.52777777777778,-0.15740740740741 0.52777777777778,0.15740740740741 0.21296296296296,0.15740740740741'/>
+        <polygon fill='{7}' stroke='#000000'
+                 points='-0.52777777777778,0.21296296296296 -0.21296296296296,0.21296296296296 -0.21296296296296,0.52777777777778 -0.52777777777778,0.52777777777778'/>
+        <polygon fill='{8}' stroke='#000000'
+                 points='-0.15740740740741,0.21296296296296 0.15740740740741,0.21296296296296 0.15740740740741,0.52777777777778 -0.15740740740741,0.52777777777778'/>
+        <polygon fill='{9}' stroke='#000000'
+                 points='0.21296296296296,0.21296296296296 0.52777777777778,0.21296296296296 0.52777777777778,0.52777777777778 0.21296296296296,0.52777777777778'/>
+    </g>
+    <g style='opacity:1;stroke-opacity:1;stroke-width:0.02;stroke-linejoin:round'>
+        <polygon fill='{15}' stroke='#000000'
+                 points='0.5544061302682,-0.19514687100894 0.5544061302682,-0.54329501915709 0.7183908045977,-0.50727969348659 0.7183908045977,-0.18314176245211'/>
+        <polygon fill='{14}' stroke='#000000'
+                 points='0.5544061302682,0.17445721583653 0.5544061302682,-0.17369093231162 0.7183908045977,-0.16168582375479 0.7183908045977,0.16245210727969'/>
+        <polygon fill='{13}' stroke='#000000'
+                 points='0.5544061302682,0.54406130268199 0.5544061302682,0.19591315453384 0.7183908045977,0.18390804597701 0.7183908045977,0.50804597701149'/>
+        <polygon fill='{10}' stroke='#000000'
+                 points='-0.54406130268199,0.5544061302682 -0.19591315453384,0.5544061302682 -0.18390804597701,0.7183908045977 -0.50804597701149,0.7183908045977'/>
+        <polygon fill='{11}' stroke='#000000'
+                 points='-0.17445721583653,0.5544061302682 0.17369093231162,0.5544061302682 0.16168582375479,0.7183908045977 -0.16245210727969,0.7183908045977'/>
+        <polygon fill='{12}' stroke='#000000'
+                 points='0.19514687100894,0.5544061302682 0.54329501915709,0.5544061302682 0.50727969348659,0.7183908045977 0.18314176245211,0.7183908045977'/>
+        <polygon fill='{19}' stroke='#000000'
+                 points='-0.5544061302682,-0.54406130268199 -0.5544061302682,-0.19591315453384 -0.7183908045977,-0.18390804597701 -0.7183908045977,-0.50804597701149'/>
+        <polygon fill='{20}' stroke='#000000'
+                 points='-0.5544061302682,-0.17445721583653 -0.5544061302682,0.17369093231162 -0.7183908045977,0.16168582375479 -0.7183908045977,-0.16245210727969'/>
+        <polygon fill='{21}' stroke='#000000'
+                 points='-0.5544061302682,0.19514687100894 -0.5544061302682,0.54329501915709 -0.7183908045977,0.50727969348659 -0.7183908045977,0.18314176245211'/>
+        <polygon fill='{16}' stroke='#000000'
+                 points='0.54406130268199,-0.5544061302682 0.19591315453384,-0.5544061302682 0.18390804597701,-0.7183908045977 0.50804597701149,-0.7183908045977'/>
+        <polygon fill='{17}' stroke='#000000'
+                 points='0.17445721583653,-0.5544061302682 -0.17369093231162,-0.5544061302682 -0.16168582375479,-0.7183908045977 0.16245210727969,-0.7183908045977'/>
+        <polygon fill='{18}' stroke='#000000'
+                 points='-0.19514687100894,-0.5544061302682 -0.54329501915709,-0.5544061302682 -0.50727969348659,-0.7183908045977 -0.18314176245211,-0.7183908045977'/>
+
+    </g>
+</svg>
+
+`
+	let pllSvg = "";
+	let ollSvg = "";
 	var isEnable;
 	var titleStr = TOOLS_RECONS_TITLE.split('|');
 
@@ -267,19 +238,10 @@ var recons = execMain(function() {
 					kernel.pretty(sval[1] + sval[2])
 				];
 				if (i == 6) {
-					trsdata[11] = "http://cubiclealgdbimagegen.azurewebsites.net/generator?&puzzle=3&case=" +
-						encodeURIComponent(pllAlg[pllfilter.indexOf(val[4])]) +
-						"&view=plan&stage=pll"
+					trsdata[11] = "data:image/svg+xml;base64," + btoa(pllSvg)
 				}
 				else if (i == 5) {
-					if (val[4].includes("-")) {
-						let index = sval[4].split("-")[1];
-						trsdata[11] = "https://cubiclealgdbimagegen.azurewebsites.net/generator?&puzzle=3&case=" +
-							encodeURIComponent(ollAlg[index]) +
-							"&view=plan&stage=oll"
-					} else {
-						trsdata[11] = "/";
-					}
+					trsdata[11] = "data:image/svg+xml;base64," + btoa(ollSvg)
 
 				} else  {
 					trsdata[11] = "/";
@@ -306,24 +268,10 @@ var recons = execMain(function() {
 				kernel.pretty(val[1] + val[2]),
 			];
 			if (i == 6) {
-				console.log(val[4])
-				trdata[11] = "http://cubiclealgdbimagegen.azurewebsites.net/generator?&puzzle=3&case=" +
-					encodeURIComponent(pllAlg[pllfilter.indexOf(val[4])]) +
-					"&view=plan&stage=pll"
+				trdata[11] = "data:image/svg+xml;base64," + btoa(pllSvg)
 			}
 			else if (i == 5) {
-				console.log(val[4])
-				if (val[4].includes("-")) {
-					let index = val[4].split("-")[1];
-					trdata[11] = "https://cubiclealgdbimagegen.azurewebsites.net/generator?&puzzle=3&case=" +
-						encodeURIComponent(ollAlg[index]) +
-						"&view=plan&stage=oll"
-					console.log(trdata[11])
-					console.log(ollAlg[index])
-				} else {
-					trdata[11] = "/";
-				}
-
+				trdata[11] = "data:image/svg+xml;base64," + btoa(ollSvg)
 			} else  {
 				trdata[11] = "/";
 			}
@@ -401,14 +349,44 @@ var recons = execMain(function() {
 			var curData = data[i] || [0, 0, 0, 0];
 			stepData.push([steps[i], curData[1] - curData[0], curData[2] - curData[1], curData[3]]);
 		}
-		var solve = cubeutil.getPrettyReconstruction(rec.rawMoves, method).prettySolve;
-		var pll = stats.getExtraInfo('recons_cf4op_' + 'PLL', value[1]);
-		var oll = stats.getExtraInfo('recons_cf4op_' + 'OLL', value[1]);
-		stepData[6][4] = scramble_333.getPLLImage(pll[0])[2];
-		stepData[5][4] = scramble_333.getOLLImage(oll[0])[2];
+		let pll = stats.getExtraInfo('recons_cf4op_' + 'PLL', value[1]);
+		let oll = stats.getExtraInfo('recons_cf4op_' + 'OLL', value[1]);
+		let solve = cubeutil.getPrettyReconstruction(rec.rawMoves, method).prettySolve;
+		let ollFace = scramble_333.getOllSvgImage(oll[0]);
+		let pllFace = scramble_333.getPLLSvgImage(pll[0]);
+		let pllSvgTemplate = svgTemplate;
+		let ollSvgTemplate = svgTemplate;
+		for (let i = 0; i < 21; i++) {
+			ollSvgTemplate = ollSvgTemplate.replace("{" + (i + 1) + "}", getRgb(ollFace[1][i]));
+			pllSvgTemplate = pllSvgTemplate.replace("{" + (i + 1) + "}", getRgb(pllFace[1][i]));
+		}
+		pllSvg = pllSvgTemplate;
+		ollSvg = ollSvgTemplate;
+		stepData[6][4] = pllFace[0];
+		stepData[5][4] = ollFace[1];
 		renderResult(stepData, value[1] + 1, isPercent, times[1], solve);
 	}
-
+	function getRgb(operate) {
+		if ("R" === (operate)) {
+			return "#EE0000";
+		}
+		if ("L"=== (operate)) {
+			return "#FFA100";
+		}
+		if ("U"=== (operate)) {
+			return "#FEFE00";
+		}
+		if ("D"=== (operate)) {
+			return "#FFFFFF";
+		}
+		if ("B"=== (operate)) {
+			return "#00D800";
+		}
+		if ("F"=== (operate)) {
+			return "#0000F2";
+		}
+		return "#404040";
+	}
 	/**
 	 * 实时复盘数据展示
 	 */
@@ -447,17 +425,24 @@ var recons = execMain(function() {
 		var steps = cubeutil.getStepNames(method);
 		var nvalid = 0;
 		var stepData = [];
+		let pll = stats.getExtraInfo('recons_cf4op_' + 'PLL', nsolv - 1);
+		let oll = stats.getExtraInfo('recons_cf4op_' + 'OLL', nsolv - 1);
+		let ollFace = scramble_333.getOllSvgImage(oll[0]);
+		let pllFace = scramble_333.getPLLSvgImage(pll[0]);
+		let pllSvgTemplate = svgTemplate;
+		let ollSvgTemplate = svgTemplate;
+		for (let i = 0; i < 21; i++) {
+			ollSvgTemplate = ollSvgTemplate.replace("{" + (i + 1) + "}", getRgb(ollFace[1][i]));
+			pllSvgTemplate = pllSvgTemplate.replace("{" + (i + 1) + "}", getRgb(pllFace[1][i]));
+		}
+		pllSvg = pllSvgTemplate;
+		ollSvg = ollSvgTemplate;
 		for (var s = nsolv - 1; s >= nsolv - nrec; s--) {
 			var rec = stats.getExtraInfo('recons_' + method, s);
-			var pll = stats.getExtraInfo('recons_cf4op_' + 'PLL', s);
-			var oll = stats.getExtraInfo('recons_cf4op_' + 'OLL', s);
 			if (!rec) {
 				continue;
 			}
 			var data = rec.data;
-			if (data[0][2] - data[0][0] >= 3000 || data[1][2] - data[1][0] >= 3000) {
-				continue;
-			}
 			nvalid++;
 			for (var i = steps.length - 1; i >= 0; i--) {
 				var curData = data[i] || [0, 0, 0, 0];
@@ -468,7 +453,6 @@ var recons = execMain(function() {
 				stepData[sidx][3] += curData[3];
 			}
 		}
-		console.log(nvalid)
 		if (nvalid == 0) {
 			renderEmpty(false);
 			return;
@@ -480,8 +464,8 @@ var recons = execMain(function() {
 		}
 		if (nrec == 1) {
 			var solve = cubeutil.getPrettyReconstruction(rec.rawMoves, method).prettySolve;
-			stepData[6][4] = scramble_333.getPLLImage(pll[0])[2];
-			stepData[5][4] = scramble_333.getOLLImage(oll[0])[2];
+			stepData[6][4] = pllFace[0];
+			stepData[5][4] = ollFace[1];
 			renderResult(stepData, null, isPercent, stats.timesAt(nsolv - 1)[1], solve);
 		} else {
 			renderResult(stepData, null, isPercent);
@@ -648,7 +632,7 @@ var caseStat = execMain(function() {
 			}
 			maxSubt = Math.max(maxSubt, (caseCnts[i][1] + caseCnts[i][2]) / caseCnts[i][0]);
 		}
-		sortBySecondDim(caseCnts)
+		// sortBySecondDim(caseCnts)
 		for (var i = ident[2]; i < ident[3]; i++) {
 			if (!caseCnts[i]) {
 				continue;
