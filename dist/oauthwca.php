@@ -2,11 +2,11 @@
 
 require 'WcaOauth.php';
 
-$applicationId = '63a89d6694b1ea2d7b7cbbe174939a4d2adf8dd26e69acacd1280af7e7727554';
-$applicationSecret = '0000000000000000000000000000000000000000000000000000000000000000';
+$applicationId = '5invv3kNxqo2R9GFgtbLPJGulEaMgJtI6m9ELqzCxK8';
+$applicationSecret = 'TK5txx3z6J84NoHR6PogyBbtmI_I-eDAm2qZWp71sm0';
 $csTimerTokenSalt = '0000000000000000000000000000000000000000000000000000000000000000';
 
-$validUrlRe = '/^(https?:\/\/([^\/]*\.)?cstimer\.net\/(new\/|src\/)?(timer\.php)?)(\?.*)?$/i';
+$validUrlRe = '/^(https?:\/\/([^\/]*\.)?hjk666\.cn\/(new\/|src\/)?(timer\.php)?)(\?.*)?$/i';
 $matches = array();
 
 if (preg_match($validUrlRe, $_SERVER['HTTP_REFERER'], $matches) == 0) {
