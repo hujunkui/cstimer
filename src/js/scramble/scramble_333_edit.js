@@ -938,6 +938,11 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 		return getAnyScramble(cases[0], cases[1], 0xffffffff, 0xffffffff);
 	}
 
+	function getEasyXCrossScramble(type, length) {
+		var cases = cross.getEasyXCross(length);
+		return getAnyScramble(cases[0], cases[1], cases[2], cases[3]);
+	}
+
 	function genFacelet(facelet) {
 		return search.solution(facelet, 21, 1e9, 50, 2);
 	}
@@ -970,6 +975,7 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 		('oll', getOLLScramble, [ollfilter, ollprobs, getOLLImage])
 		('2gll', get2GLLScramble)
 		('easyc', getEasyCrossScramble)
+		('easyxc', getEasyXCrossScramble)
 		('eoline', getEOLineScramble);
 
 	return {

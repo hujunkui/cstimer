@@ -10,7 +10,7 @@ var BUTTON_DONATE = 'FAIRE UN DON';
 var PROPERTY_SR = 'Avec la session';
 var PROPERTY_USEINS = 'Utiliser l\'inspection WCA';
 var PROPERTY_USEINS_STR = 'Toujours|Sauf BLD|Jamais';
-var PROPERTY_SHOWINS = 'Show an icon when inspection is enabled';
+var PROPERTY_SHOWINS = 'Afficher une icône lorsque l\'inspection est activée';
 var PROPERTY_VOICEINS = 'Voix de l\'inspection WCA';
 var PROPERTY_VOICEINS_STR = 'Aucune|Voix masculine|Voix féminine';
 var PROPERTY_VOICEVOL = 'Volume de la voix d\'inspection';
@@ -211,6 +211,7 @@ var scrdata = [
 		['PLL', "pll", 0],
 		['EOLine', "eoline", 0],
 		['Croix facile', "easyc", 3],
+		['easy xcross', "easyxc", 4],
 		['Assistant BLD', "nocache_333bldspec", 0],
 		['3x3 ft', "333ft", 0],
 		['Personnalisé', "333custom", 0]
@@ -483,8 +484,8 @@ var PROPERTY_TOOLSFUNC = 'Fonctions sélectionnées';
 var PROPERTY_TRIM = 'Nombre de résolutions élaguées à chaque extrémité.';
 var PROPERTY_TRIM_MED = 'Médiane';
 var PROPERTY_STKHEAD = 'Utiliser les informations d\'état du Stackmat';
-var PROPERTY_TOOLPOS = 'Tools panel position';
-var PROPERTY_TOOLPOS_STR = 'Bottom|Float|Top';
+var PROPERTY_TOOLPOS = 'Position du panneau Outils';
+var PROPERTY_TOOLPOS_STR = 'Bas|Flottant|Haut';
 var PROPERTY_HIDEFULLSOL = 'Afficher la solution progressivement';
 var PROPERTY_IMPPREV = 'Importer d\'anciennes données';
 var PROPERTY_AUTOEXP = 'Exportation automatique (par 100 résolutions)';
@@ -512,7 +513,9 @@ var SCRGEN_NSCR = 'Nombre de mélanges';
 var SCRGEN_PRE = 'Préfixe';
 var SCRGEN_GEN = 'Générer des mélanges !';
 var VRCREPLAY_TITLE = 'Replay virtuel';
-var VRCREPLAY_ORI = 'ori° brute|ori° auto.';
+var VRCREPLAY_ORI = 'ori° brute|ori° auto';
 var VRCREPLAY_SHARE = 'partager le lien';
-var GIIKER_CONNECT = 'Click to connect';
-var GIIKER_RESET = 'Reset (Mark Solved)';
+var GIIKER_CONNECT = 'Cliquer pour se connecter';
+var GIIKER_RESET = 'Réinitialiser (Marquer comme résolu)';
+var PROPERTY_SHOWAD = 'Afficher les publicités (prend effet après rechargement)';
+var PROPERTY_GIIORI = 'Orientation du cube';

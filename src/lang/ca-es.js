@@ -10,7 +10,7 @@ var BUTTON_DONATE = 'Donacions';
 var PROPERTY_SR = 'Amb sessió';
 var PROPERTY_USEINS = 'Inspecions WCA';
 var PROPERTY_USEINS_STR = 'Sempre|Menys BLD|Mai';
-var PROPERTY_SHOWINS = 'Show an icon when inspection is enabled';
+var PROPERTY_SHOWINS = 'Mostrar una icona quan la inspecció és habilitada';
 var PROPERTY_VOICEINS = 'Alerta d\'inspecció WCA';
 var PROPERTY_VOICEINS_STR = 'Mai|Veu masculina|Veu femenina';
 var PROPERTY_VOICEVOL = 'Volum de Veu';
@@ -211,6 +211,7 @@ var scrdata = [
 		['PLL', "pll", 0],
 		['Línia EO', "eoline", 0],
 		['Creu fàcil', "easyc", 3],
+		['easy xcross', "easyxc", 4],
 		['Ajudant per a BLD', "nocache_333bldspec", 0],
 		['3x3 Peus', "333ft", 0],
 		['Personalitzat', "333custom", 0]
@@ -516,3 +517,5 @@ var VRCREPLAY_ORI = 'raw ori|auto ori';
 var VRCREPLAY_SHARE = 'share link';
 var GIIKER_CONNECT = 'Click to connect';
 var GIIKER_RESET = 'Reset (Mark Solved)';
+var PROPERTY_SHOWAD = 'Show advistisements (take effect after reload)';
+var PROPERTY_GIIORI = 'Cube orientation';

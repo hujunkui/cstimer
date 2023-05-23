@@ -211,6 +211,7 @@ var scrdata = [
 		['PLL', "pll", 0],
 		['EOLine', "eoline", 0],
 		['简单十字', "easyc", 3],
+		['简单XCross', "easyxc", 4],
 		['盲拧助手', "nocache_333bldspec", 0],
 		['三阶脚拧', "333ft", 0],
 		['自定义', "333custom", 0]
@@ -516,3 +517,5 @@ var VRCREPLAY_ORI = '原始朝向|自动朝向';
 var VRCREPLAY_SHARE = '分享链接';
 var GIIKER_CONNECT = '点击连接';
 var GIIKER_RESET = '重置（置为还原）';
+var PROPERTY_SHOWAD = '显示广告（刷新后生效）';
+var PROPERTY_GIIORI = '魔方朝向';
