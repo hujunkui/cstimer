@@ -354,7 +354,7 @@ var scramble = execMain(function(rn, rndEl) {
 
 	var remoteScrambleGen = (function() {
 		var remoteScramble = [];
-		var remoteURL = 'https://cstimer.net/testRemoteScramble.php';
+		var remoteURL = 'https://cstimer.hjk666.cn/testRemoteScramble.php';
 
 		function next(type) {
 			var ret = null;

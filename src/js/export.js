@@ -144,7 +144,7 @@ var exportFunc = execMain(function() {
 	function uploadData(id) {
 		return new Promise(function(resolve, reject) {
 			var compExpString = LZString.compressToEncodedURIComponent(expString);
-			$.post('https://cstimer.net/userdata.php', {
+			$.post('https://cstimer.hjk666.cn/userdata.php', {
 				'id': id,
 				'data': compExpString
 			}, function(val) {
@@ -205,7 +205,7 @@ var exportFunc = execMain(function() {
 				}
 			}
 			target.html('Import Data...');
-			$.post('https://cstimer.net/userdata.php', {
+			$.post('https://cstimer.hjk666.cn/userdata.php', {
 				'id': id,
 				'offset': idx - 1
 			}, dataCallback, 'json').error(onerr).always(revert);
@@ -228,7 +228,7 @@ var exportFunc = execMain(function() {
 		};
 
 		if (kernel.getProp('expp')) {
-			$.post('https://cstimer.net/userdata.php', {
+			$.post('https://cstimer.hjk666.cn/userdata.php', {
 				'id': id,
 				'cnt': 1
 			}, cntCallback, 'json').error(onerr).always(revert);
