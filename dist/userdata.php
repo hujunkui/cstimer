@@ -20,7 +20,7 @@
 	header("Access-Control-Allow-Origin: *");
 	$uid = $_POST['id'];
 
-	$db = new mysqli('localhost', 'cstimer', '', 'cstimer');
+	$db = new mysqli('localhost', 'cstimer', 'cstimer', 'cstimer');
 	if ($db->connect_errno) {
 		echo '{"retcode":500,"reason":"db connect error"}';
 		die('Could not connect: ' . $db->connect_error);
