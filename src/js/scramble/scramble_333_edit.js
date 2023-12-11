@@ -755,10 +755,10 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 		['RBFLRRFFLBLB', [0, 6], [6, 8], [8, 0]],
 		['LBRFRBRFLBLF', [0, 6], [2, 8]],
 		['BFRFRBRBFLLL', [1, 7], [2, 8]],
-		['BRRFLBRBFLFL'],
-		['BFRFBBRLFLRL'],
-		['BFRFLBRRFLBL'],
-		['BLRFFBRBFLRL'],
+		['BRRFLBRBFLFL',[0, 2], [2, 6], [6, 0], [1, 3], [3, 5], [5, 1]],
+		['BFRFBBRLFLRL',[0, 6], [6, 2], [2, 0], [1, 3], [3, 5], [5, 1]],
+		['BFRFLBRRFLBL',[0, 6], [6, 8], [8, 0], [3, 5], [5, 7], [7, 3]],
+		['BLRFFBRBFLRL',[0, 2], [2, 6], [6, 0], [1, 3], [3, 7], [7, 1]],
 		['BBRFFBRRFLLL', [1, 5], [2, 8]],
 		['LBBRLLBRRFFF', [2, 8], [5, 7]],
 		['FBBRLLBFFLRR', [2, 6], [3, 5]],
@@ -785,6 +785,144 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 			return llParam.concat([pllfilter[cases]]);
 		}
 		image.llImage.drawImage(llParam[0], llParam[1], canvas);
+	}
+
+	/**
+	 * 获取pll svg 图片
+	 */
+	// function getPLLSvgImage(cases) {
+	// 	let pllCase = pllImgParam[cases];
+	// 	getPll(cases)
+	// 	return [pllfilter[cases],"UUUUUUUUU" + pllCase];
+	// }
+
+	function getPLLSvgImage(cases) {
+		let cord
+		if (pllImgParam[cases] != null || pllImgParam[cases] != undefined) {
+			cord = pllImgParam[cases].slice(1)
+		} else {
+			cord = []
+		}
+		return [pllfilter[cases],generate("UUUUUUUUU" + pllImgParam[cases], cord)];
+	}
+
+	/**
+	 * 获取oll svg 图片
+	 */
+	function getOllSvgImage(cases) {
+		var face = '';
+		var val = ollImgParam[cases];
+		for (var i = 0; i < 21; i++) {
+			if (i === 4) {
+				face += 'U';
+			} else {
+				face += (val & 1) ? 'U' : 'G';
+				val >>= 1;
+			}
+		}
+
+		return [ollfilter[cases],generate(face, [])];
+	}
+	function generate(face, coordinates) {
+		let svgTmp = "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' viewBox='-0.9 -0.9 1.8 1.8'>\n    <g style='stroke-width:0.1;stroke-linejoin:round;opacity:1'>\n        <polygon fill='#000000' stroke='#000000'\n                 points='-0.52222222222222,-0.52222222222222 0.52222222222222,-0.52222222222222 0.52222222222222,0.52222222222222 -0.52222222222222,0.52222222222222'/>\n    </g>\n    <g style='opacity:1;stroke-opacity:0.5;stroke-width:0;stroke-linejoin:round'>\n        <polygon fill='{0}' stroke='#000000'\n                 points='-0.52777777777778,-0.52777777777778 -0.21296296296296,-0.52777777777778 -0.21296296296296,-0.21296296296296 -0.52777777777778,-0.21296296296296'/>\n        <polygon fill='{1}' stroke='#000000'\n                 points='-0.15740740740741,-0.52777777777778 0.15740740740741,-0.52777777777778 0.15740740740741,-0.21296296296296 -0.15740740740741,-0.21296296296296'/>\n        <polygon fill='{2}' stroke='#000000'\n                 points='0.21296296296296,-0.52777777777778 0.52777777777778,-0.52777777777778 0.52777777777778,-0.21296296296296 0.21296296296296,-0.21296296296296'/>\n        <polygon fill='{3}' stroke='#000000'\n                 points='-0.52777777777778,-0.15740740740741 -0.21296296296296,-0.15740740740741 -0.21296296296296,0.15740740740741 -0.52777777777778,0.15740740740741'/>\n        <polygon fill='{4}' stroke='#000000'\n                 points='-0.15740740740741,-0.15740740740741 0.15740740740741,-0.15740740740741 0.15740740740741,0.15740740740741 -0.15740740740741,0.15740740740741'/>\n        <polygon fill='{5}' stroke='#000000'\n                 points='0.21296296296296,-0.15740740740741 0.52777777777778,-0.15740740740741 0.52777777777778,0.15740740740741 0.21296296296296,0.15740740740741'/>\n        <polygon fill='{6}' stroke='#000000'\n                 points='-0.52777777777778,0.21296296296296 -0.21296296296296,0.21296296296296 -0.21296296296296,0.52777777777778 -0.52777777777778,0.52777777777778'/>\n        <polygon fill='{7}' stroke='#000000'\n                 points='-0.15740740740741,0.21296296296296 0.15740740740741,0.21296296296296 0.15740740740741,0.52777777777778 -0.15740740740741,0.52777777777778'/>\n        <polygon fill='{8}' stroke='#000000'\n                 points='0.21296296296296,0.21296296296296 0.52777777777778,0.21296296296296 0.52777777777778,0.52777777777778 0.21296296296296,0.52777777777778'/>\n    </g>\n    <g style='opacity:1;stroke-opacity:1;stroke-width:0.02;stroke-linejoin:round'>\n\n        <polygon fill='{12}' stroke='#000000'\n                 points='0.5544061302682,0.54406130268199 0.5544061302682,0.19591315453384 0.7183908045977,0.18390804597701 0.7183908045977,0.50804597701149'/>\n        <polygon fill='{13}' stroke='#000000'\n                 points='0.5544061302682,0.17445721583653 0.5544061302682,-0.17369093231162 0.7183908045977,-0.16168582375479 0.7183908045977,0.16245210727969'/>\n        <polygon fill='{14}' stroke='#000000'\n                 points='0.5544061302682,-0.19514687100894 0.5544061302682,-0.54329501915709 0.7183908045977,-0.50727969348659 0.7183908045977,-0.18314176245211'/>\n        <polygon fill='{9}' stroke='#000000'\n                 points='-0.54406130268199,0.5544061302682 -0.19591315453384,0.5544061302682 -0.18390804597701,0.7183908045977 -0.50804597701149,0.7183908045977'/>\n        <polygon fill='{10}' stroke='#000000'\n                 points='-0.17445721583653,0.5544061302682 0.17369093231162,0.5544061302682 0.16168582375479,0.7183908045977 -0.16245210727969,0.7183908045977'/>\n        <polygon fill='{11}' stroke='#000000'\n                 points='0.19514687100894,0.5544061302682 0.54329501915709,0.5544061302682 0.50727969348659,0.7183908045977 0.18314176245211,0.7183908045977'/>\n        <polygon fill='{18}' stroke='#000000'\n                 points='-0.5544061302682,-0.54406130268199 -0.5544061302682,-0.19591315453384 -0.7183908045977,-0.18390804597701 -0.7183908045977,-0.50804597701149'/>\n        <polygon fill='{19}' stroke='#000000'\n                 points='-0.5544061302682,-0.17445721583653 -0.5544061302682,0.17369093231162 -0.7183908045977,0.16168582375479 -0.7183908045977,-0.16245210727969'/>\n        <polygon fill='{20}' stroke='#000000'\n                 points='-0.5544061302682,0.19514687100894 -0.5544061302682,0.54329501915709 -0.7183908045977,0.50727969348659 -0.7183908045977,0.18314176245211'/>\n        <polygon fill='{15}' stroke='#000000'\n                 points='0.54406130268199,-0.5544061302682 0.19591315453384,-0.5544061302682 0.18390804597701,-0.7183908045977 0.50804597701149,-0.7183908045977'/>\n        <polygon fill='{16}' stroke='#000000'\n                 points='0.17445721583653,-0.5544061302682 -0.17369093231162,-0.5544061302682 -0.16168582375479,-0.7183908045977 0.16245210727969,-0.7183908045977'/>\n        <polygon fill='{17}' stroke='#000000'\n                 points='-0.19514687100894,-0.5544061302682 -0.54329501915709,-0.5544061302682 -0.50727969348659,-0.7183908045977 -0.18314176245211,-0.7183908045977'/>\n</g>{svgTmp}</svg>\n"
+		let location = [
+			['-0.37037037037037', '-0.37037037037037'],
+			['0', '-0.37037037037037'],
+			['0.37037037037037', '-0.37037037037037'],
+			['-0.37037037037037', '-4.1633363423443E-17'],
+			['0', '-4.1633363423443E-17'],
+			['0.37037037037037', '-5.5511151231258E-17'],
+			['-0.37037037037037', '0.37037037037037'],
+			['0', '0.37037037037037'],
+			['0.37037037037037', '0.37037037037037'],
+		]
+
+		function calculateAngle(num1, num2) {
+			const position = {
+				0: {x: 0, y: 0},
+				1: {x: 1, y: 0},
+				2: {x: 2, y: 0},
+				3: {x: 0, y: 1},
+				4: {x: 1, y: 1},
+				5: {x: 2, y: 1},
+				6: {x: 0, y: 2},
+				7: {x: 1, y: 2},
+				8: {x: 2, y: 2},
+			};
+
+			const deltaX = position[num2].x - position[num1].x;
+			const deltaY = position[num2].y - position[num1].y;
+
+			const angleRad = Math.atan2(deltaY, deltaX);
+			let angleDeg = angleRad * (180 / Math.PI);
+			angleDeg = (angleDeg + 360) % 360; // Ensure the angle is positive
+			console.log(angleDeg)
+			return angleDeg;
+		}
+		function getRgb(operate) {
+			if ("R" === (operate)) {
+				return "#EE0000";
+			}
+			if ("L"=== (operate)) {
+				return "#FFA100";
+			}
+			if ("U"=== (operate)) {
+				return "#FEFE00";
+			}
+			if ("D"=== (operate)) {
+				return "#FFFFFF";
+			}
+			if ("B"=== (operate)) {
+				return "#00D800";
+			}
+			if ("F"=== (operate)) {
+				return "#0000F2";
+			}
+			return "#404040";
+		}
+		let res = "";
+		for (let i = 0; i < 21; i++) {
+			let regex = new RegExp('\\{' + i + '\\}', 'g');
+			svgTmp = svgTmp.replace(regex, getRgb(face[i]));
+		}
+		let line = ' <path d="M {0},{1} L {2},{3}" style="fill:none;stroke:#000000;stroke-opacity:1" />'
+		let arow = '<path transform=" translate({0},{1}) scale(0.011) rotate({2})" d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z" style="fill:#000000;stroke-width:0;stroke-linejoin:round"/>'
+		let cnt = coordinates.length;
+		for (let i = 0; i < coordinates.length; i++) {
+			let lineData = [location[coordinates[i][0]][0], location[coordinates[i][0]][1], location[coordinates[i][1]][0], location[coordinates[i][1]][1]]
+			let tmp = line;
+			for (let j = 0; j < 4; j++) {
+				let regex = new RegExp('\\{' + j + '\\}', 'g');
+				tmp = tmp.replace(regex, lineData[j])
+			}
+			res += tmp;
+			let arrData = []
+			arrData.push([
+				location[coordinates[i][1]][0],
+				location[coordinates[i][1]][1],
+				calculateAngle(coordinates[i][0], coordinates[i][1])
+			]);
+			if (cnt === 2) {
+				arrData.push([
+					location[coordinates[i][0]][0],
+					location[coordinates[i][0]][1],
+					calculateAngle(coordinates[i][1], coordinates[i][0])
+				]);
+			}
+			for (let j = 0; j < arrData.length; j++) {
+				let arowTmp = arow;
+				for (let k = 0; k < 3; k++) {
+					let regex = new RegExp('\\{' + k + '\\}', 'g');
+					arowTmp = arowTmp.replace(regex, arrData[j][k])
+				}
+				res += arowTmp;
+			}
+		}
+		if (cnt != 0) {
+			res = "<g style='opacity:1;stroke-opacity:1;stroke-width:0.04;stroke-linecap:round'>" +res + "</g>"
+		}
+		let regex = new RegExp('\\{' + "svgTmp" + '\\}', 'g');
+		return svgTmp.replace(regex, res)
 	}
 
 	var oll_map = [
@@ -1008,7 +1146,9 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 		getELLScramble: getELLScramble,
 		getAnyScramble: getAnyScramble,
 		getPLLImage: getPLLImage,
+		getPLLSvgImage: getPLLSvgImage,
 		getOLLImage: getOLLImage,
+		getOllSvgImage: getOllSvgImage,
 		genFacelet: genFacelet,
 		solvFacelet: solvFacelet
 	};

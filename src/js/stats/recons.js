@@ -1,4 +1,6 @@
 var recons = execMain(function() {
+	let pllSvg = "";
+	let ollSvg = "";
 	var isEnable;
 	var titleStr = TOOLS_RECONS_TITLE.split('|');
 
@@ -9,7 +11,7 @@ var recons = execMain(function() {
 	var methodSelect = $('<select>');
 	var requestBack = $('<span class="click" />');
 	var tableTh = $('<tr>').append($('<th style="padding:0;">').append(methodSelect),
-		'<th>' + titleStr[0] + '</th><th>' + titleStr[1] + '</th><th>' + titleStr[2] + '</th><th>' + titleStr[3] + '</th>');
+		'<th>' + titleStr[0] + '</th><th>' + titleStr[1] + '</th><th>' + titleStr[2] + '</th><th>' + titleStr[3] + '</th><th>' + titleStr[4] + '</th><th>' + "Case" +'</th>');
 
 	function parseMove(moveStr) {
 		var movere = /^([URFDLB]w?|[EMSyxz]|2-2[URFDLB]w)(['2]?)@(\d+)$/;
@@ -139,8 +141,11 @@ var recons = execMain(function() {
 			'<tr style="$0" data="$1">' +
 			'<td style="padding-bottom:0;padding-top:0;">$4</td>' +
 			'<td style="padding-bottom:0;padding-top:0;">$5</td>' +
+			'<td style="padding-bottom:0;padding-top:0;">$10</td>' +
 			'<td style="padding-bottom:0;padding-top:0;">$6</td>' +
 			'<td style="padding-bottom:0;padding-top:0;">$7</td>' +
+			// '<td style="padding-bottom:0;padding-top:0;">$9</td>' +
+			'<td style="padding-bottom:0;padding-top:0;" width="50"><img src="$11" alt="" style="display: block"></td>' +
 			'</tr>';
 
 		var str = [];
@@ -157,7 +162,7 @@ var recons = execMain(function() {
 			if (isSuperStep) {
 				curSIdx = sDataIdx[i];
 				var sval = stepSData[curSIdx];
-				var trsdata = [
+				let trsdata = [
 					'',
 					sval[0],
 					sval[1] / maxSubt * 100,
@@ -165,17 +170,29 @@ var recons = execMain(function() {
 					isPercent ? Math.round(sval[1] / sumSubt * 1000) / 10 + '%' : kernel.pretty(sval[1]),
 					isPercent ? Math.round(sval[2] / sumSubt * 1000) / 10 + '%' : kernel.pretty(sval[2]),
 					Math.round(sval[3] * 10) / 10,
-					sval[3] > 0 && sval[1] + sval[2] > 0 ? Math.round(sval[3] / (sval[1] + sval[2]) * 10000 ) / 10 : 'N/A',
-					'click sstep'
+					sval[3] > 0 && sval[2] > 0 ? Math.round(sval[3] / (sval[2]) * 10000 ) / 10 : 'N/A',
+					'click sstep',
+					sval[4] === undefined ? "" : sval[4],
+					kernel.pretty(sval[1] + sval[2])
 				];
-				var curTr = trTpl;
-				for (var j = 0; j < 9; j++) {
-					curTr = curTr.replace(new RegExp('\\$' + j, 'g'), trsdata[j]);
+				if (i == 6) {
+					trsdata[11] = "data:image/svg+xml;base64," + btoa(pllSvg)
 				}
+				else if (i == 5) {
+					trsdata[11] = "data:image/svg+xml;base64," + btoa(ollSvg)
+
+				} else  {
+					trsdata[11] = "/";
+				}
+				let curTr = trTpl;
+				curTr = curTr.replace(/\$\d+/g, function(match) {
+					let index = parseInt(match.substr(1));
+					return trsdata[index];
+				});
 				str.push(curTr);
 			}
 
-			var trdata = [
+			let trdata = [
 				sDataIdx[i] == curSIdx ? 'display:none;' : '',
 				val[0],
 				val[1] / maxSubt * 100,
@@ -183,18 +200,30 @@ var recons = execMain(function() {
 				isPercent ? Math.round(val[1] / sumSubt * 1000) / 10 + '%' : kernel.pretty(val[1]),
 				isPercent ? Math.round(val[2] / sumSubt * 1000) / 10 + '%' : kernel.pretty(val[2]),
 				Math.round(val[3] * 10) / 10,
-				val[3] > 0 && val[1] + val[2] > 0 ? Math.round(val[3] / (val[1] + val[2]) * 10000 ) / 10 : 'N/A',
-				['oll', 'pll'].indexOf(val[0]) != -1 ? 'click' : ''
+				val[3] > 0 && val[2] > 0 ? Math.round(val[3] / (val[2]) * 10000 ) / 10 : 'N/A',
+				['oll', 'pll'].indexOf(val[0]) != -1 ? 'click' : '',
+				val[4] === undefined ? "" : val[4],
+				kernel.pretty(val[1] + val[2]),
 			];
-			var curTr = trTpl;
-			for (var j = 0; j < 9; j++) {
-				curTr = curTr.replace(new RegExp('\\$' + j, 'g'),  trdata[j]);
+			if (i == 6) {
+				trdata[11] = "data:image/svg+xml;base64," + btoa(pllSvg)
 			}
+			else if (i == 5) {
+				trdata[11] = "data:image/svg+xml;base64," + btoa(ollSvg)
+			} else  {
+				trdata[11] = "/";
+			}
+			let curTr = trTpl;
+			curTr = curTr.replace(/\$\d+/g, function(match) {
+				let index = parseInt(match.substr(1));
+				return trdata[index];
+			});
 			str.push(curTr);
 		}
 		var endTr = $('<tr>').append(tidx ? $('<td>').append(requestBack) : $('<td style="padding:0;">').append(rangeSelect),
 			'<td>' + (isPercent ? Math.round(totIns / sumSubt * 1000) / 10 + '%' : kernel.pretty(totIns)) + '</td>' +
-			'<td>' + (isPercent ? Math.round(totExec / sumSubt * 1000) / 10 + '%' : kernel.pretty(totExec)) + '</td>',
+			'<td>' + (isPercent ? Math.round(totExec / sumSubt * 1000) / 10 + '%' : kernel.pretty(totExec)) + '</td>' +
+			'<td>' + (isPercent ? Math.round(totExec / sumSubt * 1000) / 10 + '%' : kernel.pretty(totExec + totIns)) + '</td>',
 			$('<td>').append((scramble || solve) ? reconsClick : Math.round(totMov * 10) / 10),
 			'<td>' + (totMov > 0 && totIns + totExec > 0 ? Math.round(totMov / (totIns + totExec) * 10000 ) / 10 : 'N/A') + '</td>');
 		table.empty().append(tableTh);
@@ -252,10 +281,41 @@ var recons = execMain(function() {
 			var curData = data[i] || [0, 0, 0, 0];
 			stepData.push([steps[i], curData[1] - curData[0], curData[2] - curData[1], curData[3]]);
 		}
-		var solve = cubeutil.getPrettyReconstruction(rec.rawMoves, method).prettySolve;
+		let solve = cubeutil.getPrettyReconstruction(rec.rawMoves, method).prettySolve;
+		let pll = stats.getExtraInfo('recons_cf4op_' + 'PLL', value[1]);
+		let oll = stats.getExtraInfo('recons_cf4op_' + 'OLL', value[1]);
+		let ollFace = scramble_333.getOllSvgImage(oll[0]);
+		let pllFace = scramble_333.getPLLSvgImage(pll[0]);
+		pllSvg = pllFace[1];
+		ollSvg = ollFace[1];
+		stepData[6][4] = pllFace[0];
+		stepData[5][4] = ollFace[1];
 		renderResult(stepData, value[1] + 1, isPercent, times[1], solve);
 	}
-
+	function getRgb(operate) {
+		if ("R" === (operate)) {
+			return "#EE0000";
+		}
+		if ("L"=== (operate)) {
+			return "#FFA100";
+		}
+		if ("U"=== (operate)) {
+			return "#FEFE00";
+		}
+		if ("D"=== (operate)) {
+			return "#FFFFFF";
+		}
+		if ("B"=== (operate)) {
+			return "#00D800";
+		}
+		if ("F"=== (operate)) {
+			return "#0000F2";
+		}
+		return "#404040";
+	}
+	/**
+	 * 实时复盘数据展示
+	 */
 	function update() {
 		if (!isEnable) {
 			return;
@@ -268,8 +328,16 @@ var recons = execMain(function() {
 			nrec = Math.min(5, nsolv);
 		} else if (nrec == 'mo12') {
 			nrec = Math.min(12, nsolv);
+		} else if (nrec == 'mo50') {
+			nrec = Math.min(50, nsolv);
 		} else if (nrec == 'mo100') {
 			nrec = Math.min(100, nsolv);
+		} else if (nrec == 'mo200') {
+			nrec = Math.min(200, nsolv);
+		} else if (nrec == 'mo500') {
+			nrec = Math.min(500, nsolv);
+		} else if (nrec == 'mo1000') {
+			nrec = Math.min(1000, nsolv);
 		} else {
 			nrec = nsolv;
 		}
@@ -283,6 +351,12 @@ var recons = execMain(function() {
 		var steps = cubeutil.getStepNames(method);
 		var nvalid = 0;
 		var stepData = [];
+		let pll = stats.getExtraInfo('recons_cf4op_' + 'PLL', nsolv - 1);
+		let oll = stats.getExtraInfo('recons_cf4op_' + 'OLL', nsolv - 1);
+		let ollFace = scramble_333.getOllSvgImage(oll[0]);
+		let pllFace = scramble_333.getPLLSvgImage(pll[0]);
+		pllSvg = pllFace[1];
+		ollSvg = ollFace[1];
 		for (var s = nsolv - 1; s >= nsolv - nrec; s--) {
 			var rec = stats.getExtraInfo('recons_' + method, s);
 			if (!rec) {
@@ -310,6 +384,8 @@ var recons = execMain(function() {
 		}
 		if (nrec == 1) {
 			var solve = cubeutil.getPrettyReconstruction(rec.rawMoves, method).prettySolve;
+			stepData[6][4] = pllFace[0];
+			stepData[5][4] = ollFace[1];
 			renderResult(stepData, null, isPercent, stats.timesAt(nsolv - 1)[1], solve);
 		} else {
 			renderResult(stepData, null, isPercent);
@@ -436,7 +512,7 @@ var recons = execMain(function() {
 			cumStepMetric.bind(null, 'cf4op', false),
 			['CFOP ' + titleStr[1], kernel.pretty]);
 		kernel.regListener('recons', 'reqrec', reqRecons);
-		var ranges = ['single', 'mo5', 'mo12', 'mo100', 'all'];
+		var ranges = ['single', 'mo5', 'mo12', 'mo50','mo100','mo200','mo500','mo1000', 'all'];
 		for (var i = 0; i < ranges.length; i++) {
 			rangeSelect.append('<option value="' + ranges[i] + '">' + ranges[i] + '</option>');
 		}
@@ -466,9 +542,20 @@ var caseStat = execMain(function() {
 		$('<th>').addClass('click').attr('data-sort-column', 2).append('N'),
 		$('<th>').addClass('click').attr('data-sort-column', 5).append(titleStr[0]),
 		$('<th>').addClass('click').attr('data-sort-column', 6).append(titleStr[1]),
-		$('<th>').addClass('click').attr('data-sort-column', 7).append(titleStr[2]),
-		$('<th>').addClass('click').attr('data-sort-column', 8).append(titleStr[3])
+		$('<th>').addClass('click').attr('data-sort-column', 7).append(titleStr[3]),
+		$('<th>').addClass('click').attr('data-sort-column', 8).append(titleStr[4])
 	);
+	function sortBySecondDim(arr) {
+		arr.sort(function(a, b) {
+			if (a[2] / a[0] < b[2]/ a[0]) {
+				return 1;
+			}
+			if (a[2]/ a[0] > b[2]/ a[0]) {
+				return -1;
+			}
+			return 0;
+		});
+	}
 
 	function update() {
 		if (!isEnable) {
@@ -726,9 +813,9 @@ var scatter = execMain(function() {
 			ctx.closePath();
 		}
 		var spanT = '<span style="color:$">$</span>';
-		slowSpan.html(' ' + 
-			spanT.replace('$', '#f00').replace('$', kernel.pretty(slow0 * finalTime)) + ' ' + 
-			spanT.replace('$', '#00f').replace('$', kernel.pretty(slow1 * finalTime)) + ' ' + 
+		slowSpan.html(' ' +
+			spanT.replace('$', '#f00').replace('$', kernel.pretty(slow0 * finalTime)) + ' ' +
+			spanT.replace('$', '#00f').replace('$', kernel.pretty(slow1 * finalTime)) + ' ' +
 			spanT.replace('$', '#888').replace('$', kernel.pretty((1 - slow0 - slow1) * finalTime))
 		);
 	}

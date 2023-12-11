@@ -702,7 +702,7 @@ posit:
 			for (var i = 0; i < dim * dim; i++) {
 				var x = i % dim + 0.5;
 				var y = ~~(i / dim) + 0.5;
-				drawPolygon(ctx, colors["DLBURF".indexOf(pieces[i])] || '#888', [
+				drawPolygon(ctx, colors["DLBURF".indexOf(pieces[i])] || '#404040', [
 					[x, x + 1, x + 1, x],
 					[y, y, y + 1, y + 1]
 				], [width, 0.1, 0.1]);
@@ -710,7 +710,7 @@ posit:
 			for (var i = 0; i < dim * 4; i++) {
 				var x = i % dim;
 				var rot = ~~(i / dim);
-				drawPolygon(ctx, colors["DLBURF".indexOf(pieces[i + dim * dim])] || '#888', Rotate([
+				drawPolygon(ctx, colors["DLBURF".indexOf(pieces[i + dim * dim])] || '#404040', Rotate([
 					[x - dim / 2, x - dim / 2 + 1, (x - dim / 2 + 1) * 0.9, (x - dim / 2) * 0.9],
 					[dim / 2 + 0.05, dim / 2 + 0.05, dim / 2 + 0.5, dim / 2 + 0.5]
 				], -rot * PI / 2), [width, 0.6 + dim / 2, 0.6 + dim / 2]);
