@@ -67,7 +67,7 @@ var TOOLS_TREND = '时间趋势';
 var TOOLS_METRONOME = '节拍器';
 var TOOLS_RECONS = '解法复盘';
 var TOOLS_RECONS_NODATA = '未找到解法。';
-var TOOLS_RECONS_TITLE = '观察|转动|合计|步数|手速';
+var TOOLS_RECONS_TITLE = '观察|转动|合计|步数|手速|Case|';
 var TOOLS_TRAINSTAT = '训练统计';
 var TOOLS_BLDHELPER = '盲拧助手';
 var TOOLS_CFMTIME = '确认成绩';
@@ -111,7 +111,7 @@ var PROPERTY_TIMEU = '计时器更新方式';
 var PROPERTY_TIMEU_STR = '实时|0.1秒|到秒|仅观察|隐藏';
 var PROPERTY_PRETIME = '开始前按住空格时间（秒）';
 var PROPERTY_ENTERING = '产生成绩通过';
-var PROPERTY_ENTERING_STR = '计时器|手动输入|stackmat|MoYuTimer|虚拟魔方|蓝牙魔方|qCube|Gan计时器';
+var PROPERTY_ENTERING_STR = '计时器|手动输入|stackmat|MoYuTimer|虚拟魔方|蓝牙魔方|qCube|Gan计时器|顶层训练';
 var PROPERTY_INTUNIT = '输入整数时的单位';
 var PROPERTY_INTUNIT_STR = '秒|百分秒|毫秒';
 var PROPERTY_COLOR = '选择颜色主题';
@@ -190,40 +190,56 @@ var scrdata = [
 		['傻瓜', "333noob", 25],
 		['棱块训练', "edges", 0],
 		['角块训练', "corners", 0],
-		['顶层训练', "ll", 0],
-		['zbll训练', "zbll", 0],
-		['顶层角块', "cll", 0],
-		['COLL', "coll", 0],
-		['顶层棱块', "ell", 0],
-		['桥式六棱', "lse", 0],
-		['桥式六棱&ltM,U&gt', "lsemu", 0],
-		['桥式四角', "cmll", 0],
-		['F2L训练', "f2l", 0],
+		['盲拧助手', "nocache_333bldspec", 0],
+		['三阶脚拧', "333ft", 0],
+		['自定义', "333custom", 0]
+	]],
+	['3x3x3 CFOP', [
+		['PLL', "pll", 0],
+		['OLL', "oll", 0],
 		['F2L单组', "lsll2", 0],
+		['顶层训练', "ll", 0],
+		['ZBLL', "zbll", 0],
+		['COLL', "coll", 0],
+		['CLL', "cll", 0],
+		['ELL', "ell", 0],
 		['2GLL', "2gll", 0],
+		['ZZLL', "zzll", 0],
 		['ZBLS', "zbls", 0],
 		['EOLS', "eols", 0],
 		['WVLS', "wvls", 0],
 		['VLS', "vls", 0],
-		['ZZLL', "zzll", 0],
-		['TTLL', "ttll", 0],
-		['OLL', "oll", 0],
-		['PLL', "pll", 0],
+		['F2L训练', "f2l", 0],
 		['EOLine', "eoline", 0],
 		['简单十字', "easyc", 3],
-		['简单XCross', "easyxc", 4],
-		['盲拧助手', "nocache_333bldspec", 0],
-		['三阶脚拧', "333ft", 0],
-		['自定义', "333custom", 0]
+		['简单XCross', "easyxc", 4]
+	]],
+	['3x3x3 Roux', [
+		['2nd Block', "sbrx", 0],
+		['CMLL', "cmll", 0],
+		['LSE', "lse", 0],
+		['LSE &lt;M, U&gt;', "lsemu", 0]
+	]],
+	['3x3x3 Mehta', [
+		['3QB', "mt3qb", 0],
+		['EOLE', "mteole", 0],
+		['TDR', "mttdr", 0],
+		['6CP', "mt6cp", 0],
+		['CDRLL', "mtcdrll", 0],
+		['L5EP', "mtl5ep", 0],
+		['TTLL', "ttll", 0]
 	]],
 	['2x2x2', [
 		["随机状态 (WCA)", "222so", 0],
 		['最少步', "222o", 0],
 		['3-gen', "2223", 25],
 		['EG', "222eg", 0],
-		['EG0', "222eg0", 0],
+		['CLL', "222eg0", 0],
 		['EG1', "222eg1", 0],
 		['EG2', "222eg2", 0],
+		['TCLL+', "222tcp", 0],
+		['TCLL-', "222tcn", 0],
+		['LS', "222lsall", 0],
 		['无连色', "222nb", 0]
 	]],
 	['4x4x4', [
@@ -324,6 +340,10 @@ var scrdata = [
 		['最少步', "gearo", 0],
 		['随机转动', "gear", 10]
 	]],
+	['Kilominx', [
+		['random state', "klmso", 0],
+		['Pochmann', "klmp", 30]
+	]],
 	['Cmetrick', [
 		[' ', "cm3", 25]
 	]],
@@ -398,7 +418,8 @@ var scrdata = [
 		['2到4阶 (WCA)', "r234w", 0],
 		['2到5阶 (WCA)', "r2345w", 0],
 		['2到6阶 (WCA)', "r23456w", 0],
-		['2到7阶 (WCA)', "r234567w", 0]
+		['2到7阶 (WCA)', "r234567w", 0],
+		['Mini Guildford', "rmngf", 0]
 	]],
 	['===213===', [
 		['--', "blank", 0]
@@ -452,6 +473,7 @@ var STATS_ALERTMG = '将分组[%f]的所有成绩合并至分组[%t]的末尾？
 var STATS_PROMPTSPL = '从分组[%s]分割最新的几个成绩？';
 var STATS_ALERTSPL = '至少需要分割或保留1个成绩';
 var STATS_AVG = '平均';
+var STATS_SUM = '总和';
 var STATS_SOLVE = '还原';
 var STATS_TIME = '时间';
 var STATS_SESSION = '分组';
@@ -476,12 +498,16 @@ var PROPERTY_SCR2SS = '改变打乱类型时新建分组';
 var PROPERTY_SS2SCR = '改变分组时自动选择打乱类型';
 var PROPERTY_SS2PHASES = '改变分组时自动设置多阶段测速';
 var PROPERTY_STATINV = '倒序显示成绩列表';
+var PROPERTY_STATSSUM = '在成绩列表中显示总和';
 var PROPERTY_STATTHRES = '显示创造最快所需的目标时间';
 var PROPERTY_STATAL = '统计指标';
 var PROPERTY_STATALU = '自定义的统计指标';
+var PROPERTY_HLPBS = '高亮个人最好成绩';
+var PROPERTY_HLPBS_STR = '深橙色同WCA|同链接颜色|加粗|无';
 var PROPERTY_DELMUL = '启用批量删除';
 var PROPERTY_TOOLSFUNC = '选择的功能';
-var PROPERTY_TRIM = '首尾各删去几个成绩';
+var PROPERTY_TRIM = '删去几个最好成绩';
+var PROPERTY_TRIMR = '删去几个最坏成绩';
 var PROPERTY_TRIM_MED = '中位数';
 var PROPERTY_STKHEAD = '使用Stackmat状态信息';
 var PROPERTY_TOOLPOS = '工具面板位置';
@@ -489,7 +515,7 @@ var PROPERTY_TOOLPOS_STR = '下面|浮动|上面';
 var PROPERTY_HIDEFULLSOL = '逐步显示解法';
 var PROPERTY_IMPPREV = '导入非最新数据';
 var PROPERTY_AUTOEXP = '自动导出（每100次还原）';
-var PROPERTY_AUTOEXP_OPT = '从不|到文件|用csTimer账号|用WCA账号';
+var PROPERTY_AUTOEXP_OPT = '从不|到文件|用csTimer账号|用WCA账号|用Google账号';
 var PROPERTY_SCRASIZE = '自动打乱字体大小';
 var MODULE_NAMES = {
 	"kernel": '全局',
@@ -507,6 +533,8 @@ var BGIMAGE_OPACITY = '背景图片不透明度';
 var BGIMAGE_IMAGE = '背景图片';
 var BGIMAGE_IMAGE_STR = '无|自定义|CCT';
 var SHOW_AVG_LABEL = '显示平均标签';
+var SHOW_DIFF_LABEL = '显示对比标签';
+var SHOW_DIFF_LABEL_STR = '-绿+红|-红+绿|正常|无';
 var USE_LOGOHINT = '在Logo中提示信息';
 var TOOLS_SCRGEN = '打乱生成器';
 var SCRGEN_NSCR = '打乱个数';

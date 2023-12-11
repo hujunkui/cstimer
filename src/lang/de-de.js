@@ -111,7 +111,7 @@ var PROPERTY_TIMEU = 'Timer-Update ist';
 var PROPERTY_TIMEU_STR = 'Update|0.1s|Sekunden|Inspektion|keine';
 var PROPERTY_PRETIME = 'wie lange die Leertaste drücken (Sekunde(n))';
 var PROPERTY_ENTERING = 'Zeiten eintragen mit';
-var PROPERTY_ENTERING_STR = 'Timer|Tippen|Stackmat|MoYuTimer|virtuell|Bluetooth|qCube|GanTimer';
+var PROPERTY_ENTERING_STR = 'Timer|Tippen|Stackmat|MoYuTimer|virtuell|Bluetooth|qCube|GanTimer|last layer training';
 var PROPERTY_INTUNIT = 'Einheit bei der Eingabe einer Zahl';
 var PROPERTY_INTUNIT_STR = 'Sekunde|Hundertstelsekunde|Millisekunde';
 var PROPERTY_COLOR = 'Farbschema wählen';
@@ -190,40 +190,56 @@ var scrdata = [
 		['3x3x3 für Anfänger', "333noob", 25],
 		['nur Kanten', "edges", 0],
 		['nur Ecken', "corners", 0],
-		['letze Schicht', "ll", 0],
-		['ZB letzte Schicht', "zbll", 0],
-		['Ecken der letzten Schicht', "cll", 0],
-		['COLL', "coll", 0],
-		['Kanten der letzen Schicht', "ell", 0],
-		['letzten sechs Kanten', "lse", 0],
-		['letzten sechs Kanten&ltM,U&gt', "lsemu", 0],
-		['Roux L10P', "cmll", 0],
-		['Kreuz gelöst', "f2l", 0],
+		['BLD Helper', "nocache_333bldspec", 0],
+		['3x3 mit Füßen', "333ft", 0],
+		['Angepasst', "333custom", 0]
+	]],
+	['3x3x3 CFOP', [
+		['PLL', "pll", 0],
+		['OLL', "oll", 0],
 		['letzter Slot + letzte Schicht', "lsll2", 0],
+		['letze Schicht', "ll", 0],
+		['ZBLL', "zbll", 0],
+		['COLL', "coll", 0],
+		['CLL', "cll", 0],
+		['ELL', "ell", 0],
 		['2GLL', "2gll", 0],
+		['ZZLL', "zzll", 0],
 		['ZBLS', "zbls", 0],
 		['EOLS', "eols", 0],
 		['WVLS', "wvls", 0],
 		['VLS', "vls", 0],
-		['ZZLL', "zzll", 0],
-		['TTLL', "ttll", 0],
-		['OLL', "oll", 0],
-		['PLL', "pll", 0],
+		['Kreuz gelöst', "f2l", 0],
 		['EOLine', "eoline", 0],
 		['einfaches Kreuz', "easyc", 3],
-		['easy xcross', "easyxc", 4],
-		['BLD Helper', "nocache_333bldspec", 0],
-		['3x3 mit Füßen', "333ft", 0],
-		['Angepasst', "333custom", 0]
+		['easy xcross', "easyxc", 4]
+	]],
+	['3x3x3 Roux', [
+		['2nd Block', "sbrx", 0],
+		['CMLL', "cmll", 0],
+		['LSE', "lse", 0],
+		['LSE &lt;M, U&gt;', "lsemu", 0]
+	]],
+	['3x3x3 Mehta', [
+		['3QB', "mt3qb", 0],
+		['EOLE', "mteole", 0],
+		['TDR', "mttdr", 0],
+		['6CP', "mt6cp", 0],
+		['CDRLL', "mtcdrll", 0],
+		['L5EP', "mtl5ep", 0],
+		['TTLL', "ttll", 0]
 	]],
 	['2x2x2', [
 		["zufälliger Status (WCA)", "222so", 0],
 		['optimal', "222o", 0],
 		['3-gen', "2223", 25],
 		['EG', "222eg", 0],
-		['EG0', "222eg0", 0],
+		['CLL', "222eg0", 0],
 		['EG1', "222eg1", 0],
 		['EG2', "222eg2", 0],
+		['TCLL+', "222tcp", 0],
+		['TCLL-', "222tcn", 0],
+		['LS', "222lsall", 0],
 		['Keine Bar', "222nb", 0]
 	]],
 	['4x4x4', [
@@ -324,6 +340,10 @@ var scrdata = [
 		['optimal', "gearo", 0],
 		['zufällige Bewegung', "gear", 10]
 	]],
+	['Kilominx', [
+		['random state', "klmso", 0],
+		['Pochmann', "klmp", 30]
+	]],
 	['Cmetrick', [
 		[' ', "cm3", 25]
 	]],
@@ -398,7 +418,8 @@ var scrdata = [
 		['234 Staffel (WCA)', "r234w", 0],
 		['2345 Staffel (WCA)', "r2345w", 0],
 		['23456 Staffel (WCA)', "r23456w", 0],
-		['234567 Staffel (WCA)', "r234567w", 0]
+		['234567 Staffel (WCA)', "r234567w", 0],
+		['Mini Guildford', "rmngf", 0]
 	]],
 	['===Witze===', [
 		['--', "blank", 0]
@@ -452,6 +473,7 @@ var STATS_ALERTMG = 'Alle Zeiten der Sitzung [%f] an das Ende von Sitzung [%t] a
 var STATS_PROMPTSPL = 'Nummer des neuesten Zeit-Splits der Sitzung [%s]?';
 var STATS_ALERTSPL = 'Soll geteilt werden, oder mindestens eine Zeit übrig lassen';
 var STATS_AVG = 'Mittelwert';
+var STATS_SUM = 'sum';
 var STATS_SOLVE = 'Versuch';
 var STATS_TIME = 'Zeit';
 var STATS_SESSION = 'Sitzung';
@@ -476,12 +498,16 @@ var PROPERTY_SCR2SS = 'neue Sitzung erstellen, wenn Scramble-Typ gewechselt wird
 var PROPERTY_SS2SCR = 'Scramble-Typ wiederherstellen wenn Sitzung gewechselt wird';
 var PROPERTY_SS2PHASES = 'Multi-Phase Timen wiederherstellen, wenn Sitzung gewechselt wird';
 var PROPERTY_STATINV = 'umgekehrte Zeitliste';
+var PROPERTY_STATSSUM = 'Show sum in time list';
 var PROPERTY_STATTHRES = 'Show target time for session best';
 var PROPERTY_STATAL = 'Statistische Indikatoren';
 var PROPERTY_STATALU = 'Angepasster statistischer Indikator';
+var PROPERTY_HLPBS = 'Highlight PBs';
+var PROPERTY_HLPBS_STR = 'Dark orange as WCA|As link color|Bolder|None';
 var PROPERTY_DELMUL = 'Mehrfach-Löschung aktivieren';
 var PROPERTY_TOOLSFUNC = 'Ausgewählte Funktionen';
 var PROPERTY_TRIM = 'Anzahl der Versuche, die auf beiden Seiten getrimmt wurden';
+var PROPERTY_TRIMR = 'Number of solves trimmed at worse side';
 var PROPERTY_TRIM_MED = 'Median';
 var PROPERTY_STKHEAD = 'Benutze die Stackmat Statusinformationen';
 var PROPERTY_TOOLPOS = 'Tools panel position';
@@ -489,7 +515,7 @@ var PROPERTY_TOOLPOS_STR = 'Bottom|Float|Top';
 var PROPERTY_HIDEFULLSOL = 'Zeige die Lösungen schrittweise an';
 var PROPERTY_IMPPREV = 'Veraltete Daten importieren?';
 var PROPERTY_AUTOEXP = 'Autoexport (alle 100 solves)';
-var PROPERTY_AUTOEXP_OPT = 'Nie|In Datei|Mit csTimer ID|Mit WCA Account';
+var PROPERTY_AUTOEXP_OPT = 'Nie|In Datei|Mit csTimer ID|Mit WCA Account|Mit Google Account';
 var PROPERTY_SCRASIZE = 'Automatische Scramble Größe';
 var MODULE_NAMES = {
 	"kernel": 'global',
@@ -507,6 +533,8 @@ var BGIMAGE_OPACITY = 'Deckkraft des Hintergrundbilds';
 var BGIMAGE_IMAGE = 'Hintergrundbild';
 var BGIMAGE_IMAGE_STR = 'keine|manuell|CCT';
 var SHOW_AVG_LABEL = 'Durchnitts-Label anzeigen';
+var SHOW_DIFF_LABEL = 'Show Difference Label';
+var SHOW_DIFF_LABEL_STR = '-Green+Red|-Red+Green|Normal|None';
 var USE_LOGOHINT = 'Hinweis-Meldungen im Logo';
 var TOOLS_SCRGEN = 'Scramble-Generator';
 var SCRGEN_NSCR = 'Anzahl der Scrambles';
@@ -517,5 +545,5 @@ var VRCREPLAY_ORI = 'raw ori|auto ori';
 var VRCREPLAY_SHARE = 'share link';
 var GIIKER_CONNECT = 'Click to connect';
 var GIIKER_RESET = 'Reset (Mark Solved)';
-var PROPERTY_SHOWAD = 'Show advistisements (take effect after reload)';
+var PROPERTY_SHOWAD = 'Show advertisements (take effect after reload)';
 var PROPERTY_GIIORI = 'Cube orientation';

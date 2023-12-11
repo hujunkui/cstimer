@@ -45,9 +45,9 @@ var EXPORT_UPLOADED = 'Ladattu onnistuneesti';
 var EXPORT_CODEPROMPT = 'Save this code, or type saved code to import';
 var EXPORT_ONLYOPT = 'Export/Import only Options';
 var EXPORT_ACCOUNT = 'Export Accounts';
-var EXPORT_LOGINGGL = 'Login Using Google Account';
-var EXPORT_LOGINWCA = 'Login Using WCA Account';
-var EXPORT_LOGOUTCFM = 'Confirm to log out?';
+var EXPORT_LOGINGGL = 'Kirjaudu käyttäen Google-tiliä';
+var EXPORT_LOGINWCA = 'Kirjaudu käyttäen WCA-tiliä';
+var EXPORT_LOGOUTCFM = 'Kirjaudu ulos?';
 var EXPORT_LOGINAUTHED = 'Authorized<br>Fetching Data...';
 var IMPORT_FINAL_CONFIRM = 'This will override all local data! It will modify %d sessions, add %a and remove %r solves at least. Confirm to import data?';
 var BUTTON_SCRAMBLE = 'SEKOITA';
@@ -62,13 +62,13 @@ var TOOLS_GIIKER = 'Bluetooth kuutio';
 var TOOLS_IMAGE = 'piirrä sekoitus';
 var TOOLS_STATS = 'Tilastot';
 var TOOLS_HUGESTATS = 'cross-session stats';
-var TOOLS_DISTRIBUTION = 'time distribution';
-var TOOLS_TREND = 'time trend';
-var TOOLS_METRONOME = 'metronome';
+var TOOLS_DISTRIBUTION = 'ajan jakautuminen';
+var TOOLS_TREND = 'ajan trendi';
+var TOOLS_METRONOME = 'metronomi';
 var TOOLS_RECONS = 'Reconstruct';
 var TOOLS_RECONS_NODATA = 'No solution found.';
 var TOOLS_RECONS_TITLE = 'insp|exec|turn|tps';
-var TOOLS_TRAINSTAT = 'Training Stat.';
+var TOOLS_TRAINSTAT = 'Harj. statistiikka';
 var TOOLS_BLDHELPER = 'BLD Helper';
 var TOOLS_CFMTIME = 'Vahvista aika';
 var TOOLS_SOLVERS = 'Solvers';
@@ -111,7 +111,7 @@ var PROPERTY_TIMEU = 'Ajastimen päivitys on';
 var PROPERTY_TIMEU_STR = 'update|0.1s|seconds|inspection|none';
 var PROPERTY_PRETIME = 'time of keeping space down(second(s))';
 var PROPERTY_ENTERING = 'entering in times with';
-var PROPERTY_ENTERING_STR = 'timer|typing|stackmat|MoYuTimer|virtual|bluetooth|qCube|GanTimer';
+var PROPERTY_ENTERING_STR = 'timer|typing|stackmat|MoYuTimer|virtual|bluetooth|qCube|GanTimer|last layer training';
 var PROPERTY_INTUNIT = 'Unit when entering an integer';
 var PROPERTY_INTUNIT_STR = 'second|centisecond|millisecond';
 var PROPERTY_COLOR = 'valitse väriteema';
@@ -127,9 +127,9 @@ var PROPERTY_FONTCOLOR_STR = 'black|white';
 var PROPERTY_COLOR_STR = 'manual|import/export...|random|style1|style2|style3|black|white|style6|solarized dark|solarized light';
 var PROPERTY_FONT = 'select timer\'s font';
 var PROPERTY_FONT_STR = 'random digital|normal|digital1|digital2|digital3|digital4|digital5';
-var PROPERTY_FORMAT = 'time format';
-var PROPERTY_USEKSC = 'use keyboard shortcut';
-var PROPERTY_NTOOLS = 'number of tools';
+var PROPERTY_FORMAT = 'ajan muoto';
+var PROPERTY_USEKSC = 'käytä pikanäppäimiä';
+var PROPERTY_NTOOLS = 'työkalujen määrä';
 var PROPERTY_AHIDE = 'Hide All Elements When Timing';
 var SCRAMBLE_LAST = 'last';
 var SCRAMBLE_NEXT = 'next';
@@ -188,42 +188,58 @@ var scrdata = [
 		["random state (WCA)", "333", 0],
 		['random move', "333o", 25],
 		['3x3x3 for noobs', "333noob", 25],
-		['edges only', "edges", 0],
-		['corners only', "corners", 0],
-		['last layer', "ll", 0],
-		['zb last layer', "zbll", 0],
-		['corners of last layer', "cll", 0],
-		['COLL', "coll", 0],
-		['edges of last layer', "ell", 0],
-		['last six edges', "lse", 0],
-		['last six edges&ltM,U&gt', "lsemu", 0],
-		['Roux L10P', "cmll", 0],
-		['cross solved', "f2l", 0],
+		['vain reunat', "edges", 0],
+		['vain kulmat', "corners", 0],
+		['BLD Helper', "nocache_333bldspec", 0],
+		['3x3 ft', "333ft", 0],
+		['Custom', "333custom", 0]
+	]],
+	['3x3x3 CFOP', [
+		['PLL', "pll", 0],
+		['OLL', "oll", 0],
 		['last slot + last layer', "lsll2", 0],
+		['last layer', "ll", 0],
+		['ZBLL', "zbll", 0],
+		['COLL', "coll", 0],
+		['CLL', "cll", 0],
+		['ELL', "ell", 0],
 		['2GLL', "2gll", 0],
+		['ZZLL', "zzll", 0],
 		['ZBLS', "zbls", 0],
 		['EOLS', "eols", 0],
 		['WVLS', "wvls", 0],
 		['VLS', "vls", 0],
-		['ZZLL', "zzll", 0],
-		['TTLL', "ttll", 0],
-		['OLL', "oll", 0],
-		['PLL', "pll", 0],
+		['cross solved', "f2l", 0],
 		['EOLine', "eoline", 0],
 		['easy cross', "easyc", 3],
-		['easy xcross', "easyxc", 4],
-		['BLD Helper', "nocache_333bldspec", 0],
-		['3x3 ft', "333ft", 0],
-		['Custom', "333custom", 0]
+		['easy xcross', "easyxc", 4]
+	]],
+	['3x3x3 Roux', [
+		['2nd Block', "sbrx", 0],
+		['CMLL', "cmll", 0],
+		['LSE', "lse", 0],
+		['LSE &lt;M, U&gt;', "lsemu", 0]
+	]],
+	['3x3x3 Mehta', [
+		['3QB', "mt3qb", 0],
+		['EOLE', "mteole", 0],
+		['TDR', "mttdr", 0],
+		['6CP', "mt6cp", 0],
+		['CDRLL', "mtcdrll", 0],
+		['L5EP', "mtl5ep", 0],
+		['TTLL', "ttll", 0]
 	]],
 	['2x2x2', [
 		["random state (WCA)", "222so", 0],
 		['optimal', "222o", 0],
 		['3-gen', "2223", 25],
 		['EG', "222eg", 0],
-		['EG0', "222eg0", 0],
+		['CLL', "222eg0", 0],
 		['EG1', "222eg1", 0],
 		['EG2', "222eg2", 0],
+		['TCLL+', "222tcp", 0],
+		['TCLL-', "222tcn", 0],
+		['LS', "222lsall", 0],
 		['No Bar', "222nb", 0]
 	]],
 	['4x4x4', [
@@ -237,7 +253,7 @@ var scrdata = [
 	['5x5x5', [
 		["WCA", "555wca", 60],
 		['SiGN', "555", 60],
-		['5x5x5 edges', "5edge", 8]
+		['5x5x5 reunat', "5edge", 8]
 	]],
 	['6x6x6', [
 		["WCA", "666wca", 80],
@@ -324,6 +340,10 @@ var scrdata = [
 		['optimal', "gearo", 0],
 		['random move', "gear", 10]
 	]],
+	['Kilominx', [
+		['random state', "klmso", 0],
+		['Pochmann', "klmp", 30]
+	]],
 	['Cmetrick', [
 		[' ', "cm3", 25]
 	]],
@@ -398,7 +418,8 @@ var scrdata = [
 		['234 relay (WCA)', "r234w", 0],
 		['2345 relay (WCA)', "r2345w", 0],
 		['23456 relay (WCA)', "r23456w", 0],
-		['234567 relay (WCA)', "r234567w", 0]
+		['234567 relay (WCA)', "r234567w", 0],
+		['Mini Guildford', "rmngf", 0]
 	]],
 	['===JOKES===', [
 		['--', "blank", 0]
@@ -452,6 +473,7 @@ var STATS_ALERTMG = 'Merge all times in session [%f] to the end of session [%t]?
 var STATS_PROMPTSPL = 'Number of latest times split from session [%s]?';
 var STATS_ALERTSPL = 'Should split or leave 1 time at least';
 var STATS_AVG = 'mean';
+var STATS_SUM = 'sum';
 var STATS_SOLVE = 'solve';
 var STATS_TIME = 'time';
 var STATS_SESSION = 'Session';
@@ -476,12 +498,16 @@ var PROPERTY_SCR2SS = 'create new session when switching scramble type';
 var PROPERTY_SS2SCR = 'restore scramble type when switching session';
 var PROPERTY_SS2PHASES = 'restore multi-phase timing when switching session';
 var PROPERTY_STATINV = 'Inverse time list';
+var PROPERTY_STATSSUM = 'Show sum in time list';
 var PROPERTY_STATTHRES = 'Show target time for session best';
 var PROPERTY_STATAL = 'Statistical indicators';
 var PROPERTY_STATALU = 'Customized statistical indicator';
+var PROPERTY_HLPBS = 'Highlight PBs';
+var PROPERTY_HLPBS_STR = 'Dark orange as WCA|As link color|Bolder|None';
 var PROPERTY_DELMUL = 'Enable Multiple Deletion';
 var PROPERTY_TOOLSFUNC = 'Selected Functions';
-var PROPERTY_TRIM = 'Number of solves trimmed at each side';
+var PROPERTY_TRIM = 'Number of solves trimmed at better side';
+var PROPERTY_TRIMR = 'Number of solves trimmed at worse side';
 var PROPERTY_TRIM_MED = 'Median';
 var PROPERTY_STKHEAD = 'Use Stackmat Status Information';
 var PROPERTY_TOOLPOS = 'Tools panel position';
@@ -489,7 +515,7 @@ var PROPERTY_TOOLPOS_STR = 'Bottom|Float|Top';
 var PROPERTY_HIDEFULLSOL = 'Show solution progressively';
 var PROPERTY_IMPPREV = 'Import non-latest data';
 var PROPERTY_AUTOEXP = 'Auto Export (per 100 solves)';
-var PROPERTY_AUTOEXP_OPT = 'Never|To File|With csTimer ID|With WCA Account';
+var PROPERTY_AUTOEXP_OPT = 'Never|To File|With csTimer ID|With WCA Account|With Google Account';
 var PROPERTY_SCRASIZE = 'Auto scramble size';
 var MODULE_NAMES = {
 	"kernel": 'global',
@@ -507,6 +533,8 @@ var BGIMAGE_OPACITY = 'background image opacity';
 var BGIMAGE_IMAGE = 'background image';
 var BGIMAGE_IMAGE_STR = 'none|manual|CCT';
 var SHOW_AVG_LABEL = 'Show Avg Label';
+var SHOW_DIFF_LABEL = 'Show Difference Label';
+var SHOW_DIFF_LABEL_STR = '-Green+Red|-Red+Green|Normal|None';
 var USE_LOGOHINT = 'Hint messages in logo';
 var TOOLS_SCRGEN = 'ScrambleGenerator';
 var SCRGEN_NSCR = 'Number of scrambles';
@@ -517,5 +545,5 @@ var VRCREPLAY_ORI = 'raw ori|auto ori';
 var VRCREPLAY_SHARE = 'share link';
 var GIIKER_CONNECT = 'Click to connect';
 var GIIKER_RESET = 'Reset (Mark Solved)';
-var PROPERTY_SHOWAD = 'Show advistisements (take effect after reload)';
+var PROPERTY_SHOWAD = 'Show advertisements (take effect after reload)';
 var PROPERTY_GIIORI = 'Cube orientation';

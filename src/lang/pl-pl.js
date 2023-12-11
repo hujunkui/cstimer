@@ -10,7 +10,7 @@ var BUTTON_DONATE = 'DAROWIZNA';
 var PROPERTY_SR = 'Dla sesji';
 var PROPERTY_USEINS = 'użyj inspekcji WCA';
 var PROPERTY_USEINS_STR = 'Zawsze|Oprócz BLD|Nigdy';
-var PROPERTY_SHOWINS = 'Show an icon when inspection is enabled';
+var PROPERTY_SHOWINS = 'Pokaż ikonę, gdy inspekcja jest włączona';
 var PROPERTY_VOICEINS = 'ostrzeżenie głosowe inspekcji WCA';
 var PROPERTY_VOICEINS_STR = 'brak|męski głos|żeński głos';
 var PROPERTY_VOICEVOL = 'Głośność głosu';
@@ -83,13 +83,13 @@ var TOOLS_SYNCSEED_30S = 'Użyj 30s seeda';
 var TOOLS_SYNCSEED_HELP = 'Jeśli włączone, scramble będzie zależeć tylko od ustawień seeda i scramble\'a.';
 var TOOLS_SYNCSEED_DISABLE = 'Wyłączyć bieżący seed?';
 var TOOLS_SYNCSEED_INPUTA = 'Wprowadź seeda (a-zA-Z0-9)';
-var TOOLS_BATTLE = 'Online battle';
+var TOOLS_BATTLE = 'Bitwa online';
 var TOOLS_BATTLE_HEAD = 'Room|Join Room';
 var TOOLS_BATTLE_TITLE = 'Rank|Status|Time';
 var TOOLS_BATTLE_STATUS = 'Ready|Inspect|Solving|Solved|Lost';
-var TOOLS_BATTLE_INFO = 'Join a battle room with your friend, then you will battle together.';
-var TOOLS_BATTLE_JOINALERT = 'Please input the room ID';
-var TOOLS_BATTLE_LEAVEALERT = 'Leave current room';
+var TOOLS_BATTLE_INFO = 'Dołącz do pokoju bitewnego ze swoim przyjacielem, wtedy będziesz walczyć razem.';
+var TOOLS_BATTLE_JOINALERT = 'Wprowadź identyfikator pokoju';
+var TOOLS_BATTLE_LEAVEALERT = 'Opuść bieżący pokój';
 var OLCOMP_UPDATELIST = 'Zaktualizuj listę zawodów';
 var OLCOMP_VIEWRESULT = 'Pokaż wyniki';
 var OLCOMP_VIEWMYRESULT = 'Moja historia';
@@ -111,7 +111,7 @@ var PROPERTY_TIMEU = 'Aktualizacja czasu jest';
 var PROPERTY_TIMEU_STR = 'aktualizacja|0.1s|sekunda|inspekcja|brak';
 var PROPERTY_PRETIME = 'Czas trzymania spacji (sekundy)';
 var PROPERTY_ENTERING = 'wprowadzanie czasów poprzez';
-var PROPERTY_ENTERING_STR = 'timer|wprowadź czas|stackmat|MoYuTimer|virtual|bluetooth|qCube|GanTimer';
+var PROPERTY_ENTERING_STR = 'timer|wprowadź czas|stackmat|MoYuTimer|virtual|bluetooth|qCube|GanTimer|last layer training';
 var PROPERTY_INTUNIT = 'Jednostka przy wstawaniu liczby całkowitej';
 var PROPERTY_INTUNIT_STR = 'sekundy|setne sekundy|milisekundy';
 var PROPERTY_COLOR = 'wybierz kolor motywu';
@@ -178,7 +178,7 @@ var scrdata = [
 	['Wprowadź', [
 		['Zewnętrzny', "input", 0],
 		['Zawody', "remoteComp", 0],
-		['Online battle', "remoteBattle", 0],
+		['Bitwa online', "remoteBattle", 0],
 		['Remote', "remoteOther", 0]
 	]],
 	['===WCA===', [
@@ -190,40 +190,56 @@ var scrdata = [
 		['3x3x3 dla noobów', "333noob", 25],
 		['tylko krawędzie', "edges", 0],
 		['tylko narożniki', "corners", 0],
-		['ostatnia warstwa', "ll", 0],
-		['zb ostatnia warstwa', "zbll", 0],
-		['narożniki ostatniej warstwy', "cll", 0],
-		['COLL', "coll", 0],
-		['krawędzie ostatniej warstwy', "ell", 0],
-		['ostatnie sześć krawędzi', "lse", 0],
-		['ostatnie sześć krawędzi&ltM,U&gt', "lsemu", 0],
-		['Roux L10P', "cmll", 0],
-		['krzyż ułożony', "f2l", 0],
+		['BLD Helper', "nocache_333bldspec", 0],
+		['3x3x3 stopami', "333ft", 0],
+		['Własny', "333custom", 0]
+	]],
+	['3x3x3 CFOP', [
+		['PLL', "pll", 0],
+		['OLL', "oll", 0],
 		['ostatni para + ostatnia warstwa', "lsll2", 0],
+		['ostatnia warstwa', "ll", 0],
+		['ZBLL', "zbll", 0],
+		['COLL', "coll", 0],
+		['CLL', "cll", 0],
+		['ELL', "ell", 0],
 		['2GLL', "2gll", 0],
+		['ZZLL', "zzll", 0],
 		['ZBLS', "zbls", 0],
 		['EOLS', "eols", 0],
 		['WVLS', "wvls", 0],
 		['VLS', "vls", 0],
-		['ZZLL', "zzll", 0],
-		['TTLL', "ttll", 0],
-		['OLL', "oll", 0],
-		['PLL', "pll", 0],
+		['krzyż ułożony', "f2l", 0],
 		['EOLine', "eoline", 0],
 		['łatwy krzyż', "easyc", 3],
-		['easy xcross', "easyxc", 4],
-		['BLD Helper', "nocache_333bldspec", 0],
-		['3x3x3 stopami', "333ft", 0],
-		['Własny', "333custom", 0]
+		['easy xcross', "easyxc", 4]
+	]],
+	['3x3x3 Roux', [
+		['2nd Block', "sbrx", 0],
+		['CMLL', "cmll", 0],
+		['LSE', "lse", 0],
+		['LSE &lt;M, U&gt;', "lsemu", 0]
+	]],
+	['3x3x3 Mehta', [
+		['3QB', "mt3qb", 0],
+		['EOLE', "mteole", 0],
+		['TDR', "mttdr", 0],
+		['6CP', "mt6cp", 0],
+		['CDRLL', "mtcdrll", 0],
+		['L5EP', "mtl5ep", 0],
+		['TTLL', "ttll", 0]
 	]],
 	['2x2x2', [
 		["stan losowy (WCA)", "222so", 0],
 		['optymalny', "222o", 0],
 		['3-gen', "2223", 25],
 		['EG', "222eg", 0],
-		['EG-0', "222eg0", 0],
-		['EG-1', "222eg1", 0],
-		['EG-2', "222eg2", 0],
+		['CLL', "222eg0", 0],
+		['EG1', "222eg1", 0],
+		['EG2', "222eg2", 0],
+		['TCLL+', "222tcp", 0],
+		['TCLL-', "222tcn", 0],
+		['LS', "222lsall", 0],
 		['Brak paska', "222nb", 0]
 	]],
 	['4x4x4', [
@@ -324,6 +340,10 @@ var scrdata = [
 		['optymalny', "gearo", 0],
 		['losowy ruch', "gear", 10]
 	]],
+	['Kilominx', [
+		['random state', "klmso", 0],
+		['Pochmann', "klmp", 30]
+	]],
 	['Cmetrick', [
 		[' ', "cm3", 25]
 	]],
@@ -398,7 +418,8 @@ var scrdata = [
 		['234 relay (WCA)', "r234w", 0],
 		['2345 relay (WCA)', "r2345w", 0],
 		['23456 relay (WCA)', "r23456w", 0],
-		['234567 relay (WCA)', "r234567w", 0]
+		['234567 relay (WCA)', "r234567w", 0],
+		['Mini Guildford', "rmngf", 0]
 	]],
 	['===ŻARTY===', [
 		['--', "blank", 0]
@@ -452,6 +473,7 @@ var STATS_ALERTMG = 'Dołączyć wszystkie czasy z sesji [%f] do sesji [%t]?';
 var STATS_PROMPTSPL = 'Ile ostatnich czasów odłączyć od sesji [%s]?';
 var STATS_ALERTSPL = 'Powinien rozdzielić lub zostawić co najmniej 1 czas.';
 var STATS_AVG = 'średnia';
+var STATS_SUM = 'sum';
 var STATS_SOLVE = 'Ułożenie ';
 var STATS_TIME = 'czas';
 var STATS_SESSION = 'Sesja';
@@ -476,20 +498,24 @@ var PROPERTY_SCR2SS = 'utwórz nową sesję po przełączaniu typu scrambla';
 var PROPERTY_SS2SCR = 'przywróć typ scrambla po przełączaniu sesji';
 var PROPERTY_SS2PHASES = 'przywróć wielofazowy czas podczas przełączania sesji';
 var PROPERTY_STATINV = 'Odwrotna kolejność na liście czasów ';
+var PROPERTY_STATSSUM = 'Show sum in time list';
 var PROPERTY_STATTHRES = 'Show target time for session best';
 var PROPERTY_STATAL = 'Wskaźniki statystyczne';
 var PROPERTY_STATALU = 'Niestandardowy wskaźnik statystyczny';
+var PROPERTY_HLPBS = 'Highlight PBs';
+var PROPERTY_HLPBS_STR = 'Dark orange as WCA|As link color|Bolder|None';
 var PROPERTY_DELMUL = 'Włącz usuwanie wielu wierszy';
 var PROPERTY_TOOLSFUNC = 'Wybrane funkcje';
 var PROPERTY_TRIM = 'Liczba ułożeń niebranych pod uwagę';
+var PROPERTY_TRIMR = 'Number of solves trimmed at worse side';
 var PROPERTY_TRIM_MED = 'Mediana';
 var PROPERTY_STKHEAD = 'Użyj informacji o stanie Stackmat';
-var PROPERTY_TOOLPOS = 'Tools panel position';
+var PROPERTY_TOOLPOS = 'Pozycja panelu narzędzi';
 var PROPERTY_TOOLPOS_STR = 'Bottom|Float|Top';
 var PROPERTY_HIDEFULLSOL = 'Pokaż stopniowo rozwiązanie';
 var PROPERTY_IMPPREV = 'Importuj starsze dane';
 var PROPERTY_AUTOEXP = 'Automatyczny eksport (co 100 rozwiązań)';
-var PROPERTY_AUTOEXP_OPT = 'Nie eksportuj|Do pliku|przy użyciu csTimer ID|przy użyciu konta WCA';
+var PROPERTY_AUTOEXP_OPT = 'Nie eksportuj|Do pliku|przy użyciu csTimer ID|przy użyciu konta WCA|przy użyciu konta Google';
 var PROPERTY_SCRASIZE = 'Automatyczny rozmiar scrambla';
 var MODULE_NAMES = {
 	"kernel": 'globalnie',
@@ -507,15 +533,17 @@ var BGIMAGE_OPACITY = 'przezroczystość obrazu tła';
 var BGIMAGE_IMAGE = 'tło';
 var BGIMAGE_IMAGE_STR = 'brak|manualnie|CCT';
 var SHOW_AVG_LABEL = 'Wyświetl etykietę średniego czasu';
+var SHOW_DIFF_LABEL = 'Show Difference Label';
+var SHOW_DIFF_LABEL_STR = '-Green+Red|-Red+Green|Normal|None';
 var USE_LOGOHINT = 'Wiadomości w logo';
 var TOOLS_SCRGEN = 'GeneratorScrambli';
 var SCRGEN_NSCR = 'Liczba scramblów';
 var SCRGEN_PRE = 'prefiks';
 var SCRGEN_GEN = 'Generuj algorytmy mieszające!';
-var VRCREPLAY_TITLE = 'Virtual Replay';
+var VRCREPLAY_TITLE = 'Wirtualna powtórka';
 var VRCREPLAY_ORI = 'raw ori|auto ori';
-var VRCREPLAY_SHARE = 'share link';
-var GIIKER_CONNECT = 'Click to connect';
-var GIIKER_RESET = 'Reset (Mark Solved)';
-var PROPERTY_SHOWAD = 'Show advistisements (take effect after reload)';
-var PROPERTY_GIIORI = 'Cube orientation';
+var VRCREPLAY_SHARE = 'udostępnij link';
+var GIIKER_CONNECT = 'Kliknij, aby połączyć';
+var GIIKER_RESET = 'Resetuj (Oznacz jako rozwiązane)';
+var PROPERTY_SHOWAD = 'Show advertisements (take effect after reload)';
+var PROPERTY_GIIORI = 'Orientacja kostki';

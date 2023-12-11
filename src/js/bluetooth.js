@@ -205,6 +205,8 @@ var GiikerCube = execMain(function() {
 		var CHRCT_UUID_V2READ = '28be4cb6-cd67-11e9-a32f-2a2ae2dbcce4';
 		var CHRCT_UUID_V2WRITE = '28be4a4a-cd67-11e9-a32f-2a2ae2dbcce4';
 
+		var GAN_CIC_LIST = [0x0001, 0x0501]; // List of Company Identifier Codes seen for GAN cubes
+
 		var decoder = null;
 		var deviceName = null;
 		var deviceMac = null;
@@ -213,7 +215,9 @@ var GiikerCube = execMain(function() {
 			"NoRgnAHANATADDWJYwMxQOxiiEcfYgSK6Hpr4TYCs0IG1OEAbDszALpA",
 			"NoNg7ANATFIQnARmogLBRUCs0oAYN8U5J45EQBmFADg0oJAOSlUQF0g",
 			"NoRgNATGBs1gLABgQTjCeBWSUDsYBmKbCeMADjNnXxHIoIF0g",
-			"NoRg7ANAzBCsAMEAsioxBEIAc0Cc0ATJkgSIYhXIjhMQGxgC6QA"
+			"NoRg7ANAzBCsAMEAsioxBEIAc0Cc0ATJkgSIYhXIjhMQGxgC6QA",
+			"NoVgNAjAHGBMYDYCcdJgCwTFBkYVgAY9JpJYUsYBmAXSA",
+			"NoRgNAbAHGAsAMkwgMyzClH0LFcArHnAJzIqIBMGWEAukA"
 		];
 
 		function getKey(version, value) {
@@ -228,9 +232,10 @@ var GiikerCube = execMain(function() {
 			return key;
 		}
 
-		function getKeyV2(value) {
-			var key = JSON.parse(LZString.decompressFromEncodedURIComponent(KEYS[2]));
-			var iv = JSON.parse(LZString.decompressFromEncodedURIComponent(KEYS[3]));
+		function getKeyV2(value, ver) {
+			ver = ver || 0;
+			var key = JSON.parse(LZString.decompressFromEncodedURIComponent(KEYS[2 + ver * 2]));
+			var iv = JSON.parse(LZString.decompressFromEncodedURIComponent(KEYS[3 + ver * 2]));
 			for (var i = 0; i < 6; i++) {
 				key[i] = (key[i] + value[5 - i]) % 255;
 				iv[i] = (iv[i] + value[5 - i]) % 255;
@@ -326,6 +331,19 @@ var GiikerCube = execMain(function() {
 			}).then(loopRead);
 		}
 
+		function getManufacturerDataBytes(mfData) {
+			if (mfData instanceof DataView) { // this is workaround for Bluefy browser
+				return mfData;
+			}
+			for (var id of GAN_CIC_LIST) {
+				if (mfData.has(id)) {
+					DEBUG && console.log('[gancube] found Manufacturer Data under CIC = 0x' + id.toString(16).padStart(4, '0'));
+					return mfData.get(id);
+				}
+			}
+			DEBUG && console.log('[gancube] Looks like this cube has new unknown CIC');
+		}
+
 		function waitForAdvs() {
 			if (!_device || !_device.watchAdvertisements) {
 				return Promise.reject(-1);
@@ -335,7 +353,7 @@ var GiikerCube = execMain(function() {
 				var onAdvEvent = function(event) {
 					DEBUG && console.log('[gancube] receive adv event', event);
 					var mfData = event.manufacturerData;
-					var dataView = mfData instanceof DataView ? mfData : mfData.get(0x0001);
+					var dataView = getManufacturerDataBytes(mfData);
 					if (dataView && dataView.byteLength >= 6) {
 						var mac = [];
 						for (var i = 0; i < 6; i++) {
@@ -356,7 +374,7 @@ var GiikerCube = execMain(function() {
 			});
 		}
 
-		function v2initKey(forcePrompt, isWrongKey) {
+		function v2initKey(forcePrompt, isWrongKey, ver) {
 			var savedMacMap = JSON.parse(kernel.getProp('giiMacMap', '{}'));
 			var mac = savedMacMap[deviceName];
 			if (!mac || forcePrompt) {
@@ -372,16 +390,16 @@ var GiikerCube = execMain(function() {
 				savedMacMap[deviceName] = mac;
 				kernel.setProp('giiMacMap', JSON.stringify(savedMacMap));
 			}
-			v2initDecoder(mac);
+			v2initDecoder(mac, ver);
 		}
 
-		function v2initDecoder(mac) {
+		function v2initDecoder(mac, ver) {
 			var value = [];
 			for (var i = 0; i < 6; i++) {
 				value.push(parseInt(mac.slice(i * 3, i * 3 + 2), 16));
 			}
-			var keyiv = getKeyV2(value);
-			DEBUG && console.log('[gancube] key', JSON.stringify(keyiv));
+			var keyiv = getKeyV2(value, ver);
+			DEBUG && console.log('[gancube] ver=', ver, ' key=', JSON.stringify(keyiv));
 			decoder = $.aes128(keyiv[0]);
 			decoder.iv = keyiv[1];
 		}
@@ -418,7 +436,7 @@ var GiikerCube = execMain(function() {
 			return v2sendRequest([10, 5, 57, 119, 0, 0, 1, 35, 69, 103, 137, 171, 0, 0, 0, 0, 0, 0, 0, 0]);
 		}
 
-		function v2init() {
+		function v2init(ver) {
 			DEBUG && console.log('[gancube] v2init start');
 			keyCheck = 0;
 			if (deviceMac) {
@@ -431,9 +449,9 @@ var GiikerCube = execMain(function() {
 					savedMacMap[deviceName] = deviceMac;
 					kernel.setProp('giiMacMap', JSON.stringify(savedMacMap));
 				}
-				v2initDecoder(deviceMac);
+				v2initDecoder(deviceMac, ver);
 			} else {
-				v2initKey(true);
+				v2initKey(true, false, ver);
 			}
 			return _service_v2data.getCharacteristics().then(function(chrcts) {
 				DEBUG && console.log('[gancube] v2init find chrcts', chrcts);
@@ -469,10 +487,10 @@ var GiikerCube = execMain(function() {
 			deviceName = device.name;
 			DEBUG && console.log('[gancube] init gan cube start');
 			return waitForAdvs().then(function(mac) {
-				DEBUG && console.log('[gancube] init gan adv get mac= ' + mac);
+				DEBUG && console.log('[gancube] init, found cube bluetooth hardware MAC = ' + mac);
 				deviceMac = mac;
 			}, function(err) {
-				DEBUG && console.log('[gancube] init get adv failed, code=' + err);
+				DEBUG && console.log('[gancube] init, unable to automatically determine cube MAC, error code = ' + err);
 			}).then(function() {
 				return device.gatt.connect();
 			}).then(function(gatt) {
@@ -491,7 +509,7 @@ var GiikerCube = execMain(function() {
 					}
 				}
 				if (_service_v2data) {
-					return v2init();
+					return v2init((deviceName || '').startsWith('AiCube') ? 1 : 0);
 				}
 				if (_service_data && _service_meta) {
 					return v1init();
@@ -771,6 +789,7 @@ var GiikerCube = execMain(function() {
 		return {
 			init: init,
 			opservs: [SERVICE_UUID_DATA, SERVICE_UUID_META, SERVICE_UUID_V2DATA],
+			cics: GAN_CIC_LIST,
 			getBatteryLevel: getBatteryLevel,
 			clear: clear
 		};
@@ -1061,6 +1080,8 @@ var GiikerCube = execMain(function() {
 				}, {
 					namePrefix: 'MG'
 				}, {
+					namePrefix: 'AiCube'
+				}, {
 					namePrefix: 'GoCube'
 				}, {
 					namePrefix: 'Rubiks'
@@ -1068,7 +1089,7 @@ var GiikerCube = execMain(function() {
 					namePrefix: 'MHC'
 				}],
 				optionalServices: [].concat(GiikerCube.opservs, GanCube.opservs, GoCube.opservs, MoyuCube.opservs),
-				optionalManufacturerData: [0x0001],
+				optionalManufacturerData: [].concat(GanCube.cics)
 			});
 		}).then(function(device) {
 			DEBUG && console.log('[bluetooth]', device);
@@ -1077,7 +1098,7 @@ var GiikerCube = execMain(function() {
 			if (device.name.startsWith('Gi') || device.name.startsWith('Mi Smart Magic Cube')) {
 				cube = GiikerCube;
 				return GiikerCube.init(device);
-			} else if (device.name.startsWith('GAN') || device.name.startsWith('MG')) {
+			} else if (device.name.startsWith('GAN') || device.name.startsWith('MG') || device.name.startsWith('AiCube')) {
 				cube = GanCube;
 				return GanCube.init(device);
 			} else if (device.name.startsWith('GoCube') || device.name.startsWith('Rubiks')) {

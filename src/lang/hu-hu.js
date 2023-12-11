@@ -111,7 +111,7 @@ var PROPERTY_TIMEU = 'időmérő beállítása';
 var PROPERTY_TIMEU_STR = 'frissítés|0.1s|másodpercek|megnézés|nincs';
 var PROPERTY_PRETIME = 'a szóköz lenttartásának az ideje (másodpercben)';
 var PROPERTY_ENTERING = 'eredmény bevitele';
-var PROPERTY_ENTERING_STR = 'időmérővel|gépeléssel|stackmattel|MoYuTimer|virtuálisan|Bluetooth|qCube|GanTimer';
+var PROPERTY_ENTERING_STR = 'időmérővel|gépeléssel|stackmattel|MoYuTimer|virtuálisan|Bluetooth|qCube|GanTimer|last layer training';
 var PROPERTY_INTUNIT = 'Mértékegység egész megadásakor';
 var PROPERTY_INTUNIT_STR = 'másodperc|századmásodperc|ezredmásodperc';
 var PROPERTY_COLOR = 'színséma választása';
@@ -190,40 +190,56 @@ var scrdata = [
 		['3x3x3 kezdőknek', "333noob", 25],
 		['csak élek', "edges", 0],
 		['csak sarkok', "corners", 0],
-		['utolsó réteg', "ll", 0],
-		['ZB utolsó réteg', "zbll", 0],
-		['utolsó réteg sarkai', "cll", 0],
-		['COLL', "coll", 0],
-		['utolsó réteg élei', "ell", 0],
-		['utolsó hat él', "lse", 0],
-		['utolsó hat él&ltM,U&gt', "lsemu", 0],
-		['Roux L10P', "cmll", 0],
-		['kereszt megoldva', "f2l", 0],
+		['BLD Helper', "nocache_333bldspec", 0],
+		['3x3 ft (lábbal)', "333ft", 0],
+		['Custom', "333custom", 0]
+	]],
+	['3x3x3 CFOP', [
+		['PLL', "pll", 0],
+		['OLL', "oll", 0],
 		['utolsó pár + utolsó réteg', "lsll2", 0],
+		['utolsó réteg', "ll", 0],
+		['ZBLL', "zbll", 0],
+		['COLL', "coll", 0],
+		['CLL', "cll", 0],
+		['ELL', "ell", 0],
 		['2GLL', "2gll", 0],
+		['ZZLL', "zzll", 0],
 		['ZBLS', "zbls", 0],
 		['EOLS', "eols", 0],
 		['WVLS', "wvls", 0],
 		['VLS', "vls", 0],
-		['ZZLL', "zzll", 0],
-		['TTLL', "ttll", 0],
-		['OLL', "oll", 0],
-		['PLL', "pll", 0],
+		['kereszt megoldva', "f2l", 0],
 		['EOLine', "eoline", 0],
 		['könnyű kereszt', "easyc", 3],
-		['easy xcross', "easyxc", 4],
-		['BLD Helper', "nocache_333bldspec", 0],
-		['3x3 ft (lábbal)', "333ft", 0],
-		['Custom', "333custom", 0]
+		['easy xcross', "easyxc", 4]
+	]],
+	['3x3x3 Roux', [
+		['2nd Block', "sbrx", 0],
+		['CMLL', "cmll", 0],
+		['LSE', "lse", 0],
+		['LSE &lt;M, U&gt;', "lsemu", 0]
+	]],
+	['3x3x3 Mehta', [
+		['3QB', "mt3qb", 0],
+		['EOLE', "mteole", 0],
+		['TDR', "mttdr", 0],
+		['6CP', "mt6cp", 0],
+		['CDRLL', "mtcdrll", 0],
+		['L5EP', "mtl5ep", 0],
+		['TTLL', "ttll", 0]
 	]],
 	['2x2x2', [
 		["véletlen állapot (WCA)", "222so", 0],
 		['optimális', "222o", 0],
 		['3-gen', "2223", 25],
 		['EG', "222eg", 0],
-		['EG0', "222eg0", 0],
+		['CLL', "222eg0", 0],
 		['EG1', "222eg1", 0],
 		['EG2', "222eg2", 0],
+		['TCLL+', "222tcp", 0],
+		['TCLL-', "222tcn", 0],
+		['LS', "222lsall", 0],
 		['Oszlop nélkül', "222nb", 0]
 	]],
 	['4x4x4', [
@@ -324,6 +340,10 @@ var scrdata = [
 		['optimális', "gearo", 0],
 		['véletlen mozdulat', "gear", 10]
 	]],
+	['Kilominx', [
+		['random state', "klmso", 0],
+		['Pochmann', "klmp", 30]
+	]],
 	['Cmetrick', [
 		[' ', "cm3", 25]
 	]],
@@ -398,7 +418,8 @@ var scrdata = [
 		['234 váltó (WCA)', "r234w", 0],
 		['2345 váltó (WCA)', "r2345w", 0],
 		['23456 váltó (WCA)', "r23456w", 0],
-		['234567 váltó (WCA)', "r234567w", 0]
+		['234567 váltó (WCA)', "r234567w", 0],
+		['Mini Guildford', "rmngf", 0]
 	]],
 	['===POÉN===', [
 		['--', "blank", 0]
@@ -452,6 +473,7 @@ var STATS_ALERTMG = 'Egybevonod az összes időt a(z) [%f] időszakban a(z) [%t]
 var STATS_PROMPTSPL = 'Hány időt szeretnél leválasztani a(z) [%s] időszakról?';
 var STATS_ALERTSPL = 'Szétválasszon vagy legalább egy időt hagyjon';
 var STATS_AVG = 'átlag';
+var STATS_SUM = 'sum';
 var STATS_SOLVE = 'megoldás';
 var STATS_TIME = 'eredmény';
 var STATS_SESSION = 'Időszak';
@@ -476,12 +498,16 @@ var PROPERTY_SCR2SS = 'keverés váltásakor új időszak létrehozása';
 var PROPERTY_SS2SCR = 'időszak váltásakor állítsa vissza a keverés típusát';
 var PROPERTY_SS2PHASES = 'időszak váltásakor állítsa vissza a többfázisú időzítést';
 var PROPERTY_STATINV = 'Időlista megfordítása';
+var PROPERTY_STATSSUM = 'Show sum in time list';
 var PROPERTY_STATTHRES = 'Show target time for session best';
 var PROPERTY_STATAL = 'Statisztikai jelölők';
 var PROPERTY_STATALU = 'Személyre szabott statisztikai jelölők';
+var PROPERTY_HLPBS = 'Highlight PBs';
+var PROPERTY_HLPBS_STR = 'Dark orange as WCA|As link color|Bolder|None';
 var PROPERTY_DELMUL = 'Több elem törlésének engedélyezése';
 var PROPERTY_TOOLSFUNC = 'Kiválasztott Funkciók';
 var PROPERTY_TRIM = 'A kétoldalt levágott megoldások száma';
+var PROPERTY_TRIMR = 'Number of solves trimmed at worse side';
 var PROPERTY_TRIM_MED = 'Medián';
 var PROPERTY_STKHEAD = 'A Stackmat státuszának használata';
 var PROPERTY_TOOLPOS = 'Tools panel position';
@@ -489,7 +515,7 @@ var PROPERTY_TOOLPOS_STR = 'Bottom|Float|Top';
 var PROPERTY_HIDEFULLSOL = 'A megoldás lépésenkénti mutatása';
 var PROPERTY_IMPPREV = 'A régebbi adatok importálása';
 var PROPERTY_AUTOEXP = 'Automatikus exportálás (100 kirakásonként)';
-var PROPERTY_AUTOEXP_OPT = 'Soha|File-ba|csTimer ID-val|WCA fiókkal';
+var PROPERTY_AUTOEXP_OPT = 'Soha|File-ba|csTimer ID-val|WCA fiókkal|Google fiókkal';
 var PROPERTY_SCRASIZE = 'Automatikus keverésméret';
 var MODULE_NAMES = {
 	"kernel": 'globális',
@@ -507,6 +533,8 @@ var BGIMAGE_OPACITY = 'háttérkép halványsága';
 var BGIMAGE_IMAGE = 'háttérkép';
 var BGIMAGE_IMAGE_STR = 'nincs|kézi|CCT';
 var SHOW_AVG_LABEL = 'Avg Label mutatása';
+var SHOW_DIFF_LABEL = 'Show Difference Label';
+var SHOW_DIFF_LABEL_STR = '-Green+Red|-Red+Green|Normal|None';
 var USE_LOGOHINT = 'Tippek a logóban';
 var TOOLS_SCRGEN = 'KeverésGenerátor';
 var SCRGEN_NSCR = 'Keverések száma';
@@ -517,5 +545,5 @@ var VRCREPLAY_ORI = 'raw ori|auto ori';
 var VRCREPLAY_SHARE = 'share link';
 var GIIKER_CONNECT = 'Click to connect';
 var GIIKER_RESET = 'Reset (Mark Solved)';
-var PROPERTY_SHOWAD = 'Show advistisements (take effect after reload)';
+var PROPERTY_SHOWAD = 'Show advertisements (take effect after reload)';
 var PROPERTY_GIIORI = 'Cube orientation';

@@ -41,6 +41,7 @@
   <script type="text/javascript" src="js/scramble/clock.js"></script>
   <script type="text/javascript" src="js/scramble/333lse.js"></script>
   <script type="text/javascript" src="js/scramble/mgmlsll.js"></script>
+  <script type="text/javascript" src="js/scramble/kilominx.js"></script>
   <script type="text/javascript" src="js/scramble/utilscramble.js"></script>
   <script type="text/javascript" src="js/lib/storage.js"></script>
   <script type="text/javascript" src="js/stats/timestat.js"></script>
@@ -60,6 +61,7 @@
   <script type="text/javascript" src="js/tools/gsolver.js"></script>
   <script type="text/javascript" src="js/tools/bluetoothutil.js"></script>
   <script type="text/javascript" src="js/tools/metronome.js"></script>
+  <script type="text/javascript" src="js/tools/onlinecomp.js"></script>
   <script type="text/javascript" src="js/tools/battle.js"></script>
   <script type="text/javascript" src="js/tools/syncseed.js"></script>
   <script type="text/javascript" src="js/tools/bldhelper.js"></script>

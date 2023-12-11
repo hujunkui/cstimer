@@ -111,7 +111,7 @@ var PROPERTY_TIMEU = 'Actualització de temporitzador';
 var PROPERTY_TIMEU_STR = 'Continu|0,1s|Segons|Inspecció|Res';
 var PROPERTY_PRETIME = 'Temps d\'espera de l\'espai(Segon(s))';
 var PROPERTY_ENTERING = 'Entrar temps amb';
-var PROPERTY_ENTERING_STR = 'Cronòmetre|Manual|StackMat|Cronòmetre MoYu|Virtual|Bluetooth|qCube|GanTimer';
+var PROPERTY_ENTERING_STR = 'Cronòmetre|Manual|StackMat|Cronòmetre MoYu|Virtual|Bluetooth|qCube|GanTimer|last layer training';
 var PROPERTY_INTUNIT = 'Unitat en registrar un nombre enter';
 var PROPERTY_INTUNIT_STR = 'segon|centsegon|mil·lisegon';
 var PROPERTY_COLOR = 'Seleciona tema de color';
@@ -190,40 +190,56 @@ var scrdata = [
 		['3x3x3 per a novicis', "333noob", 25],
 		['Només arestes', "edges", 0],
 		['Només cantonades', "corners", 0],
-		['Última capa', "ll", 0],
-		['Última capa ZB', "zbll", 0],
-		['Cantonades de la última capa', "cll", 0],
-		['COLL', "coll", 0],
-		['Arestes de la última capa', "ell", 0],
-		['Últimes sis arestes', "lse", 0],
-		['Últimes sis arestes&ltM,U&gt', "lsemu", 0],
-		['Roux L10P', "cmll", 0],
-		['Creu resolta', "f2l", 0],
+		['Ajudant per a BLD', "nocache_333bldspec", 0],
+		['3x3 Peus', "333ft", 0],
+		['Personalitzat', "333custom", 0]
+	]],
+	['3x3x3 CFOP', [
+		['PLL', "pll", 0],
+		['OLL', "oll", 0],
 		['Últim espai + Última capa', "lsll2", 0],
+		['Última capa', "ll", 0],
+		['ZBLL', "zbll", 0],
+		['COLL', "coll", 0],
+		['CLL', "cll", 0],
+		['ELL', "ell", 0],
 		['2GLL', "2gll", 0],
+		['ZZLL', "zzll", 0],
 		['ZBLS', "zbls", 0],
 		['EOLS', "eols", 0],
 		['WVLS', "wvls", 0],
 		['VLS', "vls", 0],
-		['ZZLL', "zzll", 0],
-		['TTLL', "ttll", 0],
-		['OLL', "oll", 0],
-		['PLL', "pll", 0],
+		['Creu resolta', "f2l", 0],
 		['Línia EO', "eoline", 0],
 		['Creu fàcil', "easyc", 3],
-		['easy xcross', "easyxc", 4],
-		['Ajudant per a BLD', "nocache_333bldspec", 0],
-		['3x3 Peus', "333ft", 0],
-		['Personalitzat', "333custom", 0]
+		['easy xcross', "easyxc", 4]
+	]],
+	['3x3x3 Roux', [
+		['2nd Block', "sbrx", 0],
+		['CMLL', "cmll", 0],
+		['LSE', "lse", 0],
+		['LSE &lt;M, U&gt;', "lsemu", 0]
+	]],
+	['3x3x3 Mehta', [
+		['3QB', "mt3qb", 0],
+		['EOLE', "mteole", 0],
+		['TDR', "mttdr", 0],
+		['6CP', "mt6cp", 0],
+		['CDRLL', "mtcdrll", 0],
+		['L5EP', "mtl5ep", 0],
+		['TTLL', "ttll", 0]
 	]],
 	['2x2x2', [
 		["estat aleatori (WCA)", "222so", 0],
 		['òptim', "222o", 0],
 		['3-gen', "2223", 25],
 		['EG', "222eg", 0],
-		['EG0', "222eg0", 0],
+		['CLL', "222eg0", 0],
 		['EG1', "222eg1", 0],
 		['EG2', "222eg2", 0],
+		['TCLL+', "222tcp", 0],
+		['TCLL-', "222tcn", 0],
+		['LS', "222lsall", 0],
 		['Cap Barra', "222nb", 0]
 	]],
 	['4x4x4', [
@@ -324,6 +340,10 @@ var scrdata = [
 		['òptim', "gearo", 0],
 		['moviment aleatori', "gear", 10]
 	]],
+	['Kilominx', [
+		['random state', "klmso", 0],
+		['Pochmann', "klmp", 30]
+	]],
 	['Cmetrick', [
 		[' ', "cm3", 25]
 	]],
@@ -398,7 +418,8 @@ var scrdata = [
 		['Relay 234 (WCA)', "r234w", 0],
 		['Relay 2345 (WCA)', "r2345w", 0],
 		['Relay 23456 (WCA)', "r23456w", 0],
-		['Relay 234567 (WCA)', "r234567w", 0]
+		['Relay 234567 (WCA)', "r234567w", 0],
+		['Mini Guildford', "rmngf", 0]
 	]],
 	['===Bromes===', [
 		['--', "blank", 0]
@@ -452,6 +473,7 @@ var STATS_ALERTMG = 'Combinar tots els temps de la sessió [%f] al final de la s
 var STATS_PROMPTSPL = 'Nombre de temps dividits de la sessió [%s]?';
 var STATS_ALERTSPL = 'Cal dividir o deixar com a mínim 1 vegada';
 var STATS_AVG = 'Mitjana';
+var STATS_SUM = 'sum';
 var STATS_SOLVE = 'Resol';
 var STATS_TIME = 'Temps';
 var STATS_SESSION = 'Sessió';
@@ -476,12 +498,16 @@ var PROPERTY_SCR2SS = 'crear nova sessió després de canviar tipus de barreja';
 var PROPERTY_SS2SCR = 'restaurar tipus de barreja en canviar de sessió';
 var PROPERTY_SS2PHASES = 'restaurar multi-fase quan canvii de sessió';
 var PROPERTY_STATINV = 'Llista de temps invers';
+var PROPERTY_STATSSUM = 'Show sum in time list';
 var PROPERTY_STATTHRES = 'Mostrar objectiu de temps per al millor de sessió';
 var PROPERTY_STATAL = 'Indicadors d\'estadística';
 var PROPERTY_STATALU = 'Indicador d\'estadística personalitzat';
+var PROPERTY_HLPBS = 'Highlight PBs';
+var PROPERTY_HLPBS_STR = 'Dark orange as WCA|As link color|Bolder|None';
 var PROPERTY_DELMUL = 'Habilitar Esborrat Multiple';
 var PROPERTY_TOOLSFUNC = 'Funcions seleccionades';
 var PROPERTY_TRIM = 'Nombre de resolucions no contants a cada costat';
+var PROPERTY_TRIMR = 'Number of solves trimmed at worse side';
 var PROPERTY_TRIM_MED = 'Mitjana';
 var PROPERTY_STKHEAD = 'Utilitzar Informació d\'Estat de Stackmat';
 var PROPERTY_TOOLPOS = 'Tools panel position';
@@ -489,7 +515,7 @@ var PROPERTY_TOOLPOS_STR = 'Bottom|Float|Top';
 var PROPERTY_HIDEFULLSOL = 'Mostrar resolució progressivament';
 var PROPERTY_IMPPREV = 'Importar dades no més recents';
 var PROPERTY_AUTOEXP = 'Exportar automàticament (per cada 100 resolucions)';
-var PROPERTY_AUTOEXP_OPT = 'Mai|A un Arxiu|Amb ID csTimer|Amb un compte WCA';
+var PROPERTY_AUTOEXP_OPT = 'Mai|A un Arxiu|Amb ID csTimer|Amb un compte WCA|Amb un compte Google';
 var PROPERTY_SCRASIZE = 'Tamany automàtic de barreja';
 var MODULE_NAMES = {
 	"kernel": 'Global',
@@ -507,6 +533,8 @@ var BGIMAGE_OPACITY = 'opacitat de la imatge de fons';
 var BGIMAGE_IMAGE = 'imatge de fons';
 var BGIMAGE_IMAGE_STR = 'cap|manual|CCT';
 var SHOW_AVG_LABEL = 'Mostrar Mitjanes';
+var SHOW_DIFF_LABEL = 'Show Difference Label';
+var SHOW_DIFF_LABEL_STR = '-Green+Red|-Red+Green|Normal|None';
 var USE_LOGOHINT = 'missatges de pista al logo';
 var TOOLS_SCRGEN = 'Generador de Barrejes';
 var SCRGEN_NSCR = 'Número de barrejes';
@@ -517,5 +545,5 @@ var VRCREPLAY_ORI = 'raw ori|auto ori';
 var VRCREPLAY_SHARE = 'share link';
 var GIIKER_CONNECT = 'Click to connect';
 var GIIKER_RESET = 'Reset (Mark Solved)';
-var PROPERTY_SHOWAD = 'Show advistisements (take effect after reload)';
+var PROPERTY_SHOWAD = 'Show advertisements (take effect after reload)';
 var PROPERTY_GIIORI = 'Cube orientation';

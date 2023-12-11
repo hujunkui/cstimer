@@ -1,65 +1,4 @@
 var recons = execMain(function() {
-	let svgTemplate = `<?xml version='1.0' standalone='no'?>
-<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN'
-        'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
-
-<svg version='1.1' xmlns='http://www.w3.org/2000/svg'
-     viewBox='-0.9 -0.9 1.8 1.8'>
-    <g style='stroke-width:0.1;stroke-linejoin:round;opacity:1'>
-        <polygon fill='#000000' stroke='#000000'
-                 points='-0.52222222222222,-0.52222222222222 0.52222222222222,-0.52222222222222 0.52222222222222,0.52222222222222 -0.52222222222222,0.52222222222222'/>
-    </g>
-    <g style='opacity:1;stroke-opacity:0.5;stroke-width:0;stroke-linejoin:round'>
-
-        <polygon fill='{1}' stroke='#000000'
-                 points='-0.52777777777778,-0.52777777777778 -0.21296296296296,-0.52777777777778 -0.21296296296296,-0.21296296296296 -0.52777777777778,-0.21296296296296'/>
-        <polygon fill='{2}' stroke='#000000'
-                 points='-0.15740740740741,-0.52777777777778 0.15740740740741,-0.52777777777778 0.15740740740741,-0.21296296296296 -0.15740740740741,-0.21296296296296'/>
-        <polygon fill='{3}' stroke='#000000'
-                 points='0.21296296296296,-0.52777777777778 0.52777777777778,-0.52777777777778 0.52777777777778,-0.21296296296296 0.21296296296296,-0.21296296296296'/>
-        <polygon fill='{4}' stroke='#000000'
-                 points='-0.52777777777778,-0.15740740740741 -0.21296296296296,-0.15740740740741 -0.21296296296296,0.15740740740741 -0.52777777777778,0.15740740740741'/>
-        <polygon fill='{5}' stroke='#000000'
-                 points='-0.15740740740741,-0.15740740740741 0.15740740740741,-0.15740740740741 0.15740740740741,0.15740740740741 -0.15740740740741,0.15740740740741'/>
-        <polygon fill='{6}' stroke='#000000'
-                 points='0.21296296296296,-0.15740740740741 0.52777777777778,-0.15740740740741 0.52777777777778,0.15740740740741 0.21296296296296,0.15740740740741'/>
-        <polygon fill='{7}' stroke='#000000'
-                 points='-0.52777777777778,0.21296296296296 -0.21296296296296,0.21296296296296 -0.21296296296296,0.52777777777778 -0.52777777777778,0.52777777777778'/>
-        <polygon fill='{8}' stroke='#000000'
-                 points='-0.15740740740741,0.21296296296296 0.15740740740741,0.21296296296296 0.15740740740741,0.52777777777778 -0.15740740740741,0.52777777777778'/>
-        <polygon fill='{9}' stroke='#000000'
-                 points='0.21296296296296,0.21296296296296 0.52777777777778,0.21296296296296 0.52777777777778,0.52777777777778 0.21296296296296,0.52777777777778'/>
-    </g>
-    <g style='opacity:1;stroke-opacity:1;stroke-width:0.02;stroke-linejoin:round'>
-        <polygon fill='{15}' stroke='#000000'
-                 points='0.5544061302682,-0.19514687100894 0.5544061302682,-0.54329501915709 0.7183908045977,-0.50727969348659 0.7183908045977,-0.18314176245211'/>
-        <polygon fill='{14}' stroke='#000000'
-                 points='0.5544061302682,0.17445721583653 0.5544061302682,-0.17369093231162 0.7183908045977,-0.16168582375479 0.7183908045977,0.16245210727969'/>
-        <polygon fill='{13}' stroke='#000000'
-                 points='0.5544061302682,0.54406130268199 0.5544061302682,0.19591315453384 0.7183908045977,0.18390804597701 0.7183908045977,0.50804597701149'/>
-        <polygon fill='{10}' stroke='#000000'
-                 points='-0.54406130268199,0.5544061302682 -0.19591315453384,0.5544061302682 -0.18390804597701,0.7183908045977 -0.50804597701149,0.7183908045977'/>
-        <polygon fill='{11}' stroke='#000000'
-                 points='-0.17445721583653,0.5544061302682 0.17369093231162,0.5544061302682 0.16168582375479,0.7183908045977 -0.16245210727969,0.7183908045977'/>
-        <polygon fill='{12}' stroke='#000000'
-                 points='0.19514687100894,0.5544061302682 0.54329501915709,0.5544061302682 0.50727969348659,0.7183908045977 0.18314176245211,0.7183908045977'/>
-        <polygon fill='{19}' stroke='#000000'
-                 points='-0.5544061302682,-0.54406130268199 -0.5544061302682,-0.19591315453384 -0.7183908045977,-0.18390804597701 -0.7183908045977,-0.50804597701149'/>
-        <polygon fill='{20}' stroke='#000000'
-                 points='-0.5544061302682,-0.17445721583653 -0.5544061302682,0.17369093231162 -0.7183908045977,0.16168582375479 -0.7183908045977,-0.16245210727969'/>
-        <polygon fill='{21}' stroke='#000000'
-                 points='-0.5544061302682,0.19514687100894 -0.5544061302682,0.54329501915709 -0.7183908045977,0.50727969348659 -0.7183908045977,0.18314176245211'/>
-        <polygon fill='{16}' stroke='#000000'
-                 points='0.54406130268199,-0.5544061302682 0.19591315453384,-0.5544061302682 0.18390804597701,-0.7183908045977 0.50804597701149,-0.7183908045977'/>
-        <polygon fill='{17}' stroke='#000000'
-                 points='0.17445721583653,-0.5544061302682 -0.17369093231162,-0.5544061302682 -0.16168582375479,-0.7183908045977 0.16245210727969,-0.7183908045977'/>
-        <polygon fill='{18}' stroke='#000000'
-                 points='-0.19514687100894,-0.5544061302682 -0.54329501915709,-0.5544061302682 -0.50727969348659,-0.7183908045977 -0.18314176245211,-0.7183908045977'/>
-
-    </g>
-</svg>
-
-`
 	let pllSvg = "";
 	let ollSvg = "";
 	var isEnable;
@@ -176,7 +115,6 @@ var recons = execMain(function() {
 
 	// data = [[name, insp, exec, turn], ...]
 	function renderResult(stepData, tidx, isPercent, scramble, solve) {
-		var ident = cubeutil.getIdentData("PLL");
 		var maxSubt = 0;
 		var sumSubt = 0;
 		var stepSData = [];
@@ -263,7 +201,7 @@ var recons = execMain(function() {
 				isPercent ? Math.round(val[2] / sumSubt * 1000) / 10 + '%' : kernel.pretty(val[2]),
 				Math.round(val[3] * 10) / 10,
 				val[3] > 0 && val[2] > 0 ? Math.round(val[3] / (val[2]) * 10000 ) / 10 : 'N/A',
-				'',
+				['oll', 'pll'].indexOf(val[0]) != -1 ? 'click' : '',
 				val[4] === undefined ? "" : val[4],
 				kernel.pretty(val[1] + val[2]),
 			];
@@ -323,11 +261,6 @@ var recons = execMain(function() {
 		update();
 	}
 
-	/**
-	 * 复盘信息（点击历史数据时）
-	 * @param signal
-	 * @param value
-	 */
 	function reqRecons(signal, value) {
 		if (!isEnable) {
 			return;
@@ -337,7 +270,6 @@ var recons = execMain(function() {
 		method = method.replace('%', '');
 		var times = value[0];
 		var rec = calcRecons(times, method);
-
 		if (!rec) {
 			renderEmpty(true);
 			return;
@@ -349,19 +281,13 @@ var recons = execMain(function() {
 			var curData = data[i] || [0, 0, 0, 0];
 			stepData.push([steps[i], curData[1] - curData[0], curData[2] - curData[1], curData[3]]);
 		}
+		let solve = cubeutil.getPrettyReconstruction(rec.rawMoves, method).prettySolve;
 		let pll = stats.getExtraInfo('recons_cf4op_' + 'PLL', value[1]);
 		let oll = stats.getExtraInfo('recons_cf4op_' + 'OLL', value[1]);
-		let solve = cubeutil.getPrettyReconstruction(rec.rawMoves, method).prettySolve;
 		let ollFace = scramble_333.getOllSvgImage(oll[0]);
 		let pllFace = scramble_333.getPLLSvgImage(pll[0]);
-		let pllSvgTemplate = svgTemplate;
-		let ollSvgTemplate = svgTemplate;
-		for (let i = 0; i < 21; i++) {
-			ollSvgTemplate = ollSvgTemplate.replace("{" + (i + 1) + "}", getRgb(ollFace[1][i]));
-			pllSvgTemplate = pllSvgTemplate.replace("{" + (i + 1) + "}", getRgb(pllFace[1][i]));
-		}
-		pllSvg = pllSvgTemplate;
-		ollSvg = ollSvgTemplate;
+		pllSvg = pllFace[1];
+		ollSvg = ollFace[1];
 		stepData[6][4] = pllFace[0];
 		stepData[5][4] = ollFace[1];
 		renderResult(stepData, value[1] + 1, isPercent, times[1], solve);
@@ -429,14 +355,8 @@ var recons = execMain(function() {
 		let oll = stats.getExtraInfo('recons_cf4op_' + 'OLL', nsolv - 1);
 		let ollFace = scramble_333.getOllSvgImage(oll[0]);
 		let pllFace = scramble_333.getPLLSvgImage(pll[0]);
-		let pllSvgTemplate = svgTemplate;
-		let ollSvgTemplate = svgTemplate;
-		for (let i = 0; i < 21; i++) {
-			ollSvgTemplate = ollSvgTemplate.replace("{" + (i + 1) + "}", getRgb(ollFace[1][i]));
-			pllSvgTemplate = pllSvgTemplate.replace("{" + (i + 1) + "}", getRgb(pllFace[1][i]));
-		}
-		pllSvg = pllSvgTemplate;
-		ollSvg = ollSvgTemplate;
+		pllSvg = pllFace[1];
+		ollSvg = ollFace[1];
 		for (var s = nsolv - 1; s >= nsolv - nrec; s--) {
 			var rec = stats.getExtraInfo('recons_' + method, s);
 			if (!rec) {
@@ -472,12 +392,57 @@ var recons = execMain(function() {
 		}
 	}
 
+	var casesDialogContent = $('<div>').css('padding', '1em');
+	var casesDataLink = $('<a>').css('display', 'none');
+	var casesDialog = $('<div>').append(casesDialogContent, casesDataLink);
+
+	function exportCaseStatsData() {
+		var [method, data] = caseStat.update();
+		data = data.map(function (c) {
+			return {
+				caseId: c[0],
+				caseName: c[1],
+				count: c[2],
+				inspPct: Number(c[3]),
+				execPct: Number(c[4]),
+				insp: Number(c[5]),
+				exec: Number(c[6]),
+				turns: Number(c[7]),
+				tps: Number(c[8]),
+				caseImage: c[9]
+			}
+		});
+		var blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+		var url = URL.createObjectURL(blob);
+		casesDataLink.attr({
+			href: url,
+			download: method + '_cases_stats.json'
+		}).get(0).click();
+		setTimeout(function () {
+			URL.revokeObjectURL(blob);
+		}, 5000);
+		return false;
+	}
+
+	function showCasesDialog(method) {
+		kernel.setProp('rcCaseMthd', method);
+		caseStat.execFunc(casesDialogContent);
+		var onCloseDialog = function () {
+			caseStat.execFunc();
+		}
+		kernel.showDialog([casesDialog, onCloseDialog, undefined, onCloseDialog, [EXPORT_TOFILE, exportCaseStatsData]], 'casestats', 'Cases Stats');
+	}
+
 	function procClick(e) {
 		if (e.type == 'change') {
+			kernel.setProp('rcMthd', methodSelect.val());
 			update();
 			return;
 		}
 		var target = $(e.target);
+		if (['oll', 'pll'].indexOf(target.text()) != -1) {
+			return showCasesDialog(target.text().toUpperCase());
+		}
 		if (!target.is('.click') || target.is('.exturl')) {
 			return;
 		}
@@ -556,6 +521,7 @@ var recons = execMain(function() {
 			methodSelect.append('<option value="' + methods[i][0] + '">' + methods[i][1] + '</option>');
 			methodSelect.append('<option value="' + methods[i][0] + '%">' + methods[i][1] + '%</option>');
 		}
+		methodSelect.val(kernel.getProp('rcMthd', 'cf4op'));
 	});
 
 	return {
@@ -571,8 +537,14 @@ var caseStat = execMain(function() {
 	var div = $('<div style="font-size:0.9em;" />');
 	var table = $('<table class="table">');
 	var methodSelect = $('<select>');
-	var tableTh = $('<tr>').append($('<th colspan=2 style="padding:0;">').append(methodSelect),
-		'<th>N</th><th>' + titleStr[0] + '</th><th>' + titleStr[1] + '</th><th>' + titleStr[2] + '</th><th>' + titleStr[3] + '</th>');
+	var tableTh = $('<tr>').append(
+		$('<th>').attr('colspan', 2).css('padding', '0').append(methodSelect),
+		$('<th>').addClass('click').attr('data-sort-column', 2).append('N'),
+		$('<th>').addClass('click').attr('data-sort-column', 5).append(titleStr[0]),
+		$('<th>').addClass('click').attr('data-sort-column', 6).append(titleStr[1]),
+		$('<th>').addClass('click').attr('data-sort-column', 7).append(titleStr[3]),
+		$('<th>').addClass('click').attr('data-sort-column', 8).append(titleStr[4])
+	);
 	function sortBySecondDim(arr) {
 		arr.sort(function(a, b) {
 			if (a[2] / a[0] < b[2]/ a[0]) {
@@ -610,20 +582,20 @@ var caseStat = execMain(function() {
 		}
 
 		var trTpl =
-			'<tr><td rowspan=2 style="padding-bottom:0;padding-top:0;">$0</td>' +
-			'<td rowspan=2 style="padding:0"><canvas/></td>' +
-			'<td rowspan=2 style="padding-bottom:0;padding-top:0;">$1</td>' +
+			'<tr><td rowspan=2 style="padding-bottom:0;padding-top:0;">$1</td>' +
+			'<td rowspan=2 style="padding:0;width:2em;"><canvas/></td>' +
+			'<td rowspan=2 style="padding-bottom:0;padding-top:0;">$2</td>' +
 			'<td colspan=4 style="padding:0;">' +
-			'<span class="cntbar sty2" style="height:0.25em;float:left;border:none;width:$2%;">&nbsp;</span>' +
-			'<span class="cntbar" style="height:0.25em;float:left;border:none;width:$3%;">&nbsp;</span></td></tr>' +
+			'<span class="cntbar sty2" style="height:0.25em;float:left;border:none;width:$3%;">&nbsp;</span>' +
+			'<span class="cntbar" style="height:0.25em;float:left;border:none;width:$4%;">&nbsp;</span></td></tr>' +
 			'<tr>' +
-			'<td style="padding-bottom:0;padding-top:0;">$4</td>' +
 			'<td style="padding-bottom:0;padding-top:0;">$5</td>' +
 			'<td style="padding-bottom:0;padding-top:0;">$6</td>' +
 			'<td style="padding-bottom:0;padding-top:0;">$7</td>' +
+			'<td style="padding-bottom:0;padding-top:0;">$8</td>' +
 			'</tr>';
 
-		table.empty().append(tableTh);
+		table.empty().append(tableTh.unbind('click').click(procHeaderClick));
 
 		var maxSubt = 0;
 		for (var i = ident[2]; i < ident[3]; i++) {
@@ -632,16 +604,16 @@ var caseStat = execMain(function() {
 			}
 			maxSubt = Math.max(maxSubt, (caseCnts[i][1] + caseCnts[i][2]) / caseCnts[i][0]);
 		}
-		// sortBySecondDim(caseCnts)
+
+		var trdata = [];
 		for (var i = ident[2]; i < ident[3]; i++) {
 			if (!caseCnts[i]) {
 				continue;
 			}
 			var caseCnt = caseCnts[i];
-			var tr = $('<tr>');
 			var param = ident[1](i);
-
-			var trdata = [
+			trdata.push([
+				i,
 				param[2],
 				caseCnt[0],
 				caseCnt[1] / caseCnt[0] / maxSubt * 100,
@@ -650,13 +622,21 @@ var caseStat = execMain(function() {
 				kernel.pretty(caseCnt[2] / caseCnt[0]),
 				Math.round(caseCnt[3] / caseCnt[0] * 10) / 10,
 				Math.round(caseCnt[3] / (caseCnt[1] + caseCnt[2]) * 10000) / 10
-			];
-			console.log(trdata)
-			var curTr = trTpl;
-			for (var j = 0; j < 8; j++) {
-				curTr = curTr.replace(new RegExp('\\$' + j, 'g'), trdata[j]);
-			}
+			]);
+		}
 
+		var sortCol = kernel.getProp('rcCaseSortCol', 2);
+		var sortDir = kernel.getProp('rcCaseSortDir', 'desc');
+		trdata.sort(function (a, b) {
+			if (sortDir == 'desc') [a, b] = [b, a];
+			return a[sortCol] - b[sortCol];
+		});
+
+		for (var row of trdata) {
+			var curTr = trTpl;
+			for (var j = 0; j < row.length; j++) {
+				curTr = curTr.replace(new RegExp('\\$' + j, 'g'), row[j]);
+			}
 			curTr = $(curTr);
 			var canvas = curTr.find('canvas');
 			canvas.css({
@@ -664,20 +644,32 @@ var caseStat = execMain(function() {
 				'height': '2em',
 				'display': 'block'
 			});
-			ident[1](i, canvas);
+			ident[1](row[0], canvas);
+			row.push(canvas.get(0).toDataURL());
 			table.append(curTr);
 		}
-		methodSelect.unbind('change').change(procClick);
+		methodSelect.unbind('change').change(procMethodChange);
 		if (nvalid == 0) {
 			tableTh.after('<tr><td colspan=7>' + TOOLS_RECONS_NODATA + '</td></tr>');
-			return;
+			return [method, []];
 		}
+		return [method, trdata];
 	}
 
-	function procClick(e) {
-		if (e.type == 'change') {
+	function procMethodChange(e) {
+		kernel.setProp('rcCaseMthd', methodSelect.val());
+		update();
+	}
+
+	function procHeaderClick(e) {
+		var sortCol = $(e.target).data('sort-column');
+		if (sortCol) {
+			var prevSortCol = kernel.getProp('rcCaseSortCol');
+			kernel.setProp('rcCaseSortCol', sortCol);
+			if (prevSortCol == sortCol) {
+				kernel.setProp('rcCaseSortDir', kernel.getProp('rcCaseSortDir') == 'desc' ? 'asc' : 'desc');
+			}
 			update();
-			return;
 		}
 	}
 
@@ -689,6 +681,7 @@ var caseStat = execMain(function() {
 			return;
 		}
 		fdiv.empty().append(div.append(table));
+		methodSelect.val(kernel.getProp('rcCaseMthd', 'PLL'));
 		update();
 	}
 
@@ -722,6 +715,12 @@ var caseStat = execMain(function() {
 			stats.regExtraInfo('recons_cf4op_' + methods[i], calcCaseExtra.bind(null, methods[i]));
 		}
 	});
+
+	return {
+		execFunc: execFunc,
+		update: update
+	}
+
 });
 
 var scatter = execMain(function() {
@@ -909,14 +908,14 @@ var scatter = execMain(function() {
 		}
 		var span = '<span class="click" data="%" style="font-family: iconfont, Arial;display:inline-block;width:2em;">$</span>';
 		fdiv.empty().append(methodSelect, slowSpan, scatterDiv.empty().append(canvas
-			/*		, '<br>', [
-                        span.replace('$', '\ue80e').replace('%', 'x'),
-                        span.replace('$', '&lt;').replace('%', 'p'),
-                        span.replace('$', '&gt;').replace('%', 'm'),
-                        span.replace('$', '\ue80f').replace('%', 'l'),
-                        span.replace('$', '\ue810').replace('%', 's')
-                    ].join('')
-            */		).unbind('click').click(procClick));
+/*		, '<br>', [
+			span.replace('$', '\ue80e').replace('%', 'x'),
+			span.replace('$', '&lt;').replace('%', 'p'),
+			span.replace('$', '&gt;').replace('%', 'm'),
+			span.replace('$', '\ue80f').replace('%', 'l'),
+			span.replace('$', '\ue810').replace('%', 's')
+		].join('')
+*/		).unbind('click').click(procClick));
 		methodSelect.unbind('change').change(procClick);
 		updateScatter();
 	}

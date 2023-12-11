@@ -647,7 +647,7 @@ var scramble = execMain(function(rn, rndEl) {
 			if (value[0] == 'scrSize') {
 				ssdiv.css('font-size', value[1] / 7 + 'em');
 			} else if (value[0] == 'scrMono') {
-				div.css('font-family', value[1] ? 'SimHei, Monospace' : 'Arial');
+				div.css('font-family', value[1] ? 'Monospace' : 'Arial');
 			} else if (value[0] == 'scrType') {
 				if (value[1] != menu.getSelected()) {
 					loadType(value[1]);
@@ -737,21 +737,34 @@ var scramble = execMain(function(rn, rndEl) {
 		var scrNum = $('<input type="text" maxlength="3">').val(5);
 		var output = $('<textarea rows="10" style="width: 100%" readonly />');
 		var prefix = $('<select><option value="1. ">1. </option><option value="1) ">1) </option><option value="(1) ">(1) </option><option value=""></option></select>');
-		tdiv.append(SCRGEN_NSCR, scrNum, "&nbsp;", SCRGEN_PRE).append(prefix, "<br>", button, "<br>", output);
+		var downclk = $('<span class="click">').html('Download');
+		tdiv.append(SCRGEN_NSCR, scrNum, "&nbsp;", SCRGEN_PRE).append(prefix, "<br>", button, ' | ', downclk, "<br>", output);
+		var genScrambles = "";
 
 		function generate() {
 			var n_scramble = ~~scrNum.val();
-			var scrambles = "";
+			genScrambles = "";
 			var scramble_copy = scramble;
 			var pre = prefix.val();
 			for (var i = 0; i < n_scramble; i++) {
 				calcScramble();
-				scrambles += pre.replace('1', i + 1) + scramble + "\n";
+				genScrambles += pre.replace('1', i + 1) + scramble + "\n";
 			}
-			// console.log(scrambles);
 			scramble = scramble_copy;
-			output.text(scrambles);
+			output.text(genScrambles);
 			output.select();
+		}
+
+		function downClk(e) {
+			if (!genScrambles) {
+				return;
+			}
+			var blob = new Blob([genScrambles], {'type': 'text/plain'});
+			var outFile = $('<a class="click"/>').appendTo('body');
+			outFile.attr('href', URL.createObjectURL(blob));
+			outFile.attr('download', 'Scrambles_' + mathlib.time2str(new Date()/1000, '%Y%M%D_%h%m%s') + '.txt');
+			outFile[0].click();
+			outFile.remove();
 		}
 
 		return function(fdiv) {
@@ -761,6 +774,7 @@ var scramble = execMain(function(rn, rndEl) {
 			fdiv.empty().append(tdiv.width(div.width() / 2));
 			prefix.unbind("change").change(kernel.blur);
 			button.unbind("click").click(generate);
+			downclk.unbind("click").click(downClk);
 		}
 	})();
 
@@ -778,6 +792,10 @@ var scramble = execMain(function(rn, rndEl) {
 		kernel.regProp('scramble', 'scrLim', 0, PROPERTY_SCRLIM, [false], 1);
 		kernel.regProp('scramble', 'scrAlign', 1, PROPERTY_SCRALIGN, ['c', ['c', 'l', 'r'], PROPERTY_SCRALIGN_STR.split('|')], 1);
 		kernel.regProp('scramble', 'preScr', 1, "pre-scramble", ['',
+			["", "y", "y2", "y'", "z2", "z2 y", "z2 y2", "z2 y'", "z'", "z' y", "z' y2", "z' y'", "z", "z y", "z y2", "z y'", "x'", "x' y", "x' y2", "x' y'", "x", "x y", "x y2", "x y'"],
+			["(UF)", "(UR) y", "(UB) y2", "(UL) y'", "(DF) z2", "(DL) z2 y", "(DB) z2 y2", "(DR) z2 y'", "(RF) z'", "(RD) z' y", "(RB) z' y2", "(RU) z' y'", "(LF) z", "(LU) z y", "(LB) z y2", "(LD) z y'", "(BU) x'", "(BR) x' y", "(BD) x' y2", "(BL) x' y'", "(FD) x", "(FR) x y", "(FU) x y2", "(FL) x y'"]
+		], 1);
+		kernel.regProp('scramble', 'preScrT', 1, "training pre-scramble", ['z2',
 			["", "y", "y2", "y'", "z2", "z2 y", "z2 y2", "z2 y'", "z'", "z' y", "z' y2", "z' y'", "z", "z y", "z y2", "z y'", "x'", "x' y", "x' y2", "x' y'", "x", "x y", "x y2", "x y'"],
 			["(UF)", "(UR) y", "(UB) y2", "(UL) y'", "(DF) z2", "(DL) z2 y", "(DB) z2 y2", "(DR) z2 y'", "(RF) z'", "(RD) z' y", "(RB) z' y2", "(RU) z' y'", "(LF) z", "(LU) z y", "(LB) z y2", "(LD) z y'", "(BU) x'", "(BR) x' y", "(BD) x' y2", "(BL) x' y'", "(FD) x", "(FR) x y", "(FU) x y2", "(FL) x y'"]
 		], 1);

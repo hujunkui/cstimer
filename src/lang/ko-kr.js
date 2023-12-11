@@ -111,7 +111,7 @@ var PROPERTY_TIMEU = '초시계 갱신 방식';
 var PROPERTY_TIMEU_STR = '실시간|0.1초|1초|미리보기만|숨기기';
 var PROPERTY_PRETIME = '측정 시작 전 스페이스바를 길게 누르기(초)';
 var PROPERTY_ENTERING = '시간 입력 방법';
-var PROPERTY_ENTERING_STR = '초시계|직접 입력|스택매트|모위(MoYu)|가상 큐브|Bluetooth|qCube|GanTimer';
+var PROPERTY_ENTERING_STR = '초시계|직접 입력|스택매트|모위(MoYu)|가상 큐브|Bluetooth|qCube|GanTimer|last layer training';
 var PROPERTY_INTUNIT = '숫자 입력할 때 단위';
 var PROPERTY_INTUNIT_STR = '초|센티초|밀리초';
 var PROPERTY_COLOR = '색 주제';
@@ -190,40 +190,56 @@ var scrdata = [
 		['바보', "333noob", 25],
 		['모서리만', "edges", 0],
 		['귀퉁이만', "corners", 0],
+		['BLD Helper', "nocache_333bldspec", 0],
+		['3x3 발', "333ft", 0],
+		['Custom', "333custom", 0]
+	]],
+	['3x3x3 CFOP', [
+		['PLL', "pll", 0],
+		['OLL', "oll", 0],
+		['맨 위층+홈통 1개', "lsll2", 0],
 		['맨 위층만', "ll", 0],
 		['ZBLL', "zbll", 0],
-		['CLL', "cll", 0],
 		['COLL', "coll", 0],
+		['CLL', "cll", 0],
 		['ELL', "ell", 0],
-		['LSE', "lse", 0],
-		['LSE &ltM,U&gt', "lsemu", 0],
-		['CMLL', "cmll", 0],
-		['맨 위층+홈통 4개', "f2l", 0],
-		['맨 위층+홈통 1개', "lsll2", 0],
 		['2GLL', "2gll", 0],
+		['ZZLL', "zzll", 0],
 		['ZBLS', "zbls", 0],
 		['EOLS', "eols", 0],
 		['WVLS', "wvls", 0],
 		['VLS', "vls", 0],
-		['ZZLL', "zzll", 0],
-		['TTLL', "ttll", 0],
-		['OLL', "oll", 0],
-		['PLL', "pll", 0],
+		['맨 위층+홈통 4개', "f2l", 0],
 		['EOLine', "eoline", 0],
 		['간단한 십자', "easyc", 3],
-		['easy xcross', "easyxc", 4],
-		['BLD Helper', "nocache_333bldspec", 0],
-		['3x3 발', "333ft", 0],
-		['Custom', "333custom", 0]
+		['easy xcross', "easyxc", 4]
+	]],
+	['3x3x3 Roux', [
+		['2nd Block', "sbrx", 0],
+		['CMLL', "cmll", 0],
+		['LSE', "lse", 0],
+		['LSE &lt;M, U&gt;', "lsemu", 0]
+	]],
+	['3x3x3 Mehta', [
+		['3QB', "mt3qb", 0],
+		['EOLE', "mteole", 0],
+		['TDR', "mttdr", 0],
+		['6CP', "mt6cp", 0],
+		['CDRLL', "mtcdrll", 0],
+		['L5EP', "mtl5ep", 0],
+		['TTLL', "ttll", 0]
 	]],
 	['2x2x2', [
 		["무작위 상태 (WCA)", "222so", 0],
 		['최적', "222o", 0],
 		['3-생성', "2223", 25],
 		['EG', "222eg", 0],
-		['EG0', "222eg0", 0],
+		['CLL', "222eg0", 0],
 		['EG1', "222eg1", 0],
 		['EG2', "222eg2", 0],
+		['TCLL+', "222tcp", 0],
+		['TCLL-', "222tcn", 0],
+		['LS', "222lsall", 0],
 		['No Bar', "222nb", 0]
 	]],
 	['4x4x4', [
@@ -324,6 +340,10 @@ var scrdata = [
 		['최적', "gearo", 0],
 		['무작위 수순', "gear", 10]
 	]],
+	['Kilominx', [
+		['random state', "klmso", 0],
+		['Pochmann', "klmp", 30]
+	]],
 	['C메트릭', [
 		[' ', "cm3", 25]
 	]],
@@ -398,7 +418,8 @@ var scrdata = [
 		['234 계주 (WCA)', "r234w", 0],
 		['2345 계주 (WCA)', "r2345w", 0],
 		['23456 계주 (WCA)', "r23456w", 0],
-		['234567 계주 (WCA)', "r234567w", 0]
+		['234567 계주 (WCA)', "r234567w", 0],
+		['Mini Guildford', "rmngf", 0]
 	]],
 	['===ㅁㄴㅇㄹ===', [
 		['--', "blank", 0]
@@ -452,6 +473,7 @@ var STATS_ALERTMG = ' [%f] 모둠의 모든 시간을 [%t] 모둠의 끝으로 �
 var STATS_PROMPTSPL = '[%s] 모둠으로부터 최근 시간 몇 개를 분할하시겠습니까?';
 var STATS_ALERTSPL = '적어도 1개는 나누거나 남겨놔야 합니다';
 var STATS_AVG = '평균';
+var STATS_SUM = 'sum';
 var STATS_SOLVE = '완료';
 var STATS_TIME = '시간';
 var STATS_SESSION = '모둠';
@@ -476,12 +498,16 @@ var PROPERTY_SCR2SS = '섞기 유형을 바꿀 때마다 새 모둠 만들기';
 var PROPERTY_SS2SCR = '각 모둠의 섞기 유형 유지';
 var PROPERTY_SS2PHASES = '각 모둠의 다단계 측정 설정 유지';
 var PROPERTY_STATINV = '시간목록 역순으로 표시';
+var PROPERTY_STATSSUM = 'Show sum in time list';
 var PROPERTY_STATTHRES = 'Show target time for session best';
 var PROPERTY_STATAL = '통계지표';
 var PROPERTY_STATALU = 'Customized statistical indicator';
+var PROPERTY_HLPBS = 'Highlight PBs';
+var PROPERTY_HLPBS_STR = 'Dark orange as WCA|As link color|Bolder|None';
 var PROPERTY_DELMUL = '일괄 삭제 허용';
 var PROPERTY_TOOLSFUNC = '선택된 기능';
-var PROPERTY_TRIM = 'Number of solves trimmed at each side';
+var PROPERTY_TRIM = 'Number of solves trimmed at better side';
+var PROPERTY_TRIMR = 'Number of solves trimmed at worse side';
 var PROPERTY_TRIM_MED = '중간값';
 var PROPERTY_STKHEAD = '스택매트 상태 정보 사용';
 var PROPERTY_TOOLPOS = 'Tools panel position';
@@ -489,7 +515,7 @@ var PROPERTY_TOOLPOS_STR = 'Bottom|Float|Top';
 var PROPERTY_HIDEFULLSOL = 'Show solution progressively';
 var PROPERTY_IMPPREV = '최신이 아닌 데이터 가져오기';
 var PROPERTY_AUTOEXP = '자동 내보내기 (해법 100개 마다)';
-var PROPERTY_AUTOEXP_OPT = 'Never|To File|With csTimer ID|With WCA Account';
+var PROPERTY_AUTOEXP_OPT = 'Never|To File|With csTimer ID|With WCA Account|With Google Account';
 var PROPERTY_SCRASIZE = '자동 섞기 크기';
 var MODULE_NAMES = {
 	"kernel": '전역',
@@ -507,6 +533,8 @@ var BGIMAGE_OPACITY = '배경 그림 투명도';
 var BGIMAGE_IMAGE = '배경 그림';
 var BGIMAGE_IMAGE_STR = '없음|직접 입력|CCT';
 var SHOW_AVG_LABEL = '초시계 아래에 평균 정보 표시';
+var SHOW_DIFF_LABEL = 'Show Difference Label';
+var SHOW_DIFF_LABEL_STR = '-Green+Red|-Red+Green|Normal|None';
 var USE_LOGOHINT = '로고에 힌트 메시지';
 var TOOLS_SCRGEN = '섞기 생성기';
 var SCRGEN_NSCR = '섞기 개수';
@@ -517,5 +545,5 @@ var VRCREPLAY_ORI = 'raw ori|auto ori';
 var VRCREPLAY_SHARE = 'share link';
 var GIIKER_CONNECT = 'Click to connect';
 var GIIKER_RESET = 'Reset (Mark Solved)';
-var PROPERTY_SHOWAD = 'Show advistisements (take effect after reload)';
+var PROPERTY_SHOWAD = '광고 보이기 (새로고침 시 적용)';
 var PROPERTY_GIIORI = 'Cube orientation';

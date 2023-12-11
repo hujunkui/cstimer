@@ -39,7 +39,7 @@
 		"RrU": [[["U"],["R","r"]],cubesuff], // 3-generator <R,r,U>
 		"RrUu": [[["U","u"],["R","r"]],cubesuff], // <R,r,U,u>
 		"minx2g": [[["U"],["R"]],minxsuff], // megaminx 2-gen
-		"half": [[["U","D"],["R","L"],["F","B"]],["2"]], // 3x3x3 half turns
+		// "half": [[["U","D"],["R","L"],["F","B"]],["2"]], // 3x3x3 half turns, replaced by random state solver
 		"lsll": [[[["R U R'","R U2 R'","R U' R'"]],[["F' U F","F' U2 F","F' U' F"]],[["U","U2","U'"]]]], // 3x3x3 last slot + last layer (old)
 		"prco": [[["F","B"],["U","D"],["L","DBR"],["R","DBL"],["BL","DR"],["BR","DL"]],minxsuff], // Pyraminx Crystal (old style)
 		"skb": [[["R"],["L"],["B"],["U"]],["","'"]], // Skewb
@@ -62,6 +62,7 @@
 		'r2345w': '${r234w}\\n5) ${["555wca",60]}',
 		'r23456w': '${r2345w}\\n6) ${["666wca",80]}',
 		'r234567w': '${r23456w}\\n7) ${["777wca",100]}',
+		'rmngf': '${r2345w}\\n3oh) ${333}\\npyr) ${["pyrso",10]}\\n skb) ${skbso}\\nsq1) ${sqrs}\\nclk) ${clkwca}\\nmgm) ${["mgmp",70]}',
 		'333ni': '${333}#{[[""]],["","Rw ","Rw2 ","Rw\' ","Fw ","Fw\' "],1}#{[[""]],["","Uw","Uw2","Uw\'"],1}',
 		'444bld': '${444wca}#{[[""]],[""," x"," x2"," x\'"," z"," z\'"],1}#{[[""]],[""," y"," y2"," y\'"],1}',
 		'555bld': '${["555wca",%l]}#{[[""]],[""," 3Rw"," 3Rw2"," 3Rw\'"," 3Fw"," 3Fw\'"],1}#{[[""]],[""," 3Uw"," 3Uw2"," 3Uw\'"],1}'

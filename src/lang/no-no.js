@@ -111,7 +111,7 @@ var PROPERTY_TIMEU = 'Timer oppdatering er';
 var PROPERTY_TIMEU_STR = 'oppdater|0.1s|sekunder|inspeksjon|ingen';
 var PROPERTY_PRETIME = 'tid å holde mellomromstasten nede(sekund(er))';
 var PROPERTY_ENTERING = 'Skriv inn tider med';
-var PROPERTY_ENTERING_STR = 'Tidtaker|Skrive|Stackmat|MoYuTidtaker|virtuell|bluetooth|qCube|GanTimer';
+var PROPERTY_ENTERING_STR = 'Tidtaker|Skrive|Stackmat|MoYuTidtaker|virtuell|bluetooth|qCube|GanTimer|last layer training';
 var PROPERTY_INTUNIT = 'Enhet når du går inn i et heltall';
 var PROPERTY_INTUNIT_STR = 'Sekund|deltidsekund|millisikund';
 var PROPERTY_COLOR = 'velg fargetema';
@@ -190,40 +190,56 @@ var scrdata = [
 		['3x3x3 for nybegynnere', "333noob", 25],
 		['Bare kanter', "edges", 0],
 		['Bare hjørner', "corners", 0],
-		['Siste rad', "ll", 0],
-		['zb siste rad', "zbll", 0],
-		['Hjørner på siste rad', "cll", 0],
-		['COLL', "coll", 0],
-		['Kantene på siste rad', "ell", 0],
-		['Siste seks kanter', "lse", 0],
-		['sist seks kanter', "lsemu", 0],
-		['Roux L10P', "cmll", 0],
-		['Krysset løst', "f2l", 0],
+		['BLD Helper', "nocache_333bldspec", 0],
+		['3x3 ft', "333ft", 0],
+		['Custom', "333custom", 0]
+	]],
+	['3x3x3 CFOP', [
+		['PLL', "pll", 0],
+		['OLL', "oll", 0],
 		['Siste F2L plass + Siste rad', "lsll2", 0],
+		['Siste rad', "ll", 0],
+		['ZBLL', "zbll", 0],
+		['COLL', "coll", 0],
+		['CLL', "cll", 0],
+		['ELL', "ell", 0],
 		['2GLL', "2gll", 0],
+		['ZZLL', "zzll", 0],
 		['ZBLS', "zbls", 0],
 		['EOLS', "eols", 0],
 		['WVLS', "wvls", 0],
 		['VLS', "vls", 0],
-		['ZLL', "zzll", 0],
-		['TTLL', "ttll", 0],
-		['OLL', "oll", 0],
-		['PLL', "pll", 0],
+		['Krysset løst', "f2l", 0],
 		['EOLinje', "eoline", 0],
 		['lett kryss', "easyc", 3],
-		['easy xcross', "easyxc", 4],
-		['BLD Helper', "nocache_333bldspec", 0],
-		['3x3 ft', "333ft", 0],
-		['Custom', "333custom", 0]
+		['easy xcross', "easyxc", 4]
+	]],
+	['3x3x3 Roux', [
+		['2nd Block', "sbrx", 0],
+		['CMLL', "cmll", 0],
+		['LSE', "lse", 0],
+		['LSE &lt;M, U&gt;', "lsemu", 0]
+	]],
+	['3x3x3 Mehta', [
+		['3QB', "mt3qb", 0],
+		['EOLE', "mteole", 0],
+		['TDR', "mttdr", 0],
+		['6CP', "mt6cp", 0],
+		['CDRLL', "mtcdrll", 0],
+		['L5EP', "mtl5ep", 0],
+		['TTLL', "ttll", 0]
 	]],
 	['2x2x2', [
 		["tilfeldig tilstand (WCA)", "222so", 0],
 		['Optimalt', "222o", 0],
 		['3-gen', "2223", 25],
 		['EG', "222eg", 0],
-		['EG0', "222eg0", 0],
+		['CLL', "222eg0", 0],
 		['EG1', "222eg1", 0],
 		['EG2', "222eg2", 0],
+		['TCLL+', "222tcp", 0],
+		['TCLL-', "222tcn", 0],
+		['LS', "222lsall", 0],
 		['Ingen bar', "222nb", 0]
 	]],
 	['4x4x4', [
@@ -324,6 +340,10 @@ var scrdata = [
 		['Optimalt', "gearo", 0],
 		['Tilfeldig trekk', "gear", 10]
 	]],
+	['Kilominx', [
+		['random state', "klmso", 0],
+		['Pochmann', "klmp", 30]
+	]],
 	['Cmetrick', [
 		[' ', "cm3", 25]
 	]],
@@ -398,7 +418,8 @@ var scrdata = [
 		['234 relay (WCA)', "r234w", 0],
 		['2345 relay (WCA)', "r2345w", 0],
 		['23456 relay (WCA)', "r23456w", 0],
-		['234567 relay (WCA)', "r234567w", 0]
+		['234567 relay (WCA)', "r234567w", 0],
+		['Mini Guildford', "rmngf", 0]
 	]],
 	['===SPØK===', [
 		['--', "blank", 0]
@@ -452,6 +473,7 @@ var STATS_ALERTMG = 'Flett alle tider i økten [%f] til slutten av økten [%t]?'
 var STATS_PROMPTSPL = 'Antall siste tider delt opp fra økt [%s]?';
 var STATS_ALERTSPL = 'Skal splitte eller forlate hvertfall 1 tid';
 var STATS_AVG = 'Gjennomsnitt';
+var STATS_SUM = 'sum';
 var STATS_SOLVE = 'løs';
 var STATS_TIME = 'tid';
 var STATS_SESSION = 'Økt';
@@ -476,12 +498,16 @@ var PROPERTY_SCR2SS = 'Opprett ny økt når blandingstype blir byttet';
 var PROPERTY_SS2SCR = 'Gjenopprett blandingstype når økt skiftes';
 var PROPERTY_SS2PHASES = 'gjennopprette flerfaset tidtaking når du bytter økt';
 var PROPERTY_STATINV = 'Hvis tider i omvendt rekkefølge';
+var PROPERTY_STATSSUM = 'Vis sum i tidsliste';
 var PROPERTY_STATTHRES = 'Show target time for session best';
 var PROPERTY_STATAL = 'Statistiske indikatorer';
 var PROPERTY_STATALU = 'Tilpasset statistisk indikator';
+var PROPERTY_HLPBS = 'Highlight PBs';
+var PROPERTY_HLPBS_STR = 'Dark orange as WCA|As link color|Bolder|None';
 var PROPERTY_DELMUL = 'Aktiver sletting av flere';
 var PROPERTY_TOOLSFUNC = 'Valgte funksjoner';
 var PROPERTY_TRIM = 'Antall avskåret løser ved hver side';
+var PROPERTY_TRIMR = 'Number of solves trimmed at worse side';
 var PROPERTY_TRIM_MED = 'Median';
 var PROPERTY_STKHEAD = 'bruk stackmat status informasjon';
 var PROPERTY_TOOLPOS = 'Tools panel position';
@@ -489,7 +515,7 @@ var PROPERTY_TOOLPOS_STR = 'Bottom|Float|Top';
 var PROPERTY_HIDEFULLSOL = 'Vis løsning progressivt';
 var PROPERTY_IMPPREV = 'Importer ikke-nyeste data';
 var PROPERTY_AUTOEXP = 'Automatisk eksport (hver 100 gang)';
-var PROPERTY_AUTOEXP_OPT = 'Aldri|til fil|Med CsTimer ID|Med WCA bruker';
+var PROPERTY_AUTOEXP_OPT = 'Aldri|til fil|Med CsTimer ID|Med WCA bruker|Med Google bruker';
 var PROPERTY_SCRASIZE = 'Automatisk blandingsstørrelse';
 var MODULE_NAMES = {
 	"kernel": 'Globalt',
@@ -507,6 +533,8 @@ var BGIMAGE_OPACITY = 'bakgrunnsbilde opasitet';
 var BGIMAGE_IMAGE = 'Bakgrunnsbilde';
 var BGIMAGE_IMAGE_STR = 'ingen|manuelt|CCT';
 var SHOW_AVG_LABEL = 'Vis snitt etikett';
+var SHOW_DIFF_LABEL = 'Show Difference Label';
+var SHOW_DIFF_LABEL_STR = '-Green+Red|-Red+Green|Normal|None';
 var USE_LOGOHINT = 'Hint meldinger i logo';
 var TOOLS_SCRGEN = 'Blandingsgenerator';
 var SCRGEN_NSCR = 'Antall blandingstyper';
@@ -517,5 +545,5 @@ var VRCREPLAY_ORI = 'raw ori|auto ori';
 var VRCREPLAY_SHARE = 'share link';
 var GIIKER_CONNECT = 'Click to connect';
 var GIIKER_RESET = 'Reset (Mark Solved)';
-var PROPERTY_SHOWAD = 'Show advistisements (take effect after reload)';
+var PROPERTY_SHOWAD = 'Show advertisements (take effect after reload)';
 var PROPERTY_GIIORI = 'Cube orientation';

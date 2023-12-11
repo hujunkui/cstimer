@@ -10,7 +10,7 @@ var BUTTON_DONATE = 'Doneren';
 var PROPERTY_SR = 'With session';
 var PROPERTY_USEINS = 'Gebruik WCA inspectie';
 var PROPERTY_USEINS_STR = 'Altijd|Behalve BLD|Nooit';
-var PROPERTY_SHOWINS = 'Show an icon when inspection is enabled';
+var PROPERTY_SHOWINS = 'Toon een pictogram wanneer inspectie is ingeschakeld';
 var PROPERTY_VOICEINS = 'Stem alarm bij WCA inspection';
 var PROPERTY_VOICEINS_STR = 'geen|mannelijke stem|vrouwlijke stem';
 var PROPERTY_VOICEVOL = 'Voice volume';
@@ -43,12 +43,12 @@ var EXPORT_ERROR = 'Er zijn fouten opgetreden...';
 var EXPORT_NODATA = 'Geen gegevens gevonden in je account';
 var EXPORT_UPLOADED = 'Succesvol geupload';
 var EXPORT_CODEPROMPT = 'Save this code, or type saved code to import';
-var EXPORT_ONLYOPT = 'Export/Import only Options';
-var EXPORT_ACCOUNT = 'Export Accounts';
-var EXPORT_LOGINGGL = 'Login Using Google Account';
-var EXPORT_LOGINWCA = 'Login Using WCA Account';
-var EXPORT_LOGOUTCFM = 'Confirm to log out?';
-var EXPORT_LOGINAUTHED = 'Authorized<br>Fetching Data...';
+var EXPORT_ONLYOPT = 'Alleen opties exporteren/importeren';
+var EXPORT_ACCOUNT = 'Accounts exporteren';
+var EXPORT_LOGINGGL = 'Login met behulp van Google-account';
+var EXPORT_LOGINWCA = 'Inloggen met WCA Account';
+var EXPORT_LOGOUTCFM = 'Bevestigen om uit te loggen?';
+var EXPORT_LOGINAUTHED = 'Geautoriseerde<br>gegevens ophalen...';
 var IMPORT_FINAL_CONFIRM = 'This will override all local data! It will modify %d sessions, add %a and remove %r solves at least. Confirm to import data?';
 var BUTTON_SCRAMBLE = 'SCRA-<br>MBLE';
 var BUTTON_TOOLS = 'Hulpmi-<br>ddelen';
@@ -65,7 +65,7 @@ var TOOLS_HUGESTATS = 'gekruiste-sessie statistieken';
 var TOOLS_DISTRIBUTION = 'Verdeling tijden';
 var TOOLS_TREND = 'tijd trend';
 var TOOLS_METRONOME = 'metronoom';
-var TOOLS_RECONS = 'Reconstruct';
+var TOOLS_RECONS = 'Reconstrueer';
 var TOOLS_RECONS_NODATA = 'No solution found.';
 var TOOLS_RECONS_TITLE = 'insp|exec|turn|tps';
 var TOOLS_TRAINSTAT = 'Training Stat.';
@@ -111,7 +111,7 @@ var PROPERTY_TIMEU = 'Stopwatch update is';
 var PROPERTY_TIMEU_STR = 'update|0.1s|seconden|inspectie|geen';
 var PROPERTY_PRETIME = 'Spatiebalk ingedrukt houden voor (seconde(n))';
 var PROPERTY_ENTERING = 'Tijden meten met';
-var PROPERTY_ENTERING_STR = 'stopwatch|typen|stackmat|MoYuTimer|virtueel|Bluetooth|qCube|GanTimer';
+var PROPERTY_ENTERING_STR = 'stopwatch|typen|stackmat|MoYuTimer|virtueel|Bluetooth|qCube|GanTimer|last layer training';
 var PROPERTY_INTUNIT = 'Unit when entering an integer';
 var PROPERTY_INTUNIT_STR = 'second|centisecond|millisecond';
 var PROPERTY_COLOR = 'Selecteer kleurenschema';
@@ -134,7 +134,7 @@ var PROPERTY_AHIDE = 'Verberg Alle Elementen wanneer je aan het timen bent';
 var SCRAMBLE_LAST = 'Laatste';
 var SCRAMBLE_NEXT = 'Volgende';
 var SCRAMBLE_SCRAMBLE = ' Scramble';
-var SCRAMBLE_SCRAMBLING = 'Scrambling';
+var SCRAMBLE_SCRAMBLING = 'Mixen';
 var SCRAMBLE_LENGTH = 'Lengte';
 var SCRAMBLE_INPUT = 'Scramble(s) invoeren';
 var PROPERTY_VRCSPEED = 'VRC basissnelheid (tps)';
@@ -190,40 +190,56 @@ var scrdata = [
 		['3x3x3 voor beginners', "333noob", 25],
 		['Alleen randen', "edges", 0],
 		['Alleen hoeken', "corners", 0],
-		['Laatste laag', "ll", 0],
-		['ZB laatste laag', "zbll", 0],
-		['Hoeken laatste laag', "cll", 0],
-		['COLL', "coll", 0],
-		['Randen laatste laag', "ell", 0],
-		['Laatste zes randen', "lse", 0],
-		['Laatste zes randen&ltM,U&gt', "lsemu", 0],
-		['Roux L10P', "cmll", 0],
-		['Kruis opgelost', "f2l", 0],
+		['BLD Helper', "nocache_333bldspec", 0],
+		['3x3 ft', "333ft", 0],
+		['Aangepast', "333custom", 0]
+	]],
+	['3x3x3 CFOP', [
+		['PLL', "pll", 0],
+		['OLL', "oll", 0],
 		['Laatste slot + laatste laag', "lsll2", 0],
+		['Laatste laag', "ll", 0],
+		['ZBLL', "zbll", 0],
+		['COLL', "coll", 0],
+		['CLL', "cll", 0],
+		['ELL', "ell", 0],
 		['2GLL', "2gll", 0],
+		['ZZLL', "zzll", 0],
 		['ZBLS', "zbls", 0],
 		['EOLS', "eols", 0],
 		['WVLS', "wvls", 0],
 		['VLS', "vls", 0],
-		['ZZLL', "zzll", 0],
-		['TTLL', "ttll", 0],
-		['OLL', "oll", 0],
-		['PLL', "pll", 0],
+		['Kruis opgelost', "f2l", 0],
 		['EOLine', "eoline", 0],
 		['Makkelijk kruis', "easyc", 3],
-		['easy xcross', "easyxc", 4],
-		['BLD Helper', "nocache_333bldspec", 0],
-		['3x3 ft', "333ft", 0],
-		['Custom', "333custom", 0]
+		['eenvoudig xkruis', "easyxc", 4]
+	]],
+	['3x3x3 Roux', [
+		['2nd Block', "sbrx", 0],
+		['CMLL', "cmll", 0],
+		['LSE', "lse", 0],
+		['LSE &lt;M, U&gt;', "lsemu", 0]
+	]],
+	['3x3x3 Mehta', [
+		['3QB', "mt3qb", 0],
+		['EOLE', "mteole", 0],
+		['TDR', "mttdr", 0],
+		['6CP', "mt6cp", 0],
+		['CDRLL', "mtcdrll", 0],
+		['L5EP', "mtl5ep", 0],
+		['TTLL', "ttll", 0]
 	]],
 	['2x2x2', [
 		["willekeurige staat (WCA)", "222so", 0],
 		['optimaal', "222o", 0],
 		['derde generatie', "2223", 25],
 		['EG', "222eg", 0],
-		['EG0', "222eg0", 0],
+		['CLL', "222eg0", 0],
 		['EG1', "222eg1", 0],
 		['EG2', "222eg2", 0],
+		['TCLL+', "222tcp", 0],
+		['TCLL-', "222tcn", 0],
+		['LS', "222lsall", 0],
 		['Geen balk', "222nb", 0]
 	]],
 	['4x4x4', [
@@ -265,7 +281,7 @@ var scrdata = [
 		['Wortel', "mgmc", 70],
 		['Oude methode', "mgmo", 70],
 		['2-generator R,U', "minx2g", 30],
-		['last slot + last layer', "mlsll", 0],
+		['Laatste slot + laatste laag', "mlsll", 0],
 		['PLL', "mgmpll", 0],
 		['Last Layer', "mgmll", 0]
 	]],
@@ -323,6 +339,10 @@ var scrdata = [
 		['willekeurige staat', "gearso", 0],
 		['optimaal', "gearo", 0],
 		['willekeurige draai', "gear", 10]
+	]],
+	['Kilominx', [
+		['random state', "klmso", 0],
+		['Pochmann', "klmp", 30]
 	]],
 	['Cmetrick', [
 		[' ', "cm3", 25]
@@ -383,14 +403,14 @@ var scrdata = [
 		['3-generator R,U,L', "3gen_L", 25],
 		['3-generator R,r,U', "RrU", 25],
 		['Alleen halve draaien', "half", 25],
-		['last slot + last layer (old)', "lsll", 15]
+		['Laatste slot + laatste laag (oud)', "lsll", 15]
 	]],
 	['Bandaged Cube', [
 		['Bicube', "bic", 30],
 		['Square-1 /,(1,0)', "bsq", 25]
 	]],
 	['Relays', [
-		['lots of 3x3x3s', "r3", 5],
+		['Veel 3x3x3s', "r3", 5],
 		['234 relay', "r234", 0],
 		['2345 relay', "r2345", 0],
 		['23456 relay', "r23456", 0],
@@ -398,7 +418,8 @@ var scrdata = [
 		['234 relay (WCA)', "r234w", 0],
 		['2345 relay (WCA)', "r2345w", 0],
 		['23456 relay (WCA)', "r23456w", 0],
-		['234567 relay (WCA)', "r234567w", 0]
+		['234567 relay (WCA)', "r234567w", 0],
+		['Mini Guildford', "rmngf", 0]
 	]],
 	['===GRAPPEN===', [
 		['--', "blank", 0]
@@ -425,7 +446,7 @@ var SCRAMBLE_NOOBST = [
 	['Draai de voorkant', 'Draai de achterkant']
 ];
 var SCRAMBLE_NOOBSS = ' 90 graden met de klok mee,| 90 graden tegen de klok in,| 180 graden,';
-var SCROPT_TITLE = 'Scramble Options';
+var SCROPT_TITLE = 'Scramble Opties';
 var SCROPT_BTNALL = 'Full';
 var SCROPT_BTNNONE = 'Clear';
 var SCROPT_EMPTYALT = 'Please select at least one case';
@@ -441,7 +462,7 @@ var STATS_CURROUND = 'Gegevens actuele ronde';
 var STATS_CURSESSION = 'Gegevens actuele sessie';
 var STATS_CURSPLIT = 'Phase %d of Current Session Statistics';
 var STATS_EXPORTCSV = 'Exporteer CSV';
-var STATS_SSMGR_TITLE = 'Session Manager';
+var STATS_SSMGR_TITLE = 'Sessie manager';
 var STATS_SSMGR_NAME = 'Naam';
 var STATS_SSMGR_DETAIL = 'Sessie details';
 var STATS_SSMGR_OPS = 'Rename|Create|Split|Merge|Delete|Sort';
@@ -452,6 +473,7 @@ var STATS_ALERTMG = 'Merge all times in session [%f] to the end of session [%t]?
 var STATS_PROMPTSPL = 'Number of latest times split from session [%s]?';
 var STATS_ALERTSPL = 'Should split or leave 1 time at least';
 var STATS_AVG = 'Gemiddelde';
+var STATS_SUM = 'sum';
 var STATS_SOLVE = 'Opgelost';
 var STATS_TIME = 'Tijd';
 var STATS_SESSION = 'Sessie';
@@ -464,24 +486,28 @@ var STATS_TYPELEN = 'lijst %d type|lijst %d lengte|average|mean';
 var STATS_STATCLR = 'Schakel sessie leegmaken in';
 var STATS_ABSIDX = 'Show absolute index in statistics report';
 var STATS_XSESSION_DATE = 'any date|past 24 hours|past 7 days|past 30 days|past 365 days';
-var STATS_XSESSION_NAME = 'any name';
+var STATS_XSESSION_NAME = 'elke naam';
 var STATS_XSESSION_SCR = 'any scramble';
 var STATS_XSESSION_CALC = 'Calc';
 var STATS_RSFORSS = 'Show stat. when clicking solve number';
 var PROPERTY_PRINTSCR = 'afdrukken scramble(s) in statistieken';
-var PROPERTY_PRINTDATE = 'print solving date in statistics';
+var PROPERTY_PRINTDATE = 'druk oplossingsdatum in statistieken';
 var PROPERTY_SUMMARY = 'samenvatting tonen voor tijdlijst';
 var PROPERTY_IMRENAME = 'hernoem sessie direct na aanmaken';
 var PROPERTY_SCR2SS = 'maak nieuwe sessie bij wisselen van scramble type';
 var PROPERTY_SS2SCR = 'herstel scramble tytpe bij wisselen van sessie';
 var PROPERTY_SS2PHASES = 'herstel multi-fase tijdmeting bij wisselen van sessie';
 var PROPERTY_STATINV = 'Omgekeerde tijdenlijst';
-var PROPERTY_STATTHRES = 'Show target time for session best';
+var PROPERTY_STATSSUM = 'Show sum in time list';
+var PROPERTY_STATTHRES = 'Doeltijd voor sessie beste tijd weergeven';
 var PROPERTY_STATAL = 'Statistische indicatoren';
 var PROPERTY_STATALU = 'Customized statistical indicator';
+var PROPERTY_HLPBS = 'Highlight PBs';
+var PROPERTY_HLPBS_STR = 'Dark orange as WCA|As link color|Bolder|None';
 var PROPERTY_DELMUL = 'Inschakelen meervoudige verwijdering';
 var PROPERTY_TOOLSFUNC = 'Selected Functions';
-var PROPERTY_TRIM = 'Number of solves trimmed at each side';
+var PROPERTY_TRIM = 'Number of solves trimmed at better side';
+var PROPERTY_TRIMR = 'Number of solves trimmed at worse side';
 var PROPERTY_TRIM_MED = 'Median';
 var PROPERTY_STKHEAD = 'Use Stackmat Status Information';
 var PROPERTY_TOOLPOS = 'Tools panel position';
@@ -489,7 +515,7 @@ var PROPERTY_TOOLPOS_STR = 'Bottom|Float|Top';
 var PROPERTY_HIDEFULLSOL = 'Show solution progressively';
 var PROPERTY_IMPPREV = 'Importeer niet-nieuwste gegevens';
 var PROPERTY_AUTOEXP = 'Automatisch exporteren (per 100 solves)';
-var PROPERTY_AUTOEXP_OPT = 'Nooit|Naar bestand|Met csTimer ID|Met WCA Account';
+var PROPERTY_AUTOEXP_OPT = 'Nooit|Naar bestand|Met csTimer ID|Met WCA Account|Met Google Account';
 var PROPERTY_SCRASIZE = 'Automatische scramble grootte';
 var MODULE_NAMES = {
 	"kernel": 'Global',
@@ -507,6 +533,8 @@ var BGIMAGE_OPACITY = 'Transparantie achtergrondafbeelding';
 var BGIMAGE_IMAGE = 'Achtergrondafbeelding';
 var BGIMAGE_IMAGE_STR = 'Geen|Automatischl|CCT';
 var SHOW_AVG_LABEL = 'Toon gemiddelde';
+var SHOW_DIFF_LABEL = 'Show Difference Label';
+var SHOW_DIFF_LABEL_STR = '-Green+Red|-Red+Green|Normal|None';
 var USE_LOGOHINT = 'Hint berichten in logo';
 var TOOLS_SCRGEN = 'ScrambleGenerator';
 var SCRGEN_NSCR = 'Aantal scrambles';
@@ -517,5 +545,5 @@ var VRCREPLAY_ORI = 'raw ori|auto ori';
 var VRCREPLAY_SHARE = 'share link';
 var GIIKER_CONNECT = 'Click to connect';
 var GIIKER_RESET = 'Reset (Mark Solved)';
-var PROPERTY_SHOWAD = 'Show advistisements (take effect after reload)';
+var PROPERTY_SHOWAD = 'Show advertisements (take effect after reload)';
 var PROPERTY_GIIORI = 'Cube orientation';

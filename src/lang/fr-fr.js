@@ -111,7 +111,7 @@ var PROPERTY_TIMEU = 'Rafraîchissement du chronomètre';
 var PROPERTY_TIMEU_STR = 'Normal|0.1s|Secondes|Inspection|Aucun';
 var PROPERTY_PRETIME = 'Presser la barre d\'espace pendant (en secondes)';
 var PROPERTY_ENTERING = 'Entrer les temps avec';
-var PROPERTY_ENTERING_STR = 'Clavier|Manuellement|Stackmat|MoYuTimer|Virtuel|Bluetooth|qCube|GanTimer';
+var PROPERTY_ENTERING_STR = 'Clavier|Manuellement|Stackmat|MoYuTimer|Virtuel|Bluetooth|qCube|GanTimer|last layer training';
 var PROPERTY_INTUNIT = 'Unité de saisie des nombres';
 var PROPERTY_INTUNIT_STR = 'seconde|centième|milliseconde';
 var PROPERTY_COLOR = 'Couleur du thème';
@@ -190,40 +190,56 @@ var scrdata = [
 		['3x3x3 pour débutants', "333noob", 25],
 		['Arêtes seulement', "edges", 0],
 		['Coins seulement', "corners", 0],
-		['Dernier étage', "ll", 0],
-		['Dernier étage (ZB)', "zbll", 0],
-		['Coins du dernier étage', "cll", 0],
-		['COLL', "coll", 0],
-		['Arêtes du dernier étage', "ell", 0],
-		['Six dernières arêtes', "lse", 0],
-		['Six dernières arêtes&ltM,U&gt', "lsemu", 0],
-		['L10P Roux', "cmll", 0],
-		['Croix résolue', "f2l", 0],
+		['Assistant BLD', "nocache_333bldspec", 0],
+		['3x3 ft', "333ft", 0],
+		['Personnalisé', "333custom", 0]
+	]],
+	['3x3x3 CFOP', [
+		['PLL', "pll", 0],
+		['OLL', "oll", 0],
 		['Dernier slot + dernier étage', "lsll2", 0],
+		['Dernier étage', "ll", 0],
+		['ZBLL', "zbll", 0],
+		['COLL', "coll", 0],
+		['CLL', "cll", 0],
+		['ELL', "ell", 0],
 		['2GLL', "2gll", 0],
+		['ZZLL', "zzll", 0],
 		['ZBLS', "zbls", 0],
 		['EOLS', "eols", 0],
 		['WVLS', "wvls", 0],
 		['VLS', "vls", 0],
-		['ZZLL', "zzll", 0],
-		['TTLL', "ttll", 0],
-		['OLL', "oll", 0],
-		['PLL', "pll", 0],
+		['Croix résolue', "f2l", 0],
 		['EOLine', "eoline", 0],
 		['Croix facile', "easyc", 3],
-		['easy xcross', "easyxc", 4],
-		['Assistant BLD', "nocache_333bldspec", 0],
-		['3x3 ft', "333ft", 0],
-		['Personnalisé', "333custom", 0]
+		['X-cross facile', "easyxc", 4]
+	]],
+	['3x3x3 Roux', [
+		['2nd Block', "sbrx", 0],
+		['CMLL', "cmll", 0],
+		['LSE', "lse", 0],
+		['LSE &lt;M, U&gt;', "lsemu", 0]
+	]],
+	['3x3x3 Mehta', [
+		['3QB', "mt3qb", 0],
+		['EOLE', "mteole", 0],
+		['TDR', "mttdr", 0],
+		['6CP', "mt6cp", 0],
+		['CDRLL', "mtcdrll", 0],
+		['L5EP', "mtl5ep", 0],
+		['TTLL', "ttll", 0]
 	]],
 	['2x2x2', [
 		["état aléatoire (WCA)", "222so", 0],
 		['optimal', "222o", 0],
 		['3-gen', "2223", 25],
 		['EG', "222eg", 0],
-		['EG0', "222eg0", 0],
+		['CLL', "222eg0", 0],
 		['EG1', "222eg1", 0],
 		['EG2', "222eg2", 0],
+		['TCLL+', "222tcp", 0],
+		['TCLL-', "222tcn", 0],
+		['LS', "222lsall", 0],
 		['Sans barre', "222nb", 0]
 	]],
 	['4x4x4', [
@@ -324,6 +340,10 @@ var scrdata = [
 		['optimal', "gearo", 0],
 		['mouvements aléatoires', "gear", 10]
 	]],
+	['Kilominx', [
+		['random state', "klmso", 0],
+		['Pochmann', "klmp", 30]
+	]],
 	['Cmetrick', [
 		[' ', "cm3", 25]
 	]],
@@ -398,7 +418,8 @@ var scrdata = [
 		['Relai 234 (WCA)', "r234w", 0],
 		['Relai 2345 (WCA)', "r2345w", 0],
 		['Relai 23456 (WCA)', "r23456w", 0],
-		['Relai 234567 (WCA)', "r234567w", 0]
+		['Relai 234567 (WCA)', "r234567w", 0],
+		['Mini Guildford', "rmngf", 0]
 	]],
 	['===BLAGUES===', [
 		['--', "blank", 0]
@@ -452,6 +473,7 @@ var STATS_ALERTMG = 'Déplacer tous les temps de la session [%f] à la fin de la
 var STATS_PROMPTSPL = 'Nombre de temps à diviser de la session [%s] (en partant de la fin)?';
 var STATS_ALERTSPL = 'Il faut laisser au moins un temps, ou fusionner la session avec une autre';
 var STATS_AVG = 'Moyenne';
+var STATS_SUM = 'Total';
 var STATS_SOLVE = 'Résolutions';
 var STATS_TIME = 'temps';
 var STATS_SESSION = 'Session';
@@ -476,12 +498,16 @@ var PROPERTY_SCR2SS = 'Créer une nouvelle session lors du changement de type de
 var PROPERTY_SS2SCR = 'Restaurer le type de mélange lors d\'un changement de session';
 var PROPERTY_SS2PHASES = 'Restaurer le chnonométrage multi-phase lors d\'un changement de session';
 var PROPERTY_STATINV = 'Inverser la liste des temps';
+var PROPERTY_STATSSUM = 'Afficher le total dans la liste des temps';
 var PROPERTY_STATTHRES = 'Afficher le temps cible de la meilleure session';
 var PROPERTY_STATAL = 'Indicateurs statistiques';
 var PROPERTY_STATALU = 'Indicateur de statistiques personnalisé';
+var PROPERTY_HLPBS = 'Highlight PBs';
+var PROPERTY_HLPBS_STR = 'Dark orange as WCA|As link color|Bolder|None';
 var PROPERTY_DELMUL = 'Activer la suppression multiple';
 var PROPERTY_TOOLSFUNC = 'Fonctions sélectionnées';
 var PROPERTY_TRIM = 'Nombre de résolutions élaguées à chaque extrémité.';
+var PROPERTY_TRIMR = 'Nombre de résolutions élaguées parmi les pires';
 var PROPERTY_TRIM_MED = 'Médiane';
 var PROPERTY_STKHEAD = 'Utiliser les informations d\'état du Stackmat';
 var PROPERTY_TOOLPOS = 'Position du panneau Outils';
@@ -489,7 +515,7 @@ var PROPERTY_TOOLPOS_STR = 'Bas|Flottant|Haut';
 var PROPERTY_HIDEFULLSOL = 'Afficher la solution progressivement';
 var PROPERTY_IMPPREV = 'Importer d\'anciennes données';
 var PROPERTY_AUTOEXP = 'Exportation automatique (par 100 résolutions)';
-var PROPERTY_AUTOEXP_OPT = 'Jamais|Fichier|ID csTimer|Compte WCA';
+var PROPERTY_AUTOEXP_OPT = 'Jamais|Fichier|ID csTimer|Compte WCA|Compte Google';
 var PROPERTY_SCRASIZE = 'Taille du mélange automatique';
 var MODULE_NAMES = {
 	"kernel": 'Global',
@@ -507,6 +533,8 @@ var BGIMAGE_OPACITY = 'Opacité du fond ';
 var BGIMAGE_IMAGE = 'Image de fond';
 var BGIMAGE_IMAGE_STR = 'Aucune|Personnalisée|CCT';
 var SHOW_AVG_LABEL = 'Afficher les moyennes en cours';
+var SHOW_DIFF_LABEL = 'Show Difference Label';
+var SHOW_DIFF_LABEL_STR = '-Vert+Rouge|-Rouge+Vert|Normal|Aucun';
 var USE_LOGOHINT = 'Afficher des messages dans le bloc du logo';
 var TOOLS_SCRGEN = 'Générateur de mélange';
 var SCRGEN_NSCR = 'Nombre de mélanges';

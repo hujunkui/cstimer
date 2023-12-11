@@ -80,10 +80,10 @@
 <li><strong data="opt_scrFast">Gebruik snelle scramble voor 4x4x4 (niet-officiëel)</strong>. WCA official 4x4x4 scramble requires huge computation resources, select this option to use a random-move scramble for 4x4x4 instead.</li>
 <li><strong data="opt_scrKeyM">Label sleutelbeweging (en) in scramble</strong>. Mark a key move in the scramble, e.g. the move that take the state away from square shape in SQ1 scrambles.</li>
 <li><strong data="opt_scrClk">Actie bij klikken op scramble</strong>. Behavior when you click on the scramble text, copy scramble or generate next scramble.</li>
-<li><strong data="opt_trim">Number of solves trimmed at each side</strong>. Number of solves trimmed at head and tail of solves when calculating average.</li>
+<li><strong data="opt_trim">Number of solves trimmed at better side</strong>. Number of solves trimmed at head and tail of solves when calculating average.</li>
 <li><strong data="opt_statsum">samenvatting tonen voor tijdlijst</strong>. Show the statistics table before time list.</li>
 <li><strong data="opt_printScr">afdrukken scramble(s) in statistieken</strong>. Print scramble in round statistics dialog.</li>
-<li><strong data="opt_printDate">print solving date in statistics</strong>. Print solving date in round statistics dialog.</li>
+<li><strong data="opt_printDate">druk oplossingsdatum in statistieken</strong>. Print solving date in round statistics dialog.</li>
 <li><strong data="opt_imrename">hernoem sessie direct na aanmaken</strong>. Immediately rename a session after creating it.</li>
 <li><strong data="opt_scr2ss">maak nieuwe sessie bij wisselen van scramble type</strong>. When switching scramble type, a new session will be created.</li>
 <li><strong data="opt_statinv">Omgekeerde tijdenlijst</strong>. Invert the time list, thus, latest solves will at the bottom of the time list.</li>

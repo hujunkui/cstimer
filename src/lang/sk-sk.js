@@ -5,7 +5,7 @@ var ABOUT_LANG = 'O programe';
 var ZOOM_LANG = 'Lupa';
 var BUTTON_TIME_LIST = 'SEZNAM ČASOV';
 var BUTTON_OPTIONS = 'MOŽNOSŤ';
-var BUTTON_EXPORT = 'IZPIŠI';
+var BUTTON_EXPORT = 'EXPORTOVAŤ';
 var BUTTON_DONATE = 'prispieť';
 var PROPERTY_SR = 'With session';
 var PROPERTY_USEINS = 'Používať WCA inšpekciu';
@@ -18,7 +18,7 @@ var PROPERTY_PHASES = 'multi-phase';
 var PROPERTY_TIMERSIZE = 'timer size';
 var PROPERTY_USEMILLI = 'používať milisekundy';
 var PROPERTY_SMALLADP = 'use small font after decimal point';
-var PROPERTY_SCRSIZE = 'Velkosť zamiešania';
+var PROPERTY_SCRSIZE = 'Veľkosť zamiešania';
 var PROPERTY_SCRMONO = 'monospaced scramble';
 var PROPERTY_SCRLIM = 'Limit the height of scramble area';
 var PROPERTY_SCRALIGN = 'Alignment of scramble area';
@@ -51,10 +51,10 @@ var EXPORT_LOGOUTCFM = 'Confirm to log out?';
 var EXPORT_LOGINAUTHED = 'Authorized<br>Fetching Data...';
 var IMPORT_FINAL_CONFIRM = 'This will override all local data! It will modify %d sessions, add %a and remove %r solves at least. Confirm to import data?';
 var BUTTON_SCRAMBLE = 'SCRA-<br>MBLE';
-var BUTTON_TOOLS = 'TOOLS';
+var BUTTON_TOOLS = 'NÁSTROJE';
 var IMAGE_UNAVAILABLE = 'Unavailable for this scramble type';
 var TOOLS_SELECTFUNC = 'Funkcia';
-var TOOLS_CROSS = 'cross';
+var TOOLS_CROSS = 'kríž';
 var TOOLS_EOLINE = 'EOLine';
 var TOOLS_ROUX1 = 'Roux S1';
 var TOOLS_222FACE = '2x2x2 face';
@@ -99,8 +99,8 @@ var OLCOMP_SUBMITAS = 'Submit As: ';
 var OLCOMP_WCANOTICE = 'Submit As Your WCA Account? (Relogin if not recognized after submitting)';
 var OLCOMP_OLCOMP = 'Online Competition';
 var OLCOMP_ANONYM = 'Anonym';
-var OLCOMP_ME = 'Me';
-var OLCOMP_WCAACCOUNT = 'WCA Account';
+var OLCOMP_ME = 'Ja';
+var OLCOMP_WCAACCOUNT = 'WCA účet';
 var OLCOMP_ABORT = 'Abort competition and show results?';
 var OLCOMP_WITHANONYM = 'With Anonym';
 var PROPERTY_IMGSIZE = 'Scramble Image Size';
@@ -111,7 +111,7 @@ var PROPERTY_TIMEU = 'timer update is';
 var PROPERTY_TIMEU_STR = 'update|0.1s|seconds|inspection|none';
 var PROPERTY_PRETIME = 'time of keeping space down(second(s))';
 var PROPERTY_ENTERING = 'entering in times with';
-var PROPERTY_ENTERING_STR = 'timer|typing|stackmat|MoYuTimer|virtual|bluetooth|qCube|GanTimer';
+var PROPERTY_ENTERING_STR = 'timer|typing|stackmat|MoYuTimer|virtual|bluetooth|qCube|GanTimer|last layer training';
 var PROPERTY_INTUNIT = 'Unit when entering an integer';
 var PROPERTY_INTUNIT_STR = 'second|centisecond|millisecond';
 var PROPERTY_COLOR = 'select color theme';
@@ -123,13 +123,13 @@ var PROPERTY_UIDESIGN_STR = 'Normal|Material design|Normal w/o shadows|Material 
 var COLOR_EXPORT = 'Please save the string for import';
 var COLOR_IMPORT = 'Please input the string exported';
 var COLOR_FAIL = 'Incorrect Data, Import Failed';
-var PROPERTY_FONTCOLOR_STR = 'black|white';
+var PROPERTY_FONTCOLOR_STR = 'čierna|biela';
 var PROPERTY_COLOR_STR = 'manual|import/export...|random|style1|style2|style3|black|white|style6|solarized dark|solarized light';
 var PROPERTY_FONT = 'select timer\'s font';
 var PROPERTY_FONT_STR = 'random digital|normal|digital1|digital2|digital3|digital4|digital5';
 var PROPERTY_FORMAT = 'time format';
 var PROPERTY_USEKSC = 'use keyboard shortcut';
-var PROPERTY_NTOOLS = 'number of tools';
+var PROPERTY_NTOOLS = 'Počet nástrojov';
 var PROPERTY_AHIDE = 'Hide All Elements When Timing';
 var SCRAMBLE_LAST = 'last';
 var SCRAMBLE_NEXT = 'next';
@@ -188,42 +188,58 @@ var scrdata = [
 		["random state (WCA)", "333", 0],
 		['random move', "333o", 25],
 		['3x3x3 for noobs', "333noob", 25],
-		['edges only', "edges", 0],
-		['corners only', "corners", 0],
-		['last layer', "ll", 0],
-		['zb last layer', "zbll", 0],
-		['corners of last layer', "cll", 0],
-		['COLL', "coll", 0],
-		['edges of last layer', "ell", 0],
-		['last six edges', "lse", 0],
-		['last six edges&ltM,U&gt', "lsemu", 0],
-		['Roux L10P', "cmll", 0],
-		['cross solved', "f2l", 0],
+		['Iba hrany', "edges", 0],
+		['Iba rohy', "corners", 0],
+		['BLD Helper', "nocache_333bldspec", 0],
+		['3x3 ft', "333ft", 0],
+		['Custom', "333custom", 0]
+	]],
+	['3x3x3 CFOP', [
+		['PLL', "pll", 0],
+		['OLL', "oll", 0],
 		['last slot + last layer', "lsll2", 0],
+		['Posledná vrstva', "ll", 0],
+		['ZBLL', "zbll", 0],
+		['COLL', "coll", 0],
+		['CLL', "cll", 0],
+		['ELL', "ell", 0],
 		['2GLL', "2gll", 0],
+		['ZZLL', "zzll", 0],
 		['ZBLS', "zbls", 0],
 		['EOLS', "eols", 0],
 		['WVLS', "wvls", 0],
 		['VLS', "vls", 0],
-		['ZZLL', "zzll", 0],
-		['TTLL', "ttll", 0],
-		['OLL', "oll", 0],
-		['PLL', "pll", 0],
+		['Zložený kríž', "f2l", 0],
 		['EOLine', "eoline", 0],
 		['easy cross', "easyc", 3],
-		['easy xcross', "easyxc", 4],
-		['BLD Helper', "nocache_333bldspec", 0],
-		['3x3 ft', "333ft", 0],
-		['Custom', "333custom", 0]
+		['easy xcross', "easyxc", 4]
+	]],
+	['3x3x3 Roux', [
+		['2nd Block', "sbrx", 0],
+		['CMLL', "cmll", 0],
+		['LSE', "lse", 0],
+		['LSE &lt;M, U&gt;', "lsemu", 0]
+	]],
+	['3x3x3 Mehta', [
+		['3QB', "mt3qb", 0],
+		['EOLE', "mteole", 0],
+		['TDR', "mttdr", 0],
+		['6CP', "mt6cp", 0],
+		['CDRLL', "mtcdrll", 0],
+		['L5EP', "mtl5ep", 0],
+		['TTLL', "ttll", 0]
 	]],
 	['2x2x2', [
 		["random state (WCA)", "222so", 0],
 		['optimal', "222o", 0],
 		['3-gen', "2223", 25],
 		['EG', "222eg", 0],
-		['EG0', "222eg0", 0],
+		['CLL', "222eg0", 0],
 		['EG1', "222eg1", 0],
 		['EG2', "222eg2", 0],
+		['TCLL+', "222tcp", 0],
+		['TCLL-', "222tcn", 0],
+		['LS', "222lsall", 0],
 		['No Bar', "222nb", 0]
 	]],
 	['4x4x4', [
@@ -231,7 +247,7 @@ var scrdata = [
 		['random move', "444m", 40],
 		['SiGN', "444", 40],
 		['YJ', "444yj", 40],
-		['4x4x4 edges', "4edge", 8],
+		['4x4x4 hrany', "4edge", 8],
 		['R,r,U,u', "RrUu", 40]
 	]],
 	['5x5x5', [
@@ -324,6 +340,10 @@ var scrdata = [
 		['optimal', "gearo", 0],
 		['random move', "gear", 10]
 	]],
+	['Kilominx', [
+		['random state', "klmso", 0],
+		['Pochmann', "klmp", 30]
+	]],
 	['Cmetrick', [
 		[' ', "cm3", 25]
 	]],
@@ -398,7 +418,8 @@ var scrdata = [
 		['234 relay (WCA)', "r234w", 0],
 		['2345 relay (WCA)', "r2345w", 0],
 		['23456 relay (WCA)', "r23456w", 0],
-		['234567 relay (WCA)', "r234567w", 0]
+		['234567 relay (WCA)', "r234567w", 0],
+		['Mini Guildford', "rmngf", 0]
 	]],
 	['===JOKES===', [
 		['--', "blank", 0]
@@ -433,9 +454,9 @@ var STATS_CFM_RESET = 'reset all times in this session?';
 var STATS_CFM_DELSS = 'delete session [%s]?';
 var STATS_CFM_DELMUL = 'The Number Of Deleted Values From Current Index?';
 var STATS_CFM_DELETE = 'delete this time?';
-var STATS_COMMENT = 'Comment';
+var STATS_COMMENT = 'Komentár';
 var STATS_REVIEW = 'Review';
-var STATS_DATE = 'Date';
+var STATS_DATE = 'Dátum';
 var STATS_SSSTAT = '1-solve stat.';
 var STATS_CURROUND = 'Current Round Statistics';
 var STATS_CURSESSION = 'Current Session Statistics';
@@ -452,6 +473,7 @@ var STATS_ALERTMG = 'Merge all times in session [%f] to the end of session [%t]?
 var STATS_PROMPTSPL = 'Number of latest times split from session [%s]?';
 var STATS_ALERTSPL = 'Should split or leave 1 time at least';
 var STATS_AVG = 'mean';
+var STATS_SUM = 'sum';
 var STATS_SOLVE = 'solve';
 var STATS_TIME = 'time';
 var STATS_SESSION = 'Session';
@@ -476,12 +498,16 @@ var PROPERTY_SCR2SS = 'create new session when switching scramble type';
 var PROPERTY_SS2SCR = 'restore scramble type when switching session';
 var PROPERTY_SS2PHASES = 'restore multi-phase timing when switching session';
 var PROPERTY_STATINV = 'Inverse time list';
+var PROPERTY_STATSSUM = 'Show sum in time list';
 var PROPERTY_STATTHRES = 'Show target time for session best';
 var PROPERTY_STATAL = 'Statistical indicators';
 var PROPERTY_STATALU = 'Customized statistical indicator';
+var PROPERTY_HLPBS = 'Highlight PBs';
+var PROPERTY_HLPBS_STR = 'Dark orange as WCA|As link color|Bolder|None';
 var PROPERTY_DELMUL = 'Enable Multiple Deletion';
 var PROPERTY_TOOLSFUNC = 'Selected Functions';
-var PROPERTY_TRIM = 'Number of solves trimmed at each side';
+var PROPERTY_TRIM = 'Number of solves trimmed at better side';
+var PROPERTY_TRIMR = 'Number of solves trimmed at worse side';
 var PROPERTY_TRIM_MED = 'Median';
 var PROPERTY_STKHEAD = 'Use Stackmat Status Information';
 var PROPERTY_TOOLPOS = 'Tools panel position';
@@ -489,7 +515,7 @@ var PROPERTY_TOOLPOS_STR = 'Bottom|Float|Top';
 var PROPERTY_HIDEFULLSOL = 'Show solution progressively';
 var PROPERTY_IMPPREV = 'Import non-latest data';
 var PROPERTY_AUTOEXP = 'Auto Export (per 100 solves)';
-var PROPERTY_AUTOEXP_OPT = 'Never|To File|With csTimer ID|With WCA Account';
+var PROPERTY_AUTOEXP_OPT = 'Never|To File|With csTimer ID|With WCA Account|With Google Account';
 var PROPERTY_SCRASIZE = 'Auto scramble size';
 var MODULE_NAMES = {
 	"kernel": 'global',
@@ -497,8 +523,8 @@ var MODULE_NAMES = {
 	"color": 'color',
 	"timer": 'timer',
 	"scramble": 'scramble',
-	"stats": 'statistics',
-	"tools": 'tools',
+	"stats": 'štatistiky',
+	"tools": 'Nástroje',
 	"vrc": 'virtual&<br>bluetooth'
 };
 var BGIMAGE_URL = 'please input image\'s url';
@@ -507,6 +533,8 @@ var BGIMAGE_OPACITY = 'background image opacity';
 var BGIMAGE_IMAGE = 'background image';
 var BGIMAGE_IMAGE_STR = 'none|manual|CCT';
 var SHOW_AVG_LABEL = 'Show Avg Label';
+var SHOW_DIFF_LABEL = 'Show Difference Label';
+var SHOW_DIFF_LABEL_STR = '-Green+Red|-Red+Green|Normal|None';
 var USE_LOGOHINT = 'Hint messages in logo';
 var TOOLS_SCRGEN = 'ScrambleGenerator';
 var SCRGEN_NSCR = 'Number of scrambles';
@@ -517,5 +545,5 @@ var VRCREPLAY_ORI = 'raw ori|auto ori';
 var VRCREPLAY_SHARE = 'share link';
 var GIIKER_CONNECT = 'Click to connect';
 var GIIKER_RESET = 'Reset (Mark Solved)';
-var PROPERTY_SHOWAD = 'Show advistisements (take effect after reload)';
-var PROPERTY_GIIORI = 'Cube orientation';
+var PROPERTY_SHOWAD = 'Show advertisements (take effect after reload)';
+var PROPERTY_GIIORI = 'Orientácia kocky';

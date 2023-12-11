@@ -490,12 +490,14 @@ var kernel = execMain(function() {
 			}
 			if (values[1] != undefined) {
 				buttons.append(OK.unbind("click").click(function() {
+					$.waitUser.call();
 					values[1] && values[1]();
 					hideDialog();
 				}));
 			}
 			if (values[2] != undefined) {
 				buttons.append(CAN.unbind("click").click(function() {
+					$.waitUser.call();
 					values[2] && values[2]();
 					hideDialog();
 				}));
@@ -503,6 +505,7 @@ var kernel = execMain(function() {
 			gray.unbind("click");
 			if (values[3] != undefined) {
 				gray.click(function() {
+					$.waitUser.call();
 					values[3] && values[3]();
 					hideDialog();
 				});
@@ -510,6 +513,7 @@ var kernel = execMain(function() {
 			for (var i=4; i<values.length; i++) {
 				buttons.append($('<input type="button" class="buttonOK">').val(values[i][0]).unbind("click").click((function(func) {
 					return function() {
+						$.waitUser.call();
 						if (func()) {
 							hideDialog();
 						}
@@ -595,7 +599,7 @@ var kernel = execMain(function() {
 			".mybutton.enable,.tab.enable,.cntbar,.selected,table.opttable tr th:first-child,div.helptable h2,div.helptable h3,.sflt div.sgrp{background-color:?}" +
 			"#gray{background-color:?}" +
 			"html:not(.m) .times:hover,html:not(.m) .click:hover,.times:active,.click:active,textarea{background-color:?}" +
-			".click{color:?}" +
+			".click,.linkb .times.pb{color:?}" +
 			".mywindow,.popup,.dialog,.table,.table td,.table th,textarea,.tabValue,.opttable td.sr,.sflt .bimg{border-color:?}" +
 			"html:not(.m) #avgstr .click:hover,#avgstr .click:active{background-color:?}" +
 			"select,input[type='button'],input[type='text']{color:?;background:?;border-color:?}" +
@@ -819,6 +823,7 @@ var kernel = execMain(function() {
 			regProp('color', 'col-link', 3, parr[4], ['#0000ff']);
 			regProp('color', 'col-logo', 3, parr[5], ['#ffff00']);
 			regProp('color', 'col-logoback', 3, parr[6], ['#000000']);
+			regProp('color', 'col-timer', 4, 'Timer', ['#f00#0d0#dd0#080#f00']);
 			regProp('color', 'colcube', 4, 'Cube', ['#ff0#fa0#00f#fff#f00#0d0']);
 			regProp('color', 'colpyr', 4, 'Pyraminx', ['#0f0#f00#00f#ff0']);
 			regProp('color', 'colskb', 4, 'Skewb', ['#fff#00f#f00#ff0#0f0#f80']);
@@ -1019,6 +1024,7 @@ var kernel = execMain(function() {
 		var img;
 		var lastidx = 0;
 		var urlre = /^((http|https|ftp):\/\/)?(\w(\:\w)?@)?([0-9a-z_-]+\.)*?([a-z0-9-]+\.[a-z]{2,6}(\.[a-z]{2})?(\:[0-9]{2,6})?)((\/[^?#<>\/\\*":]*)+(\?[^#]*)?(#.*)?)?$/i;
+		var uploadImageFile = $('<input type="file" id="imgfile" accept="image/*"/>');
 
 		function procSignal(signal, value) {
 			if (value[0] == "bgImgO") {
@@ -1035,7 +1041,7 @@ var kernel = execMain(function() {
 				if (value[1] == 'u') {
 					if (value[2] == 'modify') {
 						var input = prompt(BGIMAGE_URL, src);
-						if (urlre.exec(input)) {
+						if (urlre.exec(input) && input.length < 2048) {
 							src = input;
 							img.attr("src", src);
 							setProp('bgImgSrc', src);
@@ -1048,6 +1054,26 @@ var kernel = execMain(function() {
 						src = getProp('bgImgSrc', src);
 						img.attr("src", src);
 					}
+				} else if (value[1] == 'f') {
+					storage.getKey("bgImgFile").then(function(file) {
+						if (file) {
+							img.attr("src", URL.createObjectURL(file));
+						} else if (value[2] != 'modify') {
+							setProp('bgImgS', 'n');
+							property.reload();
+						}
+					});
+					if (value[2] == 'modify') {
+						uploadImageFile.unbind('change').change(function() {
+							if (!uploadImageFile[0].files.length) {
+								return;
+							}
+							var file = uploadImageFile[0].files[0];
+							img.attr("src", URL.createObjectURL(file));
+							storage.setKey("bgImgFile", file);
+						});
+						uploadImageFile.click();
+					}
 				} else {
 					lastidx = value[1];
 					img.attr("src", images[value[1]]);
@@ -1059,7 +1085,7 @@ var kernel = execMain(function() {
 			img = $('#bgImage');
 			regListener('bgImage', 'property', procSignal, /^bgImg[OS]$/);
 			regProp('ui', 'bgImgO', 2, BGIMAGE_OPACITY, [25, 0, 100]);
-			regProp('ui', 'bgImgS', 1, BGIMAGE_IMAGE, ['n', ['n', 'u', 0, 1, 2], BGIMAGE_IMAGE_STR.split('|').slice(0, -1).concat(1, 2, 3)]);
+			regProp('ui', 'bgImgS', 1, BGIMAGE_IMAGE, ['n', ['n', 'u', 0, 1, 2, 'f'], BGIMAGE_IMAGE_STR.split('|').slice(0, -1).concat(1, 2, 3, 'upload')]);
 		});
 	})();
 
@@ -1102,8 +1128,9 @@ var kernel = execMain(function() {
 	var scrambleReg = /^([\d]+(?:-\d+)?)?([FRUBLDfrubldzxySME])(?:([w])|&sup([\d]);)?([2'])?$/;
 
 	function parseScramble(scramble, moveMap, addPreScr) {
+		scramble = scramble || '';
 		if (addPreScr) {
-			scramble = getProp('preScr') + ' ' + scramble;
+			scramble = getProp(tools.isCurTrainScramble() ? 'preScrT' : 'preScr') + ' ' + scramble;
 		}
 		var moveseq = [];
 		var moves = scramble.split(' ');
@@ -1146,7 +1173,7 @@ var kernel = execMain(function() {
 	}
 
 	function getPreConj() { // TODO 24 cases, use map insetad of calculation
-		var preScr = getProp('preScr', '').split(' ');
+		var preScr = getProp(tools.isCurTrainScramble() ? 'preScrT' : 'preScr', '').split(' ');
 		var cc = new mathlib.CubieCube();
 		for (var i = 0; i < preScr.length; i++) {
 			cc.selfMoveStr(preScr[i]);
@@ -1186,6 +1213,7 @@ var kernel = execMain(function() {
 		wndCtn.appendTo('body');
 
 		$(document).keydown(function(e) {
+			$.waitUser.call();
 			keyback = true;
 			pushSignal('keydown', e);
 			timer.onkeydown(e);
@@ -1199,6 +1227,7 @@ var kernel = execMain(function() {
 		});
 
 		$('#container').bind('touchstart', function(e) {
+			$.waitUser.call();
 			if ($(e.target).is('.click')) {
 				return;
 			}
@@ -1229,6 +1258,7 @@ var kernel = execMain(function() {
 		 * so we add the mouse timer function to support such devices.
 		 */
 		$('#container').mousedown(function(e) {
+			$.waitUser.call();
 			if ($(e.target).is('.click')) {
 				return;
 			}
@@ -1327,6 +1357,7 @@ var kernel = execMain(function() {
 		loadProp: property.load,
 		parseScramble: parseScramble,
 		getConjMoves: getConjMoves,
+		getPreConj: getPreConj,
 		blur: refocus,
 		ui: ui,
 		TwoLvMenu: TwoLvMenu,

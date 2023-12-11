@@ -515,6 +515,15 @@ html:not(.m) .mywindow:hover, html:not(.m) #leftbar:hover {
 	border-radius: 0.15em;
 }
 
+.f40b .times.pb {
+	color: #f40;
+	font-weight: bold;
+}
+
+.linkb .times.pb, .normb .times.pb {
+	font-weight: bold;
+}
+
 a {
 	color: inherit;
 }
@@ -528,6 +537,10 @@ a {
 	user-select: none;
 }
 
+#lcd {
+	white-space: nowrap;
+}
+
 #lcd::before {
 	content: "";
 	position: absolute;
@@ -538,12 +551,43 @@ a {
 	z-index: 10;
 }
 
-.insp.activetimer::after {
-	content: "\e6b6";
+.insplabel {
 	font-family: iconfont;
 	position: absolute;
 	font-size: 0.2em;
 	opacity: 0.65;
+	display: none;
+}
+
+.insp.activetimer {
+	position: relative;
+}
+
+.insp.activetimer > .insplabel {
+	display: inline-block;
+}
+
+#rtimer .insplabel {
+	top: -1.0em;
+	right: 0;
+}
+
+#timer .difflabel {
+	display: inline-block;
+	font-family: Arial;
+	font-size: 0.15em;
+}
+
+.m #timer .difflabel {
+	display: block;
+	font-size: 0.2em;
+	margin-top: -0.4em;
+}
+
+#rtimer .difflabel {
+	margin-top: -0.4em;
+	font-family: Arial;
+	font-size: 0.25em;
 }
 
 .playbutton.click {
@@ -676,7 +720,12 @@ div.helptable ul {
 #inputTimer {
 	font-size: 0.5em;
 	text-align: center;
-	width: 80%;
+	width: 60%;
+}
+
+.m #inputTimer {
+	position: relative;
+	right: 10%;
 }
 
 #scrambleTxt {
@@ -758,6 +807,18 @@ div.helptable ul {
 	right: 20%;
 	top: 20%;
 	bottom: 20%;
+}
+
+.dialogcasestats {
+	left: 30%;
+	right: 30%;
+	top: 15%;
+	bottom: 15%;
+}
+
+.dialogcasestats .table {
+	width: 100%;
+	font-size: 1.5em;
 }
 
 .dialogssmgr {
@@ -849,6 +910,42 @@ input[type="file"] {
 
 input[type="color"].mulcolor {
 	width: 1.5em;
+}
+
+.touchcube {
+	display: table;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	margin: auto;
+	user-select: none;
+	font-family: Arial;
+	border-collapse: collapse;
+	color: transparent;
+}
+
+.touchcube tr td {
+	width: 33%;
+	height: 33%;
+}
+
+.touchcube.active {
+	background-color: #6666;
+	color: #fffa;
+}
+
+.touchcube.active td.touchto {
+	background-color: #0f0a;
+}
+
+.touchcube.active td.touchfrom {
+	background-color: #f00a;
+}
+
+.touchcube.board td {
+	border: 2px solid #6666;
+	border: 0.15rem solid #6666;
 }
 
 .expOauth {
@@ -1033,7 +1130,7 @@ html.m .mhide, html:not(.m) .mshow {
 	font-size: 1.2em;
 }
 
-.m .dialogoption, .m .dialogshare, .m .dialoginput, .m .dialogstats, .m .dialogssmgr, .m .dialogscropt, .m .dialogexport, .m .dialoglogo {
+.m .dialogoption, .m .dialogshare, .m .dialoginput, .m .dialogstats, .m .dialogcasestats, .m .dialogssmgr, .m .dialogscropt, .m .dialogexport, .m .dialoglogo {
 	left: 5%;
 	right: 5%;
 }

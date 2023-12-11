@@ -111,7 +111,7 @@ var PROPERTY_TIMEU = 'Timeruppdateringen är';
 var PROPERTY_TIMEU_STR = 'uppdatera|0.1s|sekunder|inspektion|ingen';
 var PROPERTY_PRETIME = 'Tid för att hålla mellanslagstangenten nere(sekund(er))';
 var PROPERTY_ENTERING = 'Ange tider med';
-var PROPERTY_ENTERING_STR = 'timer|mata in|stackmat|MoYu timer|virtuell|Bluetooth|qCube|GanTimer';
+var PROPERTY_ENTERING_STR = 'timer|mata in|stackmat|MoYu timer|virtuell|Bluetooth|qCube|GanTimer|last layer training';
 var PROPERTY_INTUNIT = 'Enhet vid inmatning av heltal';
 var PROPERTY_INTUNIT_STR = 'sekund|centisekund|millisekund';
 var PROPERTY_COLOR = 'Välj färgtema';
@@ -190,40 +190,56 @@ var scrdata = [
 		['3x3x3 för nybörjare', "333noob", 25],
 		['endast kanter', "edges", 0],
 		['endast hörn', "corners", 0],
-		['sista lagret', "ll", 0],
-		['zb sista lagret', "zbll", 0],
-		['hörn av sista lagret', "cll", 0],
-		['COLL', "coll", 0],
-		['kanter av sista lagret', "ell", 0],
-		['sista sex kanterna', "lse", 0],
-		['sista sex kanterna&ltM,U&gt', "lsemu", 0],
-		['Roux L10P', "cmll", 0],
-		['korset löst', "f2l", 0],
+		['BLD Helper', "nocache_333bldspec", 0],
+		['3x3 ft', "333ft", 0],
+		['Custom', "333custom", 0]
+	]],
+	['3x3x3 CFOP', [
+		['PLL', "pll", 0],
+		['OLL', "oll", 0],
 		['sista f2l paret + sista lagret', "lsll2", 0],
+		['sista lagret', "ll", 0],
+		['ZBLL', "zbll", 0],
+		['COLL', "coll", 0],
+		['CLL', "cll", 0],
+		['ELL', "ell", 0],
 		['2GLL', "2gll", 0],
+		['ZZLL', "zzll", 0],
 		['ZBLS', "zbls", 0],
 		['EOLS', "eols", 0],
 		['WVLS', "wvls", 0],
 		['VLS', "vls", 0],
-		['ZZLL', "zzll", 0],
-		['TTLL', "ttll", 0],
-		['OLL', "oll", 0],
-		['PLL', "pll", 0],
+		['korset löst', "f2l", 0],
 		['EOLine', "eoline", 0],
 		['enkelt kors', "easyc", 3],
-		['easy xcross', "easyxc", 4],
-		['BLD Helper', "nocache_333bldspec", 0],
-		['3x3 ft', "333ft", 0],
-		['Custom', "333custom", 0]
+		['easy xcross', "easyxc", 4]
+	]],
+	['3x3x3 Roux', [
+		['2nd Block', "sbrx", 0],
+		['CMLL', "cmll", 0],
+		['LSE', "lse", 0],
+		['LSE &lt;M, U&gt;', "lsemu", 0]
+	]],
+	['3x3x3 Mehta', [
+		['3QB', "mt3qb", 0],
+		['EOLE', "mteole", 0],
+		['TDR', "mttdr", 0],
+		['6CP', "mt6cp", 0],
+		['CDRLL', "mtcdrll", 0],
+		['L5EP', "mtl5ep", 0],
+		['TTLL', "ttll", 0]
 	]],
 	['2x2x2', [
 		["Slumpmässigt tillstånd (WCA)", "222so", 0],
 		['Optimal', "222o", 0],
 		['3-gen', "2223", 25],
 		['EG', "222eg", 0],
-		['EG0', "222eg0", 0],
+		['CLL', "222eg0", 0],
 		['EG1', "222eg1", 0],
 		['EG2', "222eg2", 0],
+		['TCLL+', "222tcp", 0],
+		['TCLL-', "222tcn", 0],
+		['LS', "222lsall", 0],
 		['Ingen bar', "222nb", 0]
 	]],
 	['4x4x4', [
@@ -324,6 +340,10 @@ var scrdata = [
 		['Optimal', "gearo", 0],
 		['Slumpmässigt drag', "gear", 10]
 	]],
+	['Kilominx', [
+		['random state', "klmso", 0],
+		['Pochmann', "klmp", 30]
+	]],
 	['Cmetrick', [
 		[' ', "cm3", 25]
 	]],
@@ -398,7 +418,8 @@ var scrdata = [
 		['234 relay (WCA)', "r234w", 0],
 		['2345 relay (WCA)', "r2345w", 0],
 		['23456 relay (WCA)', "r23456w", 0],
-		['234567 relay (WCA)', "r234567w", 0]
+		['234567 relay (WCA)', "r234567w", 0],
+		['Mini Guildford', "rmngf", 0]
 	]],
 	['===SKÄMT===', [
 		['--', "blank", 0]
@@ -452,6 +473,7 @@ var STATS_ALERTMG = 'Sammanfoga alla tider i sessionen [%f] till slutet av sessi
 var STATS_PROMPTSPL = 'Antal senaste tider delade från sessionen [%s]?';
 var STATS_ALERTSPL = 'Bör delas eller lämnas 1 gång';
 var STATS_AVG = 'mean';
+var STATS_SUM = 'sum';
 var STATS_SOLVE = 'lösning';
 var STATS_TIME = 'tid';
 var STATS_SESSION = 'Session';
@@ -476,12 +498,16 @@ var PROPERTY_SCR2SS = 'Skapa ny session vid växling av blandningstyp';
 var PROPERTY_SS2SCR = 'Återställ blandningstyp vid byte av session';
 var PROPERTY_SS2PHASES = 'Återställ flerfastidtagning vid växling av session';
 var PROPERTY_STATINV = 'Omvänd tidslista';
+var PROPERTY_STATSSUM = 'Show sum in time list';
 var PROPERTY_STATTHRES = 'Show target time for session best';
 var PROPERTY_STATAL = 'Statistiska indikatorer';
 var PROPERTY_STATALU = 'Anpassad statistiskindikator';
+var PROPERTY_HLPBS = 'Highlight PBs';
+var PROPERTY_HLPBS_STR = 'Dark orange as WCA|As link color|Bolder|None';
 var PROPERTY_DELMUL = 'Aktivera flera borttagningar';
 var PROPERTY_TOOLSFUNC = 'Valda Funktioner';
 var PROPERTY_TRIM = 'Antal lösningar trimmade på varje sida';
+var PROPERTY_TRIMR = 'Number of solves trimmed at worse side';
 var PROPERTY_TRIM_MED = 'Median';
 var PROPERTY_STKHEAD = 'Använd Stackmatstatusinformation';
 var PROPERTY_TOOLPOS = 'Tools panel position';
@@ -489,7 +515,7 @@ var PROPERTY_TOOLPOS_STR = 'Bottom|Float|Top';
 var PROPERTY_HIDEFULLSOL = 'Visa lösning proggressivt';
 var PROPERTY_IMPPREV = 'Importera icke-senaste data';
 var PROPERTY_AUTOEXP = 'Automatisk exportering (per 100 lösningar)';
-var PROPERTY_AUTOEXP_OPT = 'Aldrig|Till fil|Med csTimer ID|Med WCA konot';
+var PROPERTY_AUTOEXP_OPT = 'Aldrig|Till fil|Med csTimer ID|Med WCA konot|Med Google konot';
 var PROPERTY_SCRASIZE = 'Automatisk blandningsstorlek';
 var MODULE_NAMES = {
 	"kernel": 'Global',
@@ -507,6 +533,8 @@ var BGIMAGE_OPACITY = 'Bakgrundsbildens opacitet';
 var BGIMAGE_IMAGE = 'Bakgrundsbild';
 var BGIMAGE_IMAGE_STR = 'Ingen|Manuell|CCT';
 var SHOW_AVG_LABEL = 'Visa average markering';
+var SHOW_DIFF_LABEL = 'Show Difference Label';
+var SHOW_DIFF_LABEL_STR = '-Green+Red|-Red+Green|Normal|None';
 var USE_LOGOHINT = 'Tipsmeddelanden i logotypen';
 var TOOLS_SCRGEN = 'Blandningsgenerator';
 var SCRGEN_NSCR = 'Antal blandningar';
@@ -517,5 +545,5 @@ var VRCREPLAY_ORI = 'raw ori|auto ori';
 var VRCREPLAY_SHARE = 'share link';
 var GIIKER_CONNECT = 'Click to connect';
 var GIIKER_RESET = 'Reset (Mark Solved)';
-var PROPERTY_SHOWAD = 'Show advistisements (take effect after reload)';
+var PROPERTY_SHOWAD = 'Show advertisements (take effect after reload)';
 var PROPERTY_GIIORI = 'Cube orientation';

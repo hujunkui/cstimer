@@ -75,14 +75,19 @@ var scrHinter = execMain(function(CubieCube) {
 	}
 
 	function checkState(state) {
+		if (!rawScrTxt || (!DEBUG && !GiikerCube.isConnected())
+				|| tools.getCurPuzzle() != '333' || timer.getCurTime() != 0) {
+			return;
+		}
 		var toMoveFix = null;
 		var toMoveRaw = null;
 		if (genState) {
 			toMoveFix = checkInSeq(state, genState, genScr);
 		}
-		if (toMoveFix == null) {
+		if (toMoveFix == null || toMoveFix.indexOf('`') == -1) {
 			toMoveRaw = checkInSeq(state, null, rawScr);
 			genState = null;
+			toMoveFix = null;
 		}
 		if (toMoveRaw == null && toMoveFix == null) {
 			genState = new CubieCube();
@@ -96,7 +101,8 @@ var scrHinter = execMain(function(CubieCube) {
 			genScr = kernel.parseScramble(genScr, "URFDLB");
 			toMoveFix = checkInSeq(state, genState, genScr);
 		}
-		kernel.pushSignal('scrfix', toMoveFix ? (rawScrTxt + '\n=> ' + toMoveFix) : toMoveRaw);
+		var toMove = toMoveFix ? (rawScrTxt + '\n=> ' + toMoveFix) : toMoveRaw;
+		kernel.pushSignal('scrfix', toMove + (toMove.indexOf('`') == -1 ? ' <span style="color:green">\u2714</span>' : ''));
 	}
 
 	function checkScramble(curCubie) {
@@ -124,8 +130,13 @@ var giikerutil = execMain(function(CubieCube) {
 	var resetClick = $('<span>' + GIIKER_RESET + '</span>').addClass('click');
 	var algCubingClick = $('<a target="_blank">Raw(N/A)</a>').addClass('click');
 	var lastSolveClick = $('<a target="_blank">Pretty(N/A)</a>').addClass('click');
-	var canvas = $('<canvas>');
-	var canvasTd = $('<tr>').append($('<td colspan=2>').append(canvas));
+	var canvas = $('<canvas>').css({
+		'display': 'block',
+		'box-sizing': 'content-box',
+		'margin': 'auto',
+		'padding': '5px'
+	});
+	var canvasTd = $('<tr>').append($('<td colspan=2 style="padding:0;">').append(canvas));
 	var deviceName = null;
 	var batteryIcon = '<span style="font-family:iconfont;">\ueaea</span> ';
 	var slopeIcon = '<span style="font-family:iconfont;">\ue6b6</span> ';
@@ -134,21 +145,29 @@ var giikerutil = execMain(function(CubieCube) {
 	var statusDiv = $('<table class="table">');
 
 	var drawState = (function() {
-		var faceOffsetX = [1, 2, 1, 1, 0, 3];
-		var faceOffsetY = [0, 1, 1, 2, 1, 1];
 		var colors = [];
 		var width = 30;
 		var ctx;
+		var trans = [
+			[1, -0.5, 1.5, 0, 0.5, 0],
+			[0.5, 0, 3, -0.5, 1, 1.5],
+			[1, 0, 0, 0, 1, 1.5],
+			[1, 0.5, 5.5, 0, 0.5, 0],
+			[-0.5, 0, 7, -0.5, -1, 4.5],
+			[-1, 0, 10, 0, -1, 4.5]
+		];
 
 		function face(f, facelet) {
-			var offx = 10 / 3 * faceOffsetX[f],
-				offy = 10 / 3 * faceOffsetY[f];
+			var t = trans[f].slice();
+			for (var i = 0; i < t.length; i++) {
+				t[i] *= width;
+			}
 			for (var x = 0; x < 3; x++) {
 				for (var y = 0; y < 3; y++) {
 					$.ctxDrawPolygon(ctx, colors["DLBURF".indexOf(facelet[(f * 3 + y) * 3 + x])], [
 						[x, x, x + 1, x + 1],
 						[y, y + 1, y + 1, y]
-					], [width, offx, offy]);
+					], t);
 				}
 			}
 		}
@@ -157,7 +176,7 @@ var giikerutil = execMain(function(CubieCube) {
 			if (!canvas) {
 				return;
 			}
-			if (kernel.getProp('giiVRC') != 'n') {
+			if (kernel.getProp('giiVRC') != 'n' && kernel.getProp('input') == 'g') {
 				canvasTd.hide();
 				return;
 			}
@@ -165,10 +184,10 @@ var giikerutil = execMain(function(CubieCube) {
 			canvasTd.show();
 			ctx = canvas[0].getContext('2d');
 			var imgSize = kernel.getProp('imgSize') / 60;
-			canvas.width(39 * imgSize + 'em');
-			canvas.height(29 * imgSize + 'em');
-			canvas.attr('width', 39 * 3 / 9 * width + 1);
-			canvas.attr('height', 29 * 3 / 9 * width + 1);
+			canvas.width((10 / 4.5 * 21 * imgSize) + 'em');
+			canvas.height((21 * imgSize) + 'em');
+			canvas.attr('width', 10 * width);
+			canvas.attr('height', 4.5 * width);
 			for (var i = 0; i < 6; i++) {
 				face(i, curState);
 			}
@@ -177,10 +196,10 @@ var giikerutil = execMain(function(CubieCube) {
 	})();
 
 	function renderStatus() {
-		if (!(kernel.getProp('giiVRC') != 'n')) {
-			statusDiv.css('font-size', '60%');
-		} else {
+		if (kernel.getProp('giiVRC') != 'n' && kernel.getProp('input') == 'g') {
 			statusDiv.css('font-size', '');
+		} else {
+			statusDiv.css('font-size', '75%');
 		}
 		statusDiv.empty();
 		statusDiv.append($('<tr>').append($('<td colspan=2>').append(connectClick)));
@@ -352,6 +371,7 @@ var giikerutil = execMain(function(CubieCube) {
 			updateSlopeSpan();
 		}
 		if (curState == mathlib.SOLVED_FACELET) {
+			reconsSolve();
 			moveTsStart = moveTsList.length;
 			scrambleLength = 0;
 		}
@@ -365,9 +385,7 @@ var giikerutil = execMain(function(CubieCube) {
 			retState = hackedCubie.toFaceCube();
 		}
 		callback(retState, prevMoves, lastTs);
-		if (curScramble && kernel.getProp('input') == 'g' && timer.getCurTime() == 0) {
-			scrHinter.checkState(curCubie);
-		}
+		scrHinter.checkState(curCubie);
 	}
 
 	function tsLinearFit(moveTsList, inv) {
@@ -441,7 +459,7 @@ var giikerutil = execMain(function(CubieCube) {
 	}
 
 	function updateSlopeSpan() {
-		if (moveTsList.length - moveTsStart > 50 && moveTsStart > 0) {
+		if (moveTsList.length - moveTsStart > 50 && moveTsStart > 0 && moveTsList[moveTsStart - 1][2] < timer.getStartTime()) {
 			moveTsList = moveTsList.slice(moveTsStart);
 			moveTsStart = 0;
 		}
@@ -536,18 +554,66 @@ var giikerutil = execMain(function(CubieCube) {
 				curScramble = "";
 			}
 			scrHinter.setScramble(curScramble);
-			if (curScramble && kernel.getProp('input') == 'g') {
-				scrHinter.checkState(curCubie);
-			}
+			scrHinter.checkState(curCubie);
 		} else if (signal == 'property') {
 			if (['giiVRC', 'imgSize'].indexOf(value[0]) >= 0) {
 				renderStatus();
-			} else if (value[0] == 'preScr') {
+			} else if (/^(preScrT?|isTrainScr)$/.exec(value[0])) {
 				scrHinter.setScramble(curScramble);
-				if (curScramble && kernel.getProp('input') == 'g') {
-					scrHinter.checkState(curCubie);
-				}
+				scrHinter.checkState(curCubie);
 			}
+		} else if (signal == 'timestd' && !value[4]) {
+			toReconsSolve = [timer.getStartTime(), value[0][1], value[1]];
+			setTimeout(reconsSolve, 0);
+		}
+	}
+
+	var toReconsSolve = null;
+
+	function reconsSolve() {
+		if (!toReconsSolve) {
+			return;
+		}
+		var startTime = toReconsSolve[0];
+		var startIdx = moveTsList.length;
+		var toScramble = toReconsSolve[2];
+		if (startIdx > 0 && moveTsList[startIdx - 1][2] > toReconsSolve[0] + toReconsSolve[1] + 1000) {
+			toReconsSolve = null;
+		}
+		for (var i = moveTsList.length - 1; i >= 0; i--) {
+			if (moveTsList[i][2] < startTime - 500) {
+				break;
+			}
+			startIdx = i;
+		}
+		if (startIdx == moveTsList.length) {
+			return;
+		}
+
+		var c1 = new mathlib.CubieCube();
+		var solvMoves = [];
+		var conj = mathlib.CubieCube.rotMulI[0][kernel.getPreConj()];
+		for (var i = startIdx; i < moveTsList.length; i++) {
+			var move = moveTsList[i].slice();
+			var m = mathlib.CubieCube.rotMulM[conj][move[0]];
+			move[0] = 'URFDLB'.charAt(~~(m/3)) + " 2'".charAt(m % 3);
+			solvMoves.push(move);
+			c1.selfMoveStr(move[0]);
+		}
+		solvMoves = tsLinearFix(solvMoves);
+		var sol = cubeutil.moveSeq2str(solvMoves);
+		kernel.pushSignal('giirecons', [toScramble, [sol, '333']]);
+
+		var scrMoves = (toScramble || "").split(' ');
+		var chk = new mathlib.CubieCube();
+		for (var i = 0; i < scrMoves.length; i++) {
+			chk.selfMoveStr(scrMoves[i]);
+		}
+		var c2 = new mathlib.CubieCube();
+		c2.invFrom(c1);
+		if (chk.toFaceCube() == c2.toFaceCube()) {
+			DEBUG && console.log('[bluetooth] recons clear, cube solved');
+			toReconsSolve = null;
 		}
 	}
 
@@ -591,7 +657,8 @@ var giikerutil = execMain(function(CubieCube) {
 		kernel.regListener('giiker', 'scramble', procSignal);
 		kernel.regListener('giiker', 'scrambling', procSignal);
 		kernel.regListener('giiker', 'scrambleX', procSignal);
-		kernel.regListener('giiker', 'property', procSignal, /^(?:giiVRC|imgSize|preScr)$/);
+		kernel.regListener('giiker', 'timestd', procSignal);
+		kernel.regListener('giiker', 'property', procSignal, /^(?:giiVRC|imgSize|preScrT?|isTrainScr)$/);
 		tools.regTool('giikerutil', TOOLS_GIIKER, execFunc);
 	});
 

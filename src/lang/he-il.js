@@ -111,7 +111,7 @@ var PROPERTY_TIMEU = 'עדכון הטיימר הוא';
 var PROPERTY_TIMEU_STR = 'עדכון|0.1ש|שניות|סקירה|ללא';
 var PROPERTY_PRETIME = 'זמן השארת מקש הרווח לחוץ(שנייה(ות))';
 var PROPERTY_ENTERING = 'הזן זמנים עם';
-var PROPERTY_ENTERING_STR = 'טיימר|הקלדה|Stackmat|טיימרמויו|וירטואלי|Bluetooth|qCube|GanTimer';
+var PROPERTY_ENTERING_STR = 'טיימר|הקלדה|Stackmat|טיימרמויו|וירטואלי|Bluetooth|qCube|GanTimer|last layer training';
 var PROPERTY_INTUNIT = 'יחידה כשמכניסים מספר';
 var PROPERTY_INTUNIT_STR = 'שנייה|עשירית שנייה|מאית שנייה';
 var PROPERTY_COLOR = 'בחר צבע נושא';
@@ -190,40 +190,56 @@ var scrdata = [
 		['3×3×3 לנוּבִּים', "333noob", 25],
 		['אדג\'ים בלבד', "edges", 0],
 		['פינות בלבד', "corners", 0],
-		['שכבה אחרונה', "ll", 0],
-		['שכבה אחרונהzb(zbll)', "zbll", 0],
-		['פינות של שכבה אחרונה (coll)', "cll", 0],
-		['COLL', "coll", 0],
-		['אדג\'ים של שכבה אחרונה', "ell", 0],
-		['שישה אדג\'ים אחרונים', "lse", 0],
-		['שישה אדג\'ים אחרונים &ltM,U&gt', "lsemu", 0],
-		['Roux L10P', "cmll", 0],
-		['פלוס פתור', "f2l", 0],
+		['BLD Helper', "nocache_333bldspec", 0],
+		['3×3 רגליים', "333ft", 0],
+		['Custom', "333custom", 0]
+	]],
+	['3×3×3 CFOP', [
+		['PLL', "pll", 0],
+		['OLL', "oll", 0],
 		['סלוט אחרון + שכבה אחרונה', "lsll2", 0],
+		['שכבה אחרונה', "ll", 0],
+		['ZBLL', "zbll", 0],
+		['COLL', "coll", 0],
+		['CLL', "cll", 0],
+		['ELL', "ell", 0],
 		['2GLL', "2gll", 0],
+		['ZZLL', "zzll", 0],
 		['ZBLS', "zbls", 0],
 		['EOLS', "eols", 0],
 		['WVLS', "wvls", 0],
 		['VLS', "vls", 0],
-		['ZZLL', "zzll", 0],
-		['TTLL', "ttll", 0],
-		['OLL', "oll", 0],
-		['PLL', "pll", 0],
+		['פלוס פתור', "f2l", 0],
 		['EOLine', "eoline", 0],
 		['פלוס קל', "easyc", 3],
-		['easy xcross', "easyxc", 4],
-		['BLD Helper', "nocache_333bldspec", 0],
-		['3×3 רגליים', "333ft", 0],
-		['Custom', "333custom", 0]
+		['easy xcross', "easyxc", 4]
+	]],
+	['3×3×3 Roux', [
+		['2nd Block', "sbrx", 0],
+		['CMLL', "cmll", 0],
+		['LSE', "lse", 0],
+		['LSE &lt;M, U&gt;', "lsemu", 0]
+	]],
+	['3×3×3 Mehta', [
+		['3QB', "mt3qb", 0],
+		['EOLE', "mteole", 0],
+		['TDR', "mttdr", 0],
+		['6CP', "mt6cp", 0],
+		['CDRLL', "mtcdrll", 0],
+		['L5EP', "mtl5ep", 0],
+		['TTLL', "ttll", 0]
 	]],
 	['2×2×2', [
 		["random state (WCA)", "222so", 0],
 		['optimal', "222o", 0],
 		['3-gen', "2223", 25],
 		['EG', "222eg", 0],
-		['EG0', "222eg0", 0],
+		['CLL', "222eg0", 0],
 		['EG1', "222eg1", 0],
 		['EG2', "222eg2", 0],
+		['TCLL+', "222tcp", 0],
+		['TCLL-', "222tcn", 0],
+		['LS', "222lsall", 0],
 		['בלי בלוקים', "222nb", 0]
 	]],
 	['4×4×4', [
@@ -324,6 +340,10 @@ var scrdata = [
 		['optimal', "gearo", 0],
 		['random move', "gear", 10]
 	]],
+	['Kilominx', [
+		['random state', "klmso", 0],
+		['Pochmann', "klmp", 30]
+	]],
 	['Cmetrick', [
 		[' ', "cm3", 25]
 	]],
@@ -398,7 +418,8 @@ var scrdata = [
 		['234 (WCA)', "r234w", 0],
 		['2345 (WCA)', "r2345w", 0],
 		['23456 (WCA)', "r23456w", 0],
-		['2 - 7 (WCA)', "r234567w", 0]
+		['2 - 7 (WCA)', "r234567w", 0],
+		['Mini Guildford', "rmngf", 0]
 	]],
 	['===בדיחות===', [
 		['--', "blank", 0]
@@ -452,6 +473,7 @@ var STATS_ALERTMG = 'שלב את כל השמנים בסשן [%f] לסוף של �
 var STATS_PROMPTSPL = 'כמות הזמנים האחרונים הנחתכים מסשן [%s]?';
 var STATS_ALERTSPL = 'לחתוך או להשאיר לפחות זמן אחד?';
 var STATS_AVG = 'ממוצע';
+var STATS_SUM = 'sum';
 var STATS_SOLVE = 'פתירה';
 var STATS_TIME = 'זמן';
 var STATS_SESSION = 'סשן';
@@ -476,12 +498,16 @@ var PROPERTY_SCR2SS = 'תיצור סשן חדש כשמחליפים סוג ערב
 var PROPERTY_SS2SCR = 'לשמר סוג ערבוב כשמחליפים סשן';
 var PROPERTY_SS2PHASES = 'restore multi-phase timing when switching session';
 var PROPERTY_STATINV = 'להפוך רשימת זמנים';
+var PROPERTY_STATSSUM = 'Show sum in time list';
 var PROPERTY_STATTHRES = 'Show target time for session best';
 var PROPERTY_STATAL = 'אינדקטורים סטטיסטיים';
 var PROPERTY_STATALU = 'אינדקטור סטטיסטי מותאם אישית';
+var PROPERTY_HLPBS = 'Highlight PBs';
+var PROPERTY_HLPBS_STR = 'Dark orange as WCA|As link color|Bolder|None';
 var PROPERTY_DELMUL = 'להפעיל מחיקה מרובה';
 var PROPERTY_TOOLSFUNC = 'הפונקציות שנבחרו';
 var PROPERTY_TRIM = 'כמות פתירות חתוכה מכל צד';
+var PROPERTY_TRIMR = 'Number of solves trimmed at worse side';
 var PROPERTY_TRIM_MED = 'חציון';
 var PROPERTY_STKHEAD = 'Use Stackmat Status Information';
 var PROPERTY_TOOLPOS = 'Tools panel position';
@@ -489,7 +515,7 @@ var PROPERTY_TOOLPOS_STR = 'Bottom|Float|Top';
 var PROPERTY_HIDEFULLSOL = 'Show solution progressively';
 var PROPERTY_IMPPREV = 'יבא מידע לא עדכני';
 var PROPERTY_AUTOEXP = 'יצוא אוטומטי (כל 100 פתירות)';
-var PROPERTY_AUTOEXP_OPT = 'אף פעם|לקובץ|עם משתמש csTimer|עם משתמש WCA';
+var PROPERTY_AUTOEXP_OPT = 'אף פעם|לקובץ|עם משתמש csTimer|עם משתמש WCA|עם משתמש Google';
 var PROPERTY_SCRASIZE = 'גודל ערבוב אוטומטי';
 var MODULE_NAMES = {
 	"kernel": 'גלובלי',
@@ -507,6 +533,8 @@ var BGIMAGE_OPACITY = 'שקיפות תמונת רקע';
 var BGIMAGE_IMAGE = 'תמונת רקע';
 var BGIMAGE_IMAGE_STR = 'כלום|ידני|CCT';
 var SHOW_AVG_LABEL = 'הראה ממוצע מתחת לטיימר';
+var SHOW_DIFF_LABEL = 'Show Difference Label';
+var SHOW_DIFF_LABEL_STR = '-Green+Red|-Red+Green|Normal|None';
 var USE_LOGOHINT = 'Hint messages in logo';
 var TOOLS_SCRGEN = 'מייצר ערבובים';
 var SCRGEN_NSCR = 'כמות ערבובים';
@@ -517,5 +545,5 @@ var VRCREPLAY_ORI = 'raw ori|auto ori';
 var VRCREPLAY_SHARE = 'share link';
 var GIIKER_CONNECT = 'Click to connect';
 var GIIKER_RESET = 'Reset (Mark Solved)';
-var PROPERTY_SHOWAD = 'Show advistisements (take effect after reload)';
+var PROPERTY_SHOWAD = 'Show advertisements (take effect after reload)';
 var PROPERTY_GIIORI = 'Cube orientation';

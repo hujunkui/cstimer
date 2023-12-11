@@ -111,7 +111,7 @@ var PROPERTY_TIMEU = 'L\'aggiornamento del cronometro e\'';
 var PROPERTY_TIMEU_STR = 'Aggiorna|0.1s|secondi|inspezione|none';
 var PROPERTY_PRETIME = 'Tempo di attesa dopo la pressione del tasto spazio (secondo(i))';
 var PROPERTY_ENTERING = 'Inizia a cronometrare in';
-var PROPERTY_ENTERING_STR = 'cronometro|digita|stackmat|MoYuTimer|virtuale|Bluetooth|qCube|GanTimer';
+var PROPERTY_ENTERING_STR = 'cronometro|digita|stackmat|MoYuTimer|virtuale|Bluetooth|qCube|GanTimer|last layer training';
 var PROPERTY_INTUNIT = 'Unità quando si digita un intero';
 var PROPERTY_INTUNIT_STR = 'secondo|centisecondo|millisecondo';
 var PROPERTY_COLOR = 'Seleziona tema colori';
@@ -190,40 +190,56 @@ var scrdata = [
 		['3x3x3 per nabbi', "333noob", 25],
 		['solo spigoli', "edges", 0],
 		['solo angoli', "corners", 0],
-		['last layer', "ll", 0],
-		['zb last layer', "zbll", 0],
-		['angoli del last layer', "cll", 0],
-		['COLL', "coll", 0],
-		['spigoli del last layer', "ell", 0],
-		['last six edges', "lse", 0],
-		['Ultimi sei bordi', "lsemu", 0],
-		['Roux L10P', "cmll", 0],
-		['croce risolta', "f2l", 0],
+		['BLD Helper', "nocache_333bldspec", 0],
+		['3x3 ft', "333ft", 0],
+		['Custom', "333custom", 0]
+	]],
+	['3x3x3 CFOP', [
+		['PLL', "pll", 0],
+		['OLL', "oll", 0],
 		['last slot + last layer', "lsll2", 0],
+		['last layer', "ll", 0],
+		['ZBLL', "zbll", 0],
+		['COLL', "coll", 0],
+		['CLL', "cll", 0],
+		['ELL', "ell", 0],
 		['2GLL', "2gll", 0],
+		['ZZLL', "zzll", 0],
 		['ZBLS', "zbls", 0],
 		['EOLS', "eols", 0],
 		['WVLS', "wvls", 0],
 		['VLS', "vls", 0],
-		['ZZLL', "zzll", 0],
-		['TTLL', "ttll", 0],
-		['OLL', "oll", 0],
-		['PLL', "pll", 0],
+		['croce risolta', "f2l", 0],
 		['EOLine', "eoline", 0],
 		['croce facile', "easyc", 3],
-		['easy xcross', "easyxc", 4],
-		['BLD Helper', "nocache_333bldspec", 0],
-		['3x3 ft', "333ft", 0],
-		['Custom', "333custom", 0]
+		['easy xcross', "easyxc", 4]
+	]],
+	['3x3x3 Roux', [
+		['2nd Block', "sbrx", 0],
+		['CMLL', "cmll", 0],
+		['LSE', "lse", 0],
+		['LSE &lt;M, U&gt;', "lsemu", 0]
+	]],
+	['3x3x3 Mehta', [
+		['3QB', "mt3qb", 0],
+		['EOLE', "mteole", 0],
+		['TDR', "mttdr", 0],
+		['6CP', "mt6cp", 0],
+		['CDRLL', "mtcdrll", 0],
+		['L5EP', "mtl5ep", 0],
+		['TTLL', "ttll", 0]
 	]],
 	['2x2x2', [
 		["random state (WCA)", "222so", 0],
 		['optimal', "222o", 0],
 		['3-gen', "2223", 25],
 		['EG', "222eg", 0],
-		['EG0', "222eg0", 0],
+		['CLL', "222eg0", 0],
 		['EG1', "222eg1", 0],
 		['EG2', "222eg2", 0],
+		['TCLL+', "222tcp", 0],
+		['TCLL-', "222tcn", 0],
+		['LS', "222lsall", 0],
 		['No Bar', "222nb", 0]
 	]],
 	['4x4x4', [
@@ -324,6 +340,10 @@ var scrdata = [
 		['optimal', "gearo", 0],
 		['random move', "gear", 10]
 	]],
+	['Kilominx', [
+		['random state', "klmso", 0],
+		['Pochmann', "klmp", 30]
+	]],
 	['Cmetrico', [
 		[' ', "cm3", 25]
 	]],
@@ -398,7 +418,8 @@ var scrdata = [
 		['234 relay (WCA)', "r234w", 0],
 		['2345 relay (WCA)', "r2345w", 0],
 		['23456 relay (WCA)', "r23456w", 0],
-		['234567 relay (WCA)', "r234567w", 0]
+		['234567 relay (WCA)', "r234567w", 0],
+		['Mini Guildford', "rmngf", 0]
 	]],
 	['===JOKES===', [
 		['--', "blank", 0]
@@ -452,6 +473,7 @@ var STATS_ALERTMG = 'Unire tutti i tempi nella sessione [%f] alla fine della ses
 var STATS_PROMPTSPL = 'Numero degli ultimi tempi da separare dalla sessione [%s]?';
 var STATS_ALERTSPL = 'Dovrebbe essere diviso o essere lasciato almeno una volta';
 var STATS_AVG = 'media';
+var STATS_SUM = 'sum';
 var STATS_SOLVE = 'risoluzione';
 var STATS_TIME = 'tempo';
 var STATS_SESSION = 'Sessione';
@@ -476,12 +498,16 @@ var PROPERTY_SCR2SS = 'crea una nuova sessione quando si cambia tipo di scramble
 var PROPERTY_SS2SCR = 'ripristina il tipo di scramble quando si cambia la sessione';
 var PROPERTY_SS2PHASES = 'ripristina multi-fase al cambio di sessione';
 var PROPERTY_STATINV = 'Lista tempi invertita';
+var PROPERTY_STATSSUM = 'Show sum in time list';
 var PROPERTY_STATTHRES = 'Show target time for session best';
 var PROPERTY_STATAL = 'Indicatori statistici';
 var PROPERTY_STATALU = 'Indicatore statistico personalizzato';
+var PROPERTY_HLPBS = 'Highlight PBs';
+var PROPERTY_HLPBS_STR = 'Dark orange as WCA|As link color|Bolder|None';
 var PROPERTY_DELMUL = 'Abilita eliminazione multipla';
 var PROPERTY_TOOLSFUNC = 'Funzione selezionata';
 var PROPERTY_TRIM = 'Numero di soluzioni eliminate da ogni lato';
+var PROPERTY_TRIMR = 'Number of solves trimmed at worse side';
 var PROPERTY_TRIM_MED = 'Mediana';
 var PROPERTY_STKHEAD = 'Usa informationi sullo stato dello Stackmat';
 var PROPERTY_TOOLPOS = 'Tools panel position';
@@ -489,7 +515,7 @@ var PROPERTY_TOOLPOS_STR = 'Bottom|Float|Top';
 var PROPERTY_HIDEFULLSOL = 'Show solution progressively';
 var PROPERTY_IMPPREV = 'Import non-latest data';
 var PROPERTY_AUTOEXP = 'Auto Export (per 100 solves)';
-var PROPERTY_AUTOEXP_OPT = 'Never|To File|With csTimer ID|With WCA Account';
+var PROPERTY_AUTOEXP_OPT = 'Never|To File|With csTimer ID|With WCA Account|With Google Account';
 var PROPERTY_SCRASIZE = 'Auto scramble size';
 var MODULE_NAMES = {
 	"kernel": 'globale',
@@ -507,6 +533,8 @@ var BGIMAGE_OPACITY = 'Opacità immagine di sfondo';
 var BGIMAGE_IMAGE = 'Immagine di sfondo';
 var BGIMAGE_IMAGE_STR = 'nessuna|manuale|CCT';
 var SHOW_AVG_LABEL = 'Mostra svg sotto al cronometro';
+var SHOW_DIFF_LABEL = 'Show Difference Label';
+var SHOW_DIFF_LABEL_STR = '-Green+Red|-Red+Green|Normal|None';
 var USE_LOGOHINT = 'Suggerimenti nel logo';
 var TOOLS_SCRGEN = 'Generatore di scramble';
 var SCRGEN_NSCR = 'Numbero di scrambles';
@@ -517,5 +545,5 @@ var VRCREPLAY_ORI = 'raw ori|auto ori';
 var VRCREPLAY_SHARE = 'share link';
 var GIIKER_CONNECT = 'Click to connect';
 var GIIKER_RESET = 'Reset (Mark Solved)';
-var PROPERTY_SHOWAD = 'Show advistisements (take effect after reload)';
+var PROPERTY_SHOWAD = 'Show advertisements (take effect after reload)';
 var PROPERTY_GIIORI = 'Cube orientation';

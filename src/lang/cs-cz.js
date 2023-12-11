@@ -111,7 +111,7 @@ var PROPERTY_TIMEU = 'aktualizace timeru je';
 var PROPERTY_TIMEU_STR = 'aktualizovat|0.1s|sekund|inspekce|nic';
 var PROPERTY_PRETIME = 'čas držení mezery dole(sekund)';
 var PROPERTY_ENTERING = 'vstup v dobách s';
-var PROPERTY_ENTERING_STR = 'timer|psaní|Stackmat|MoYu timer |virtuální kosta|Bluetooth|qCube|GanTimer';
+var PROPERTY_ENTERING_STR = 'timer|psaní|Stackmat|MoYu timer |virtuální kosta|Bluetooth|qCube|GanTimer|last layer training';
 var PROPERTY_INTUNIT = 'Jednotka při zadávání celého čísla';
 var PROPERTY_INTUNIT_STR = 'sekunda|setina|tisícina';
 var PROPERTY_COLOR = 'vybrat schéma barev';
@@ -190,40 +190,56 @@ var scrdata = [
 		['3x3x3 pro nooby', "333noob", 25],
 		['pouze hrany', "edges", 0],
 		['pouze rohy', "corners", 0],
-		['poslední vrstva', "ll", 0],
-		['zb poslední vrstva', "zbll", 0],
-		['rohy poslední vrstvy', "cll", 0],
-		['COLL', "coll", 0],
-		['hrany poslední vrstvy', "ell", 0],
-		['posledních šest hran', "lse", 0],
-		['posledních šest hran & ltM, U & gt', "lsemu", 0],
-		['Roux L10P', "cmll", 0],
-		['kříž složený', "f2l", 0],
+		['BLD Helper', "nocache_333bldspec", 0],
+		['3x3 ft', "333ft", 0],
+		['Custom', "333custom", 0]
+	]],
+	['3x3x3 CFOP', [
+		['PLL', "pll", 0],
+		['OLL', "oll", 0],
 		['poslední slot + poslední vrstva', "lsll2", 0],
+		['poslední vrstva', "ll", 0],
+		['ZBLL', "zbll", 0],
+		['COLL', "coll", 0],
+		['CLL', "cll", 0],
+		['ELL', "ell", 0],
 		['2GLL', "2gll", 0],
+		['ZZLL', "zzll", 0],
 		['ZBLS', "zbls", 0],
 		['EOLS', "eols", 0],
 		['WVLS', "wvls", 0],
 		['VLS', "vls", 0],
-		['ZZLL', "zzll", 0],
-		['TTLL', "ttll", 0],
-		['OLL', "oll", 0],
-		['PLL', "pll", 0],
+		['kříž složený', "f2l", 0],
 		['EOLine', "eoline", 0],
 		['jednoduchý kříž', "easyc", 3],
-		['easy xcross', "easyxc", 4],
-		['BLD Helper', "nocache_333bldspec", 0],
-		['3x3 ft', "333ft", 0],
-		['Custom', "333custom", 0]
+		['easy xcross', "easyxc", 4]
+	]],
+	['3x3x3 Roux', [
+		['2nd Block', "sbrx", 0],
+		['CMLL', "cmll", 0],
+		['LSE', "lse", 0],
+		['LSE &lt;M, U&gt;', "lsemu", 0]
+	]],
+	['3x3x3 Mehta', [
+		['3QB', "mt3qb", 0],
+		['EOLE', "mteole", 0],
+		['TDR', "mttdr", 0],
+		['6CP', "mt6cp", 0],
+		['CDRLL', "mtcdrll", 0],
+		['L5EP', "mtl5ep", 0],
+		['TTLL', "ttll", 0]
 	]],
 	['2x2x2', [
 		["náhodný stav (WCA)", "222so", 0],
 		['optimální', "222o", 0],
 		['3-gen', "2223", 25],
 		['EG', "222eg", 0],
-		['EG0', "222eg0", 0],
+		['CLL', "222eg0", 0],
 		['EG1', "222eg1", 0],
 		['EG2', "222eg2", 0],
+		['TCLL+', "222tcp", 0],
+		['TCLL-', "222tcn", 0],
+		['LS', "222lsall", 0],
 		['Žádný blok', "222nb", 0]
 	]],
 	['4x4x4', [
@@ -324,6 +340,10 @@ var scrdata = [
 		['optimální', "gearo", 0],
 		['náhodný tah', "gear", 10]
 	]],
+	['Kilominx', [
+		['random state', "klmso", 0],
+		['Pochmann', "klmp", 30]
+	]],
 	['Cmetrick', [
 		[' ', "cm3", 25]
 	]],
@@ -398,7 +418,8 @@ var scrdata = [
 		['234 relace (WCA)', "r234w", 0],
 		['2345 relace (WCA)', "r2345w", 0],
 		['23456 relace (WCA)', "r23456w", 0],
-		['234567 relace (WCA)', "r234567w", 0]
+		['234567 relace (WCA)', "r234567w", 0],
+		['Mini Guildford', "rmngf", 0]
 	]],
 	['==VTIPY==', [
 		['--', "blank", 0]
@@ -452,6 +473,7 @@ var STATS_ALERTMG = 'Spojit všechny časy v relaci [%f] do konce relace[%t]?';
 var STATS_PROMPTSPL = 'Spojit počet posledních časů z relace[%s]?';
 var STATS_ALERTSPL = 'Mělo by se rozdělit nebo nechat alespoň 1';
 var STATS_AVG = 'průměr';
+var STATS_SUM = 'sum';
 var STATS_SOLVE = 'vyřešit';
 var STATS_TIME = 'čas';
 var STATS_SESSION = 'Session';
@@ -476,12 +498,16 @@ var PROPERTY_SCR2SS = 'vytvořit novou relaci při změně typu zamíchání';
 var PROPERTY_SS2SCR = 'obnovit typ zamíchání při změně relace';
 var PROPERTY_SS2PHASES = 'obnovit vícefázové časování při relaci';
 var PROPERTY_STATINV = 'Obrátit časový list';
+var PROPERTY_STATSSUM = 'Show sum in time list';
 var PROPERTY_STATTHRES = 'Show target time for session best';
 var PROPERTY_STATAL = 'Statistické indikátory';
 var PROPERTY_STATALU = 'Přispůsobený statický indikátor';
+var PROPERTY_HLPBS = 'Highlight PBs';
+var PROPERTY_HLPBS_STR = 'Dark orange as WCA|As link color|Bolder|None';
 var PROPERTY_DELMUL = 'Povolit Více Odstranění';
 var PROPERTY_TOOLSFUNC = 'Vybraná Funkce';
-var PROPERTY_TRIM = 'Počet složení použitích na každé straně';
+var PROPERTY_TRIM = 'Počet nejhorších/nejlepších nepočítaných solvů';
+var PROPERTY_TRIMR = 'Number of solves trimmed at worse side';
 var PROPERTY_TRIM_MED = 'Medián';
 var PROPERTY_STKHEAD = 'Použít Informace O Stavu Stackmatu';
 var PROPERTY_TOOLPOS = 'Tools panel position';
@@ -489,7 +515,7 @@ var PROPERTY_TOOLPOS_STR = 'Bottom|Float|Top';
 var PROPERTY_HIDEFULLSOL = 'Ukázat řešení postupně';
 var PROPERTY_IMPPREV = 'Importovat ne-poslední data';
 var PROPERTY_AUTOEXP = 'Automatický export dat (po 100 solvech)';
-var PROPERTY_AUTOEXP_OPT = 'Nikdy|Do souboru|s csTimer ID|S účtem WCA';
+var PROPERTY_AUTOEXP_OPT = 'Nikdy|Do souboru|s csTimer ID|S účtem WCA|S účtem Google';
 var PROPERTY_SCRASIZE = 'Automatická velikost scramblu';
 var MODULE_NAMES = {
 	"kernel": 'globální',
@@ -507,6 +533,8 @@ var BGIMAGE_OPACITY = 'průhlednost pozadí obrázku';
 var BGIMAGE_IMAGE = 'pozadí obrázku';
 var BGIMAGE_IMAGE_STR = 'žádný|manuální|CCT';
 var SHOW_AVG_LABEL = 'Zobrazit Průměrný Popisek';
+var SHOW_DIFF_LABEL = 'Show Difference Label';
+var SHOW_DIFF_LABEL_STR = '-Green+Red|-Red+Green|Normal|None';
 var USE_LOGOHINT = 'Upozornění v logu';
 var TOOLS_SCRGEN = 'Generátor Zamíchání';
 var SCRGEN_NSCR = 'Počet zamíchání';
@@ -517,5 +545,5 @@ var VRCREPLAY_ORI = 'raw ori|auto ori';
 var VRCREPLAY_SHARE = 'share link';
 var GIIKER_CONNECT = 'Click to connect';
 var GIIKER_RESET = 'Reset (Mark Solved)';
-var PROPERTY_SHOWAD = 'Show advistisements (take effect after reload)';
+var PROPERTY_SHOWAD = 'Show advertisements (take effect after reload)';
 var PROPERTY_GIIORI = 'Cube orientation';

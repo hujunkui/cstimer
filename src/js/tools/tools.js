@@ -52,6 +52,12 @@ var tools = execMain(function() {
 		}
 	}
 
+	function carrot2poch(scramble) {
+		return scramble.replace(/([+-])([+-]) /g, function(m, p1, p2) {
+			return 'R' + p1 + p1 + ' D' + p2 + p2 + ' ';
+		});
+	}
+
 	function isPuzzle(puzzle, scramble) {
 		scramble = scramble || curScramble;
 		var scrPuzzle = puzzleType(scramble[0]);
@@ -79,9 +85,9 @@ var tools = execMain(function() {
 	}
 
 	function puzzleType(scrambleType) {
-		if (/^222(so|[236o]|eg[012]?|nb)$/.exec(scrambleType)) {
+		if (/^222(so|[236o]|eg[012]?|tc[np]|lsall|nb)$/.exec(scrambleType)) {
 			return "222";
-		} else if (/^(333(oh?|ni|f[mt]|custom)?|(z[zb]|[coep]|c[om]|2g|ls|tt)?ll|lse(mu)?|2genl?|3gen_[LF]|edges|corners|f2l|lsll2|(zb|w?v|eo)ls|roux|RrU|half|easyx?c|eoline|nocache_333bldspec)$/.exec(scrambleType)) {
+		} else if (/^(333(oh?|ni|f[mt]|custom)?|(z[zb]|[coep]|c[om]|2g|ls|tt)?ll|lse(mu)?|2genl?|3gen_[LF]|edges|corners|f2l|lsll2|(zb|w?v|eo)ls|roux|RrU|half|easyx?c|eoline|sbrx|mt(3qb|eole|tdr|6cp|l5ep|cdrll)|nocache_333bldspec)$/.exec(scrambleType)) {
 			return "333";
 		} else if (/^(444([mo]|wca|yj|bld)?|4edge|RrUu)$/.exec(scrambleType)) {
 			return "444";
@@ -109,8 +115,10 @@ var tools = execMain(function() {
 			return "sq1";
 		} else if (/^clk(wca|o)$/.exec(scrambleType)) {
 			return "clk";
-		} else if (/^(mgmp|mgmo|minx2g|mlsll|mgmpll|mgmll)$/.exec(scrambleType)) {
+		} else if (/^(mgmp|mgmo|mgmc|minx2g|mlsll|mgmpll|mgmll)$/.exec(scrambleType)) {
 			return "mgm";
+		} else if (/^(klmso|klmp)$/.exec(scrambleType)) {
+			return "klm";
 		} else if (/^15p(at|ra?p?)?$/.exec(scrambleType)) {
 			return "15p";
 		} else if (/^15p(rmp|m)$/.exec(scrambleType)) {
@@ -191,6 +199,7 @@ var tools = execMain(function() {
 			}
 		} else if (signal == 'scramble' || signal == 'scrambleX') {
 			curScramble = value;
+			kernel.setProp('isTrainScr', !!trainScrambleRe.exec((curScramble || [])[0]));
 			execFunc(-1, signal);
 		} else if (signal == 'button' && value[0] == 'tools') {
 			isEn = value[1];
@@ -245,6 +254,7 @@ var tools = execMain(function() {
 		kernel.regProp('tools', 'NTools', 2, PROPERTY_NTOOLS, [1, 1, 4]);
 		var defaultFunc = JSON.stringify(['image', 'stats', 'cross', 'distribution']);
 		kernel.regProp('tools', 'toolsfunc', 5, PROPERTY_TOOLSFUNC, [defaultFunc], 1);
+		kernel.regProp('tools', 'isTrainScr', ~5, 'Is Train Scramble', [false], 0);
 		var funcStr = kernel.getProp('toolsfunc', defaultFunc);
 		if (funcStr.indexOf('[') == -1) {
 			funcStr = defaultFunc.replace('image', funcStr);
@@ -315,6 +325,13 @@ var tools = execMain(function() {
 		}
 	}
 
+	var lastTrain = null;
+	var trainScrambleRe = /^((z[zb]|[coep]|c[om]|2g|ls|tt)?ll|lse(mu)?|2genl?|3gen_[LF]|f2l|lsll2|(zb|w?v|eo)ls|roux|eoline|sbrx|mt(3qb|eole|tdr|6cp|l5ep|cdrll)|222(eg[012]?|tc[np]|lsall))$/;
+
+	function isCurTrainScramble(scramble) {
+		return !!trainScrambleRe.exec((scramble || curScramble || [])[0]);
+	}
+
 	return {
 		regTool: regTool,
 		getCurScramble: function() {
@@ -326,6 +343,8 @@ var tools = execMain(function() {
 		getSolutionSpan: getSolutionSpan,
 		scrambleType: scrambleType,
 		puzzleType: puzzleType,
+		carrot2poch: carrot2poch,
+		isCurTrainScramble: isCurTrainScramble,
 		isPuzzle: isPuzzle
 	};
 });

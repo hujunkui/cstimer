@@ -111,7 +111,7 @@ var PROPERTY_TIMEU = 'atualização do cronômetro';
 var PROPERTY_TIMEU_STR = 'padrão|0.1s|segundos|inspeção|nenhuma';
 var PROPERTY_PRETIME = 'tempo mantendo a barra de espaços pressionada (segundo(s))';
 var PROPERTY_ENTERING = 'inserção de tempos';
-var PROPERTY_ENTERING_STR = 'cronômetro|digitação|stackmat|Timer da MoYu|puzzle virtual|Bluetooth|qCube|GanTimer';
+var PROPERTY_ENTERING_STR = 'cronômetro|digitação|stackmat|Timer da MoYu|puzzle virtual|Bluetooth|qCube|GanTimer|last layer training';
 var PROPERTY_INTUNIT = 'Unit when entering an integer';
 var PROPERTY_INTUNIT_STR = 'second|centisecond|millisecond';
 var PROPERTY_COLOR = 'escolha um tema de cores';
@@ -190,40 +190,56 @@ var scrdata = [
 		['3x3x3 para novatos', "333noob", 25],
 		['Apenas meios', "edges", 0],
 		['Apenas cantos', "corners", 0],
-		['última camada', "ll", 0],
-		['zbll', "zbll", 0],
-		['cantos da última camada', "cll", 0],
-		['COLL', "coll", 0],
-		['meios da última camada', "ell", 0],
-		['LSE', "lse", 0],
-		['lse&ltM,U&gt', "lsemu", 0],
-		['L10P de Roux', "cmll", 0],
-		['cruz resolvida', "f2l", 0],
+		['BLD Helper', "nocache_333bldspec", 0],
+		['3x3x3 com os pés', "333ft", 0],
+		['Custom', "333custom", 0]
+	]],
+	['3x3x3 CFOP', [
+		['PLL', "pll", 0],
+		['OLL', "oll", 0],
 		['último slot + última camada', "lsll2", 0],
+		['última camada', "ll", 0],
+		['ZBLL', "zbll", 0],
+		['COLL', "coll", 0],
+		['CLL', "cll", 0],
+		['ELL', "ell", 0],
 		['2GLL', "2gll", 0],
+		['ZZLL', "zzll", 0],
 		['ZBLS', "zbls", 0],
 		['EOLS', "eols", 0],
 		['WVLS', "wvls", 0],
 		['VLS', "vls", 0],
-		['ZZLL', "zzll", 0],
-		['TTLL', "ttll", 0],
-		['OLL', "oll", 0],
-		['PLL', "pll", 0],
+		['cruz resolvida', "f2l", 0],
 		['EOLine', "eoline", 0],
 		['cruz fácil', "easyc", 3],
-		['easy xcross', "easyxc", 4],
-		['BLD Helper', "nocache_333bldspec", 0],
-		['3x3x3 com os pés', "333ft", 0],
-		['Custom', "333custom", 0]
+		['easy xcross', "easyxc", 4]
+	]],
+	['3x3x3 Roux', [
+		['2nd Block', "sbrx", 0],
+		['CMLL', "cmll", 0],
+		['LSE', "lse", 0],
+		['LSE &lt;M, U&gt;', "lsemu", 0]
+	]],
+	['3x3x3 Mehta', [
+		['3QB', "mt3qb", 0],
+		['EOLE', "mteole", 0],
+		['TDR', "mttdr", 0],
+		['6CP', "mt6cp", 0],
+		['CDRLL', "mtcdrll", 0],
+		['L5EP', "mtl5ep", 0],
+		['TTLL', "ttll", 0]
 	]],
 	['2x2x2', [
 		["random state (WCA)", "222so", 0],
 		['optimal', "222o", 0],
 		['3-gen', "2223", 25],
 		['EG', "222eg", 0],
-		['EG-0', "222eg0", 0],
+		['CLL', "222eg0", 0],
 		['EG1', "222eg1", 0],
 		['EG2', "222eg2", 0],
+		['TCLL+', "222tcp", 0],
+		['TCLL-', "222tcn", 0],
+		['LS', "222lsall", 0],
 		['No Bar', "222nb", 0]
 	]],
 	['4x4x4', [
@@ -324,6 +340,10 @@ var scrdata = [
 		['optimal', "gearo", 0],
 		['movimento aleatório', "gear", 10]
 	]],
+	['Kilominx', [
+		['random state', "klmso", 0],
+		['Pochmann', "klmp", 30]
+	]],
 	['Cmetrick', [
 		[' ', "cm3", 25]
 	]],
@@ -398,7 +418,8 @@ var scrdata = [
 		['234 relay (WCA)', "r234w", 0],
 		['2345 relay (WCA)', "r2345w", 0],
 		['23456 relay (WCA)', "r23456w", 0],
-		['234567 relay (WCA)', "r234567w", 0]
+		['234567 relay (WCA)', "r234567w", 0],
+		['Mini Guildford', "rmngf", 0]
 	]],
 	['===ZUEIRAS===', [
 		['--', "blank", 0]
@@ -452,6 +473,7 @@ var STATS_ALERTMG = 'Mesclar todos os tempos na sessão [%f] até o final da ses
 var STATS_PROMPTSPL = 'Number of latest times split from session [%s]?';
 var STATS_ALERTSPL = 'Should split or leave 1 time at least';
 var STATS_AVG = 'média';
+var STATS_SUM = 'sum';
 var STATS_SOLVE = 'resolvendo';
 var STATS_TIME = 'tempo';
 var STATS_SESSION = 'Sessão';
@@ -476,12 +498,16 @@ var PROPERTY_SCR2SS = 'criar uma nova sessão quando mudar o tipo de embaralhame
 var PROPERTY_SS2SCR = 'restaurar o tipo de embaralhamento quando mudar de sessão';
 var PROPERTY_SS2PHASES = 'restaurar modadlidade de múltiplas fases quando mudar de sessão';
 var PROPERTY_STATINV = 'Lista de tempos ao contrário';
+var PROPERTY_STATSSUM = 'Show sum in time list';
 var PROPERTY_STATTHRES = 'Show target time for session best';
 var PROPERTY_STATAL = 'Indicadores estatísticos';
 var PROPERTY_STATALU = 'Indicador estatístico personalizado';
+var PROPERTY_HLPBS = 'Highlight PBs';
+var PROPERTY_HLPBS_STR = 'Dark orange as WCA|As link color|Bolder|None';
 var PROPERTY_DELMUL = 'Ativar deleção múltipla';
 var PROPERTY_TOOLSFUNC = 'Funções selecionadas';
 var PROPERTY_TRIM = 'Número de resoluções retiradas de cada lado';
+var PROPERTY_TRIMR = 'Number of solves trimmed at worse side';
 var PROPERTY_TRIM_MED = 'Mediana';
 var PROPERTY_STKHEAD = 'Use Stackmat Status Information';
 var PROPERTY_TOOLPOS = 'Tools panel position';
@@ -489,7 +515,7 @@ var PROPERTY_TOOLPOS_STR = 'Bottom|Float|Top';
 var PROPERTY_HIDEFULLSOL = 'Show solution progressively';
 var PROPERTY_IMPPREV = 'Import non-latest data';
 var PROPERTY_AUTOEXP = 'Exportação automática (a cada 100 resoluções)';
-var PROPERTY_AUTOEXP_OPT = 'Never|To File|With csTimer ID|With WCA Account';
+var PROPERTY_AUTOEXP_OPT = 'Never|To File|With csTimer ID|With WCA Account|With Google Account';
 var PROPERTY_SCRASIZE = 'Auto scramble size';
 var MODULE_NAMES = {
 	"kernel": 'Global',
@@ -507,6 +533,8 @@ var BGIMAGE_OPACITY = 'opacidade da imagem de fundo';
 var BGIMAGE_IMAGE = 'imagem de fundo';
 var BGIMAGE_IMAGE_STR = 'nenhum|manual|CCT';
 var SHOW_AVG_LABEL = 'Mostrar averages rápidas na frente';
+var SHOW_DIFF_LABEL = 'Show Difference Label';
+var SHOW_DIFF_LABEL_STR = '-Green+Red|-Red+Green|Normal|None';
 var USE_LOGOHINT = 'mensagens de dicas na logo';
 var TOOLS_SCRGEN = 'Gerador de Embaralhamentos';
 var SCRGEN_NSCR = 'Número de embaralhamentos';
@@ -517,5 +545,5 @@ var VRCREPLAY_ORI = 'raw ori|auto ori';
 var VRCREPLAY_SHARE = 'share link';
 var GIIKER_CONNECT = 'Click to connect';
 var GIIKER_RESET = 'Reset (Mark Solved)';
-var PROPERTY_SHOWAD = 'Show advistisements (take effect after reload)';
+var PROPERTY_SHOWAD = 'Show advertisements (take effect after reload)';
 var PROPERTY_GIIORI = 'Cube orientation';

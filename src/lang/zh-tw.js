@@ -111,7 +111,7 @@ var PROPERTY_TIMEU = '時間更新頻率';
 var PROPERTY_TIMEU_STR = '更新|每0.1秒|每秒|僅觀察|無';
 var PROPERTY_PRETIME = '按壓空白鍵時間(秒)';
 var PROPERTY_ENTERING = '輸入時間使用';
-var PROPERTY_ENTERING_STR = '空白鍵|鍵入|SS計時器|魔域計時器|虛擬方塊|蓝牙魔方|qCube|Gan計時器';
+var PROPERTY_ENTERING_STR = '空白鍵|鍵入|SS計時器|魔域計時器|虛擬方塊|蓝牙魔方|qCube|Gan計時器|last layer training';
 var PROPERTY_INTUNIT = '輸入整數時的單位';
 var PROPERTY_INTUNIT_STR = '秒|0.01秒|0.001秒';
 var PROPERTY_COLOR = '選擇色彩樣式';
@@ -190,40 +190,56 @@ var scrdata = [
 		['笨蛋專用', "333noob", 25],
 		['僅打亂邊塊', "edges", 0],
 		['僅打亂角塊', "corners", 0],
+		['BLD Helper', "nocache_333bldspec", 0],
+		['3x3x3腳解', "333ft", 0],
+		['Custom', "333custom", 0]
+	]],
+	['3x3x3 CFOP', [
+		['PLL', "pll", 0],
+		['OLL', "oll", 0],
+		['最後一個F2L+頂層', "lsll2", 0],
 		['僅打亂頂層', "ll", 0],
 		['ZBLL', "zbll", 0],
-		['CLL', "cll", 0],
 		['COLL', "coll", 0],
+		['CLL', "cll", 0],
 		['ELL', "ell", 0],
-		['LSE', "lse", 0],
-		['LSE(使用MU)', "lsemu", 0],
-		['橋式最後十塊', "cmll", 0],
-		['預先解好十字', "f2l", 0],
-		['最後一個F2L+頂層', "lsll2", 0],
 		['2GLL', "2gll", 0],
+		['ZZLL', "zzll", 0],
 		['ZBLS', "zbls", 0],
 		['EOLS', "eols", 0],
 		['WVLS', "wvls", 0],
 		['VLS', "vls", 0],
-		['ZZLL', "zzll", 0],
-		['TTLL', "ttll", 0],
-		['OLL', "oll", 0],
-		['PLL', "pll", 0],
+		['預先解好十字', "f2l", 0],
 		['EOLine', "eoline", 0],
 		['簡單的十字', "easyc", 3],
-		['easy xcross', "easyxc", 4],
-		['BLD Helper', "nocache_333bldspec", 0],
-		['3x3x3腳解', "333ft", 0],
-		['Custom', "333custom", 0]
+		['easy xcross', "easyxc", 4]
+	]],
+	['3x3x3 Roux', [
+		['2nd Block', "sbrx", 0],
+		['CMLL', "cmll", 0],
+		['LSE', "lse", 0],
+		['LSE &lt;M, U&gt;', "lsemu", 0]
+	]],
+	['3x3x3 Mehta', [
+		['3QB', "mt3qb", 0],
+		['EOLE', "mteole", 0],
+		['TDR', "mttdr", 0],
+		['6CP', "mt6cp", 0],
+		['CDRLL', "mtcdrll", 0],
+		['L5EP', "mtl5ep", 0],
+		['TTLL', "ttll", 0]
 	]],
 	['2x2x2', [
 		["隨機狀態 (WCA)", "222so", 0],
 		['最佳化', "222o", 0],
 		['僅使用RUF', "2223", 25],
 		['EG', "222eg", 0],
-		['EG0', "222eg0", 0],
+		['CLL', "222eg0", 0],
 		['EG1', "222eg1", 0],
 		['EG2', "222eg2", 0],
+		['TCLL+', "222tcp", 0],
+		['TCLL-', "222tcn", 0],
+		['LS', "222lsall", 0],
 		['No Bar', "222nb", 0]
 	]],
 	['4x4x4', [
@@ -324,6 +340,10 @@ var scrdata = [
 		['最佳化', "gearo", 0],
 		['隨機步驟', "gear", 10]
 	]],
+	['Kilominx', [
+		['random state', "klmso", 0],
+		['Pochmann', "klmp", 30]
+	]],
 	['Cmetric', [
 		[' ', "cm3", 25]
 	]],
@@ -398,7 +418,8 @@ var scrdata = [
 		['234連解 (WCA)', "r234w", 0],
 		['2345連解 (WCA)', "r2345w", 0],
 		['23456連解 (WCA)', "r23456w", 0],
-		['234567連解 (WCA)', "r234567w", 0]
+		['234567連解 (WCA)', "r234567w", 0],
+		['Mini Guildford', "rmngf", 0]
 	]],
 	['===搞笑===', [
 		['--', "blank", 0]
@@ -452,6 +473,7 @@ var STATS_ALERTMG = '將 [%f] 階段中的所有時間移至 [%t] 階段?';
 var STATS_PROMPTSPL = '從階段 [%s] 分離最近幾個時間?';
 var STATS_ALERTSPL = '拆開或至少留下一組時間?';
 var STATS_AVG = '平均';
+var STATS_SUM = 'sum';
 var STATS_SOLVE = '還原';
 var STATS_TIME = '時間';
 var STATS_SESSION = '階段';
@@ -476,12 +498,16 @@ var PROPERTY_SCR2SS = '更換打亂模式時創建新階段';
 var PROPERTY_SS2SCR = '更換階段時恢復打亂模式';
 var PROPERTY_SS2PHASES = '更換階段時恢復多次計時';
 var PROPERTY_STATINV = '顛倒時間清單';
+var PROPERTY_STATSSUM = 'Show sum in time list';
 var PROPERTY_STATTHRES = 'Show target time for session best';
 var PROPERTY_STATAL = '統計指標';
 var PROPERTY_STATALU = '自訂統計指標';
+var PROPERTY_HLPBS = 'Highlight PBs';
+var PROPERTY_HLPBS_STR = 'Dark orange as WCA|As link color|Bolder|None';
 var PROPERTY_DELMUL = '允許同時刪除多個成績';
 var PROPERTY_TOOLSFUNC = '選擇的功能';
 var PROPERTY_TRIM = '刪減數據中的資料數';
+var PROPERTY_TRIMR = 'Number of solves trimmed at worse side';
 var PROPERTY_TRIM_MED = '中位數';
 var PROPERTY_STKHEAD = '使用stackmat狀態資訊';
 var PROPERTY_TOOLPOS = 'Tools panel position';
@@ -489,7 +515,7 @@ var PROPERTY_TOOLPOS_STR = 'Bottom|Float|Top';
 var PROPERTY_HIDEFULLSOL = '逐步顯示解法';
 var PROPERTY_IMPPREV = '載入更舊的數據';
 var PROPERTY_AUTOEXP = '(每100轉)自動匯出';
-var PROPERTY_AUTOEXP_OPT = '從不|匯出成檔案|使用csTimer ID|使用WCA帳號';
+var PROPERTY_AUTOEXP_OPT = '從不|匯出成檔案|使用csTimer ID|使用WCA帳號|使用Google帳號';
 var PROPERTY_SCRASIZE = '自動調整打亂字體大小';
 var MODULE_NAMES = {
 	"kernel": '全域',
@@ -507,6 +533,8 @@ var BGIMAGE_OPACITY = '背景圖片不透明度';
 var BGIMAGE_IMAGE = '背景圖片';
 var BGIMAGE_IMAGE_STR = '無|手動|CCT';
 var SHOW_AVG_LABEL = '顯示「平均」標籤';
+var SHOW_DIFF_LABEL = 'Show Difference Label';
+var SHOW_DIFF_LABEL_STR = '-Green+Red|-Red+Green|Normal|None';
 var USE_LOGOHINT = '圖標中的提示訊息';
 var TOOLS_SCRGEN = '打亂製造器';
 var SCRGEN_NSCR = '打亂總數';
@@ -517,5 +545,5 @@ var VRCREPLAY_ORI = 'raw ori|auto ori';
 var VRCREPLAY_SHARE = 'share link';
 var GIIKER_CONNECT = 'Click to connect';
 var GIIKER_RESET = 'Reset (Mark Solved)';
-var PROPERTY_SHOWAD = 'Show advistisements (take effect after reload)';
+var PROPERTY_SHOWAD = 'Show advertisements (take effect after reload)';
 var PROPERTY_GIIORI = 'Cube orientation';

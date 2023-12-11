@@ -22,13 +22,21 @@ var image = execMain(function() {
 		var off2Y = off1Y + Math.sin(PI * 0.1) * 1 * efrac2;
 		var cornX = [0, d2x, 0, -d2x];
 		var cornY = [-1, -(1 + cfrac) / 2, -cfrac, -(1 + cfrac) / 2];
+		var cornX2 = [0, Math.sin(PI * 0.4) / 2, 0, -Math.sin(PI * 0.4) / 2];
+		var cornY2 = [-1, -(1 + Math.cos(PI * 0.4)) / 2, -Math.cos(PI * 0.4), -(1 + Math.cos(PI * 0.4)) / 2];
 		var edgeX = [Math.cos(PI * 0.1) - d2x, d2x, 0, Math.sin(PI * 0.4) * cfrac];
 		var edgeY = [-Math.sin(PI * 0.1) + (cfrac - 1) / 2, -(1 + cfrac) / 2, -cfrac, -Math.cos(PI * 0.4) * cfrac];
 		var centX = [Math.sin(PI * 0.0) * cfrac, Math.sin(PI * 0.4) * cfrac, Math.sin(PI * 0.8) * cfrac, Math.sin(PI * 1.2) * cfrac, Math.sin(PI * 1.6) * cfrac];
 		var centY = [-Math.cos(PI * 0.0) * cfrac, -Math.cos(PI * 0.4) * cfrac, -Math.cos(PI * 0.8) * cfrac, -Math.cos(PI * 1.2) * cfrac, -Math.cos(PI * 1.6) * cfrac];
 		var colors = ['#fff', '#d00', '#060', '#81f', '#fc0', '#00b', '#ffb', '#8df', '#f83', '#7e0', '#f9f', '#999'];
 
-		function drawFace(state, baseIdx, trans, rot) {
+		function drawFace(state, baseIdx, trans, rot, isKLO) {
+			if (isKLO) {
+				for (var i = 0; i < 5; i++) {
+					drawPolygon(ctx, colors[state[baseIdx + i]], Rotate([cornX2, cornY2], PI * 2 / 5 * i + rot), trans);
+				}
+				return;
+			}
 			for (var i = 0; i < 5; i++) {
 				drawPolygon(ctx, colors[state[baseIdx + i]], Rotate([cornX, cornY], PI * 2 / 5 * i + rot), trans);
 				drawPolygon(ctx, colors[state[baseIdx + i + 5]], Rotate([edgeX, edgeY], PI * 2 / 5 * i + rot), trans);
@@ -36,13 +44,16 @@ var image = execMain(function() {
 			drawPolygon(ctx, colors[state[baseIdx + 10]], Rotate([centX, centY], rot), trans);
 		}
 
-		return function(moveseq) {
+		return function(moveseq, isKLO) {
 			colors = kernel.getProp('colmgm').match(colre);
 			var state = [];
 			for (var i = 0; i < 12; i++) {
 				for (var j = 0; j < 11; j++) {
 					state[i * 11 + j] = i;
 				}
+			}
+			if (/^(\s*([+-]{2}\s*)+U'?\s*\n)*$/.exec(moveseq)) {
+				moveseq = tools.carrot2poch(moveseq);
 			}
 			moveseq.replace(/(?:^|\s*)(?:([DLR])(\+\+?|--?)|(U|F|D?B?R|D?B?L|D|B)(\d?)('?)|\[([ufrl])('?)\])(?:$|\s*)/g, function(m, p1, p2, p3, p4, p5, p6, p7) {
 				if (p1) {
@@ -58,18 +69,18 @@ var image = execMain(function() {
 			canvas.height(3.5 * imgSize + 'em');
 			canvas.attr('width', 9.8 * width);
 			canvas.attr('height', 4.9 * width);
-			drawFace(state, 0, [width, off1X + 0 * efrac2, off1Y + 0 * efrac2], PI * 0.0);
-			drawFace(state, 11, [width, off1X + Math.cos(PI * 0.1) * efrac2, off1Y + Math.sin(PI * 0.1) * efrac2], PI * 0.2);
-			drawFace(state, 22, [width, off1X + Math.cos(PI * 0.5) * efrac2, off1Y + Math.sin(PI * 0.5) * efrac2], PI * 0.6);
-			drawFace(state, 33, [width, off1X + Math.cos(PI * 0.9) * efrac2, off1Y + Math.sin(PI * 0.9) * efrac2], PI * 1.0);
-			drawFace(state, 44, [width, off1X + Math.cos(PI * 1.3) * efrac2, off1Y + Math.sin(PI * 1.3) * efrac2], PI * 1.4);
-			drawFace(state, 55, [width, off1X + Math.cos(PI * 1.7) * efrac2, off1Y + Math.sin(PI * 1.7) * efrac2], PI * 1.8);
-			drawFace(state, 66, [width, off2X + Math.cos(PI * 0.7) * efrac2, off2Y + Math.sin(PI * 0.7) * efrac2], PI * 0.0);
-			drawFace(state, 77, [width, off2X + Math.cos(PI * 0.3) * efrac2, off2Y + Math.sin(PI * 0.3) * efrac2], PI * 1.6);
-			drawFace(state, 88, [width, off2X + Math.cos(PI * 1.9) * efrac2, off2Y + Math.sin(PI * 1.9) * efrac2], PI * 1.2);
-			drawFace(state, 99, [width, off2X + Math.cos(PI * 1.5) * efrac2, off2Y + Math.sin(PI * 1.5) * efrac2], PI * 0.8);
-			drawFace(state, 110, [width, off2X + Math.cos(PI * 1.1) * efrac2, off2Y + Math.sin(PI * 1.1) * efrac2], PI * 0.4);
-			drawFace(state, 121, [width, off2X + 0 * efrac2, off2Y + 0 * efrac2], PI * 1.0);
+			drawFace(state, 0, [width, off1X + 0 * efrac2, off1Y + 0 * efrac2], PI * 0.0, isKLO);
+			drawFace(state, 11, [width, off1X + Math.cos(PI * 0.1) * efrac2, off1Y + Math.sin(PI * 0.1) * efrac2], PI * 0.2, isKLO);
+			drawFace(state, 22, [width, off1X + Math.cos(PI * 0.5) * efrac2, off1Y + Math.sin(PI * 0.5) * efrac2], PI * 0.6, isKLO);
+			drawFace(state, 33, [width, off1X + Math.cos(PI * 0.9) * efrac2, off1Y + Math.sin(PI * 0.9) * efrac2], PI * 1.0, isKLO);
+			drawFace(state, 44, [width, off1X + Math.cos(PI * 1.3) * efrac2, off1Y + Math.sin(PI * 1.3) * efrac2], PI * 1.4, isKLO);
+			drawFace(state, 55, [width, off1X + Math.cos(PI * 1.7) * efrac2, off1Y + Math.sin(PI * 1.7) * efrac2], PI * 1.8, isKLO);
+			drawFace(state, 66, [width, off2X + Math.cos(PI * 0.7) * efrac2, off2Y + Math.sin(PI * 0.7) * efrac2], PI * 0.0, isKLO);
+			drawFace(state, 77, [width, off2X + Math.cos(PI * 0.3) * efrac2, off2Y + Math.sin(PI * 0.3) * efrac2], PI * 1.6, isKLO);
+			drawFace(state, 88, [width, off2X + Math.cos(PI * 1.9) * efrac2, off2Y + Math.sin(PI * 1.9) * efrac2], PI * 1.2, isKLO);
+			drawFace(state, 99, [width, off2X + Math.cos(PI * 1.5) * efrac2, off2Y + Math.sin(PI * 1.5) * efrac2], PI * 0.8, isKLO);
+			drawFace(state, 110, [width, off2X + Math.cos(PI * 1.1) * efrac2, off2Y + Math.sin(PI * 1.1) * efrac2], PI * 0.4, isKLO);
+			drawFace(state, 121, [width, off2X + 0 * efrac2, off2Y + 0 * efrac2], PI * 1.0, isKLO);
 			if (ctx) {
 				ctx.fillStyle = "#000";
 				ctx.font = "20px serif";
@@ -545,7 +556,7 @@ posit:
 					drawPolygon(ctx, colors[posit[(f * size + y) * size + x]], [
 						[i, i, i + 1, i + 1],
 						[j, j + 1, j + 1, j]
-					], [width, offx, offy]);
+					], [width, offx + 0.1, offy + 0.1]);
 				}
 			}
 		}
@@ -624,6 +635,7 @@ posit:
 
 		function genPosit(size, moveseq) {
 			var cnt = 0;
+			posit = [];
 			for (var i = 0; i < 6; i++) {
 				for (var f = 0; f < size * size; f++) {
 					posit[cnt++] = i;
@@ -644,20 +656,25 @@ posit:
 			return posit;
 		}
 
-		return function(size, moveseq) {
+		function draw(size, moveseq) {
 			genPosit(size, moveseq);
 
 			var imgSize = kernel.getProp('imgSize') / 50;
 			canvas.width(39 * imgSize + 'em');
 			canvas.height(29 * imgSize + 'em');
 
-			canvas.attr('width', 39 * size / 9 * width + 1);
-			canvas.attr('height', 29 * size / 9 * width + 1);
+			canvas.attr('width', (39 * size / 9 + 0.2) * width);
+			canvas.attr('height', (29 * size / 9 + 0.2) * width);
 
 			colors = kernel.getProp('colcube').match(colre);
 			for (var i = 0; i < 6; i++) {
 				face(i, size);
 			}
+		}
+
+		return {
+			draw: draw,
+			genPosit: genPosit
 		}
 	})();
 
@@ -680,31 +697,31 @@ posit:
 				dim = 2;
 			}
 			var width = 50;
-			canvas.attr('width', (dim + 1) * width + 1);
-			canvas.attr('height', (dim + 1) * width + 1);
+			canvas.attr('width', (dim + 1.2) * width);
+			canvas.attr('height', (dim + 1.2) * width);
 			for (var i = 0; i < dim * dim; i++) {
 				var x = i % dim + 0.5;
 				var y = ~~(i / dim) + 0.5;
-				drawPolygon(ctx, colors["DLBURF".indexOf(pieces[i])] || '#888', [
+				drawPolygon(ctx, colors["DLBURF".indexOf(pieces[i])] || '#404040', [
 					[x, x + 1, x + 1, x],
 					[y, y, y + 1, y + 1]
-				], [width, 0, 0]);
+				], [width, 0.1, 0.1]);
 			}
 			for (var i = 0; i < dim * 4; i++) {
 				var x = i % dim;
 				var rot = ~~(i / dim);
-				drawPolygon(ctx, colors["DLBURF".indexOf(pieces[i + dim * dim])] || '#888', Rotate([
+				drawPolygon(ctx, colors["DLBURF".indexOf(pieces[i + dim * dim])] || '#404040', Rotate([
 					[x - dim / 2, x - dim / 2 + 1, (x - dim / 2 + 1) * 0.9, (x - dim / 2) * 0.9],
 					[dim / 2 + 0.05, dim / 2 + 0.05, dim / 2 + 0.5, dim / 2 + 0.5]
-				], -rot * PI / 2), [width, 0.5 + dim / 2, 0.5 + dim / 2]);
+				], -rot * PI / 2), [width, 0.6 + dim / 2, 0.6 + dim / 2]);
 			}
 			arrows = arrows || [];
 			for (var i = 0; i < arrows.length; i++) {
 				var arrow = arrows[i];
-				var x1 = arrow[0] % dim + 1;
-				var y1 = ~~(arrow[0] / dim) + 1;
-				var x2 = arrow[1] % dim + 1;
-				var y2 = ~~(arrow[1] / dim) + 1;
+				var x1 = arrow[0] % dim + 1.1;
+				var y1 = ~~(arrow[0] / dim) + 1.1;
+				var x2 = arrow[1] % dim + 1.1;
+				var y2 = ~~(arrow[1] / dim) + 1.1;
 				var length = Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 				drawPolygon(ctx, '#000', Rotate([
 					[0.2, length - 0.4, length - 0.4, length - 0.1, length - 0.4, length - 0.4, 0.2],
@@ -712,7 +729,27 @@ posit:
 				], Math.atan2(y2 - y1, x2 - x1)), [width, x1, y1]);
 			}
 		}
-		return drawImage;
+
+		function draw(size, moveseq, _canvas) {
+			var state = nnnImage.genPosit(size, moveseq);
+			var pieces = [];
+			for (var i = 0; i < size * size; i++) {
+				pieces.push("DLBURF"[state[3 * size * size + i]]);
+			}
+			for (var j = 0; j < 4; j++) {
+				var offset = [5, 4, 2, 1][j] * size * size;
+				for (var i = 0; i < size; i++) {
+					var ii = [i, i, size - 1 - i, size - 1 - i][j];
+					pieces.push("DLBURF"[state[offset + ii]]);
+				}
+			}
+			drawImage(pieces.join(''), [], _canvas);
+		}
+
+		return {
+			drawImage: drawImage,
+			draw: draw
+		}
 	})();
 
 	/**
@@ -1123,12 +1160,12 @@ posit:
 		var size;
 		for (size = 0; size < 12; size++) {
 			if (type == types_nnn[size]) {
-				nnnImage(size, scramble[1]);
+				nnnImage.draw(size, scramble[1]);
 				return true;
 			}
 		}
 		if (type == "cubennn") {
-			nnnImage(scramble[2], scramble[1]);
+			nnnImage.draw(scramble[2], scramble[1]);
 			return true;
 		}
 		if (type == "pyr") {
@@ -1147,8 +1184,8 @@ posit:
 			clkImage(scramble[1]);
 			return true;
 		}
-		if (type == "mgm") {
-			mgmImage(scramble[1]);
+		if (type == "mgm" || type == "klm") {
+			mgmImage(scramble[1], type == "klm");
 			return true;
 		}
 		if (type == "fto") {

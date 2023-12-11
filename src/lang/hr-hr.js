@@ -111,7 +111,7 @@ var PROPERTY_TIMEU = 'prikaz štoperice je';
 var PROPERTY_TIMEU_STR = 'normalan|0.1s|sekunde|inspekcija|bez prikaza';
 var PROPERTY_PRETIME = 'vrijeme držanja tipke space" (sekunda/e)"';
 var PROPERTY_ENTERING = 'unošenje vremena s/sa';
-var PROPERTY_ENTERING_STR = 'štopericom|utipkavanjem|stackmat štoperica|MoYuTimer|virtualno|Bluetooth|qCube|GanTimer';
+var PROPERTY_ENTERING_STR = 'štopericom|utipkavanjem|stackmat štoperica|MoYuTimer|virtualno|Bluetooth|qCube|GanTimer|last layer training';
 var PROPERTY_INTUNIT = 'Mjera prilikom unosa brojčanog tipa podatka';
 var PROPERTY_INTUNIT_STR = 'sekunda|stotinka|milisekunda';
 var PROPERTY_COLOR = 'odaberi temu';
@@ -190,40 +190,56 @@ var scrdata = [
 		['3x3x3 za noob-ove', "333noob", 25],
 		['samo rubni dijelovi', "edges", 0],
 		['samo korneri', "corners", 0],
-		['zadnji sloj', "ll", 0],
-		['zb zadnjeg sloja', "zbll", 0],
-		['korneri zadnjeg sloja', "cll", 0],
-		['COLL', "coll", 0],
-		['rubni dijelovi zadnjeg sloja', "ell", 0],
-		['zadnjih 6 rubnih dijelova', "lse", 0],
-		['zadnjih 6 rubnih dijelova&ltM,U&gt', "lsemu", 0],
-		['Roux L10P', "cmll", 0],
-		['složeni križ', "f2l", 0],
+		['BLD pomoćnik', "nocache_333bldspec", 0],
+		['3x3 s nogama', "333ft", 0],
+		['Prilagođeno', "333custom", 0]
+	]],
+	['3x3x3 CFOP', [
+		['PLL', "pll", 0],
+		['OLL', "oll", 0],
 		['zadnji slot + zadnji sloj', "lsll2", 0],
+		['zadnji sloj', "ll", 0],
+		['ZBLL', "zbll", 0],
+		['COLL', "coll", 0],
+		['CLL', "cll", 0],
+		['ELL', "ell", 0],
 		['2GLL', "2gll", 0],
+		['ZZLL', "zzll", 0],
 		['ZBLS', "zbls", 0],
 		['EOLS', "eols", 0],
 		['WVLS', "wvls", 0],
 		['VLS', "vls", 0],
-		['ZZLL', "zzll", 0],
-		['TTLL', "ttll", 0],
-		['OLL', "oll", 0],
-		['PLL', "pll", 0],
+		['složeni križ', "f2l", 0],
 		['EOLine', "eoline", 0],
 		['lagani križ', "easyc", 3],
-		['easy xcross', "easyxc", 4],
-		['BLD pomoćnik', "nocache_333bldspec", 0],
-		['3x3 s nogama', "333ft", 0],
-		['Prilagođeno', "333custom", 0]
+		['easy xcross', "easyxc", 4]
+	]],
+	['3x3x3 Roux', [
+		['2nd Block', "sbrx", 0],
+		['CMLL', "cmll", 0],
+		['LSE', "lse", 0],
+		['LSE &lt;M, U&gt;', "lsemu", 0]
+	]],
+	['3x3x3 Mehta', [
+		['3QB', "mt3qb", 0],
+		['EOLE', "mteole", 0],
+		['TDR', "mttdr", 0],
+		['6CP', "mt6cp", 0],
+		['CDRLL', "mtcdrll", 0],
+		['L5EP', "mtl5ep", 0],
+		['TTLL', "ttll", 0]
 	]],
 	['2x2x2', [
 		["nasumično stanje (WCA)", "222so", 0],
 		['optimalno', "222o", 0],
 		['3-gen', "2223", 25],
 		['EG', "222eg", 0],
-		['EG0', "222eg0", 0],
+		['CLL', "222eg0", 0],
 		['EG1', "222eg1", 0],
 		['EG2', "222eg2", 0],
+		['TCLL+', "222tcp", 0],
+		['TCLL-', "222tcn", 0],
+		['LS', "222lsall", 0],
 		['Bez Bar-a', "222nb", 0]
 	]],
 	['4x4x4', [
@@ -324,6 +340,10 @@ var scrdata = [
 		['optimalno', "gearo", 0],
 		['nasumični potez', "gear", 10]
 	]],
+	['Kilominx', [
+		['random state', "klmso", 0],
+		['Pochmann', "klmp", 30]
+	]],
 	['Cmetrick', [
 		[' ', "cm3", 25]
 	]],
@@ -398,7 +418,8 @@ var scrdata = [
 		['234 maraton (WCA)', "r234w", 0],
 		['2345 maraton (WCA)', "r2345w", 0],
 		['23456 maraton (WCA)', "r23456w", 0],
-		['234567 maraton (WCA)', "r234567w", 0]
+		['234567 maraton (WCA)', "r234567w", 0],
+		['Mini Guildford', "rmngf", 0]
 	]],
 	['===ŠALE===', [
 		['--', "blank", 0]
@@ -452,6 +473,7 @@ var STATS_ALERTMG = 'Spoji sva vremena u sesiji  [%f] s krajem sesije [%t]?';
 var STATS_PROMPTSPL = 'Broj posljednjih vremena razdjeljenih iz sesije [%s]?';
 var STATS_ALERTSPL = 'Potrebno razdvojiti ili ostaviti barem jedno vrijeme';
 var STATS_AVG = 'srednja vrijednost';
+var STATS_SUM = 'sum';
 var STATS_SOLVE = 'slaganje';
 var STATS_TIME = 'vrijeme';
 var STATS_SESSION = 'Sesija';
@@ -476,12 +498,16 @@ var PROPERTY_SCR2SS = 'kreiraj novu sesiju kada se promijeni tip scramble-a';
 var PROPERTY_SS2SCR = 'vrati tip scramble-a nakon prebacivanja sesije';
 var PROPERTY_SS2PHASES = 'vrati multi-phase štopanje prilikom promjene sesije';
 var PROPERTY_STATINV = 'Obrnuta lista vremena';
+var PROPERTY_STATSSUM = 'Show sum in time list';
 var PROPERTY_STATTHRES = 'Prikaži ciljano vrijeme za najbolje vrijeme sesije';
 var PROPERTY_STATAL = 'Statistički indikatori';
 var PROPERTY_STATALU = 'Personalizirani statistički indikator';
+var PROPERTY_HLPBS = 'Highlight PBs';
+var PROPERTY_HLPBS_STR = 'Dark orange as WCA|As link color|Bolder|None';
 var PROPERTY_DELMUL = 'Omogući višestruko brisanje';
 var PROPERTY_TOOLSFUNC = 'Odabrane funkcije';
 var PROPERTY_TRIM = 'Broj slaganja "odrezanih" sa svake strane';
+var PROPERTY_TRIMR = 'Number of solves trimmed at worse side';
 var PROPERTY_TRIM_MED = 'Medijan';
 var PROPERTY_STKHEAD = 'Koristi informacije Stackmat statusa';
 var PROPERTY_TOOLPOS = 'Tools panel position';
@@ -489,7 +515,7 @@ var PROPERTY_TOOLPOS_STR = 'Bottom|Float|Top';
 var PROPERTY_HIDEFULLSOL = 'Prikaži progresivno rješenje';
 var PROPERTY_IMPPREV = 'Uvezi ne najnovije podatke';
 var PROPERTY_AUTOEXP = 'Automatsko izvezivanje (po 100 slaganja)';
-var PROPERTY_AUTOEXP_OPT = 'Nikad|U datoteku|S csTimer IDjem|S WCA Računom';
+var PROPERTY_AUTOEXP_OPT = 'Nikad|U datoteku|S csTimer IDjem|S WCA Računom|S Google Računom';
 var PROPERTY_SCRASIZE = 'Automatska veličina scramblea';
 var MODULE_NAMES = {
 	"kernel": 'globalno',
@@ -507,6 +533,8 @@ var BGIMAGE_OPACITY = 'providnost pozadinske slike';
 var BGIMAGE_IMAGE = 'pozadinska slika';
 var BGIMAGE_IMAGE_STR = 'ništa|ručno|CCT';
 var SHOW_AVG_LABEL = 'Prikaži oznaku prosjeka';
+var SHOW_DIFF_LABEL = 'Show Difference Label';
+var SHOW_DIFF_LABEL_STR = '-Green+Red|-Red+Green|Normal|None';
 var USE_LOGOHINT = 'Poruke savjeta u logotipu';
 var TOOLS_SCRGEN = 'Generator scramble-ova';
 var SCRGEN_NSCR = 'Broj scramble-ova';
@@ -517,5 +545,5 @@ var VRCREPLAY_ORI = 'raw ori|auto ori';
 var VRCREPLAY_SHARE = 'share link';
 var GIIKER_CONNECT = 'Click to connect';
 var GIIKER_RESET = 'Reset (Mark Solved)';
-var PROPERTY_SHOWAD = 'Show advistisements (take effect after reload)';
+var PROPERTY_SHOWAD = 'Show advertisements (take effect after reload)';
 var PROPERTY_GIIORI = 'Cube orientation';

@@ -65,14 +65,14 @@ var TOOLS_HUGESTATS = 'estadísticas de la sesión de cruz';
 var TOOLS_DISTRIBUTION = 'Distribución de tiempos';
 var TOOLS_TREND = 'Tendencia del tiempo';
 var TOOLS_METRONOME = 'Metrónomo';
-var TOOLS_RECONS = 'Reconstruct';
-var TOOLS_RECONS_NODATA = 'No solution found.';
+var TOOLS_RECONS = 'Reconstruir';
+var TOOLS_RECONS_NODATA = 'No se encontró ninguna solución.';
 var TOOLS_RECONS_TITLE = 'insp|exec|turn|tps';
 var TOOLS_TRAINSTAT = 'Training Stat.';
 var TOOLS_BLDHELPER = 'BLD Helper';
 var TOOLS_CFMTIME = 'Confirmar tiempo ';
 var TOOLS_SOLVERS = 'Solucionadores';
-var TOOLS_DLYSTAT = 'Daily Statistics';
+var TOOLS_DLYSTAT = 'Estadísticas diarias';
 var TOOLS_DLYSTAT1 = 'Period|Start of Day|Week';
 var TOOLS_DLYSTAT_OPT1 = 'day|week|month|year';
 var TOOLS_DLYSTAT_OPT2 = 'Sun|Mon|Tue|Wed|Thu|Fri|Sat';
@@ -83,7 +83,7 @@ var TOOLS_SYNCSEED_30S = 'Usar semilla de 30s';
 var TOOLS_SYNCSEED_HELP = 'If enabled, scramble will only depend on the seed and scramble settings.';
 var TOOLS_SYNCSEED_DISABLE = '¿Desactivar la semilla actual?';
 var TOOLS_SYNCSEED_INPUTA = 'Ingrese un valor (a-zA-Z0-9) como semilla';
-var TOOLS_BATTLE = 'Online battle';
+var TOOLS_BATTLE = 'Batalla en línea';
 var TOOLS_BATTLE_HEAD = 'Room|Join Room';
 var TOOLS_BATTLE_TITLE = 'Rank|Status|Time';
 var TOOLS_BATTLE_STATUS = 'Ready|Inspect|Solving|Solved|Lost';
@@ -111,7 +111,7 @@ var PROPERTY_TIMEU = 'Frecuencia del cronómetro';
 var PROPERTY_TIMEU_STR = 'normal|0.1s|segundos|solo inspección|nada';
 var PROPERTY_PRETIME = 'Tiempo manteniendo la barra espaciadora (en segundo(s))';
 var PROPERTY_ENTERING = 'Introducir tiempos con';
-var PROPERTY_ENTERING_STR = 'teclado|manualmente|stackmat|MoYuTimer|virtual|Bluetooth|qCube|GanTimer';
+var PROPERTY_ENTERING_STR = 'teclado|manualmente|stackmat|MoYuTimer|virtual|bluetooth|qCube|GanTimer|last layer training';
 var PROPERTY_INTUNIT = 'Unidad al introducir un entero';
 var PROPERTY_INTUNIT_STR = 'segundo|centísegundo|milisegundo';
 var PROPERTY_COLOR = 'Selecciona el color';
@@ -150,7 +150,7 @@ var PROPERTY_GIISBEEP = 'Sonar cuando el cubo esté scrambleado';
 var PROPERTY_GIIRST = 'Resetear el cubo Bluetooth cuando se conecte';
 var PROPERTY_GIIRSTS = 'Siempre|Rápido|Nunca';
 var PROPERTY_GIIMODE = 'Bluetooth Cube Mode';
-var PROPERTY_GIIMODES = 'Normal|Training';
+var PROPERTY_GIIMODES = 'Normal|Entrenamiento';
 var PROPERTY_VRCAH = 'Useless pieces in huge cube';
 var PROPERTY_VRCAHS = 'Hide|Border|Color|Show';
 var CONFIRM_GIIRST = '¿Marcar cubo Bluetooth como resuelto?';
@@ -178,7 +178,7 @@ var scrdata = [
 	['Introducir', [
 		['外部', "input", 0],
 		['Competencia', "remoteComp", 0],
-		['Online battle', "remoteBattle", 0],
+		['Batalla en línea', "remoteBattle", 0],
 		['Remote', "remoteOther", 0]
 	]],
 	['===WCA===', [
@@ -190,40 +190,56 @@ var scrdata = [
 		['Para principiantes', "333noob", 25],
 		['Sólo aristas', "edges", 0],
 		['Sólo esquinas', "corners", 0],
-		['Última capa', "ll", 0],
-		['zbll para ultima capa', "zbll", 0],
-		['Esquinas de la última capa', "cll", 0],
-		['COLL', "coll", 0],
-		['Aristas de la última capa', "ell", 0],
-		['Últimas seis aristas', "lse", 0],
-		['Últimas seis aristas&ltM,U&gt', "lsemu", 0],
-		['Roux L10P', "cmll", 0],
-		['Cruz resuelta', "f2l", 0],
+		['BLD Helper', "nocache_333bldspec", 0],
+		['3x3 ft', "333ft", 0],
+		['Custom', "333custom", 0]
+	]],
+	['Cubo de 333 CFOP', [
+		['PLL', "pll", 0],
+		['OLL', "oll", 0],
 		['Última capa y último par', "lsll2", 0],
+		['Última capa', "ll", 0],
+		['ZBLL', "zbll", 0],
+		['COLL', "coll", 0],
+		['CLL', "cll", 0],
+		['ELL', "ell", 0],
 		['2GLL', "2gll", 0],
+		['ZZLL', "zzll", 0],
 		['ZBLS', "zbls", 0],
 		['EOLS', "eols", 0],
 		['WVLS', "wvls", 0],
 		['VLS', "vls", 0],
-		['ZZLL', "zzll", 0],
-		['TTLL', "ttll", 0],
-		['OLL', "oll", 0],
-		['PLL', "pll", 0],
+		['Cruz resuelta', "f2l", 0],
 		['EOLine(EOLínea)', "eoline", 0],
 		['Cruz sencilla', "easyc", 3],
-		['easy xcross', "easyxc", 4],
-		['BLD Helper', "nocache_333bldspec", 0],
-		['3x3 ft', "333ft", 0],
-		['Custom', "333custom", 0]
+		['easy xcross', "easyxc", 4]
+	]],
+	['Cubo de 333 Roux', [
+		['2nd Block', "sbrx", 0],
+		['CMLL', "cmll", 0],
+		['LSE', "lse", 0],
+		['LSE &lt;M, U&gt;', "lsemu", 0]
+	]],
+	['Cubo de 333 Mehta', [
+		['3QB', "mt3qb", 0],
+		['EOLE', "mteole", 0],
+		['TDR', "mttdr", 0],
+		['6CP', "mt6cp", 0],
+		['CDRLL', "mtcdrll", 0],
+		['L5EP', "mtl5ep", 0],
+		['TTLL', "ttll", 0]
 	]],
 	['2x2x2', [
 		["estado aleatorio (WCA)", "222so", 0],
 		['óptimo', "222o", 0],
 		['3-gen', "2223", 25],
 		['EG', "222eg", 0],
-		['EG0', "222eg0", 0],
+		['CLL', "222eg0", 0],
 		['EG1', "222eg1", 0],
 		['EG2', "222eg2", 0],
+		['TCLL+', "222tcp", 0],
+		['TCLL-', "222tcn", 0],
+		['LS', "222lsall", 0],
 		['Sin barra', "222nb", 0]
 	]],
 	['Cubo de 444', [
@@ -324,6 +340,10 @@ var scrdata = [
 		['óptimo', "gearo", 0],
 		['movimiento aleatorio', "gear", 10]
 	]],
+	['Kilominx', [
+		['random state', "klmso", 0],
+		['Pochmann', "klmp", 30]
+	]],
 	['Cmetrico', [
 		[' ', "cm3", 25]
 	]],
@@ -398,7 +418,8 @@ var scrdata = [
 		['Relay 2-3-4 (WCA)', "r234w", 0],
 		['Relay 2-3-4-5 (WCA)', "r2345w", 0],
 		['Relay 2-3-4-5-6 (WCA)', "r23456w", 0],
-		['Relay 2-3-4-5-6-7 (WCA)', "r234567w", 0]
+		['Relay 2-3-4-5-6-7 (WCA)', "r234567w", 0],
+		['Mini Guildford', "rmngf", 0]
 	]],
 	['===BROMAS===', [
 		['--', "blank", 0]
@@ -428,7 +449,7 @@ var SCRAMBLE_NOOBSS = ' en sentido horario 90 grados,| en sentido antihorario 90
 var SCROPT_TITLE = 'Scramble Options';
 var SCROPT_BTNALL = 'Full';
 var SCROPT_BTNNONE = 'Clear';
-var SCROPT_EMPTYALT = 'Please select at least one case';
+var SCROPT_EMPTYALT = 'Por favor, seleccione al menos un caso';
 var STATS_CFM_RESET = '¿Desea reiniciar todos los tiempos de la sesión?';
 var STATS_CFM_DELSS = '¿Seguro que quieres eliminar la sesión [%s]?';
 var STATS_CFM_DELMUL = '¿Cuántos valores quieres eliminar desde este tiempo?';
@@ -452,6 +473,7 @@ var STATS_ALERTMG = 'Fusionar todas las horas de la sesión [%f] al final de la 
 var STATS_PROMPTSPL = '¿Número de últimas veces dividido de la sesión [%s]?';
 var STATS_ALERTSPL = 'Debe dividirse o dejar 1 vez al menos';
 var STATS_AVG = 'Media';
+var STATS_SUM = 'sum';
 var STATS_SOLVE = 'Resolución';
 var STATS_TIME = 'Tiempo';
 var STATS_SESSION = 'Sesión';
@@ -476,12 +498,16 @@ var PROPERTY_SCR2SS = 'crear una nueva sesión al cambiar el tipo de scramble';
 var PROPERTY_SS2SCR = 'restaurar el tipo de mezcla al cambiar de sesión';
 var PROPERTY_SS2PHASES = 'Conservar tiempo multi-fase al cambiar de sesión';
 var PROPERTY_STATINV = 'Lista de tiempo inversa';
+var PROPERTY_STATSSUM = 'Show sum in time list';
 var PROPERTY_STATTHRES = 'Show target time for session best';
 var PROPERTY_STATAL = 'Indicadores estáticos';
 var PROPERTY_STATALU = 'Indicador estadístico personalizado';
+var PROPERTY_HLPBS = 'Highlight PBs';
+var PROPERTY_HLPBS_STR = 'Dark orange as WCA|As link color|Bolder|None';
 var PROPERTY_DELMUL = 'Habilitar eliminación múltiple';
 var PROPERTY_TOOLSFUNC = 'Funciones seleccionadas';
 var PROPERTY_TRIM = 'Cantidad de soluciones recortadas a cada lado';
+var PROPERTY_TRIMR = 'Number of solves trimmed at worse side';
 var PROPERTY_TRIM_MED = 'Media';
 var PROPERTY_STKHEAD = 'Usar información de estado de Stackmat';
 var PROPERTY_TOOLPOS = 'Tools panel position';
@@ -489,7 +515,7 @@ var PROPERTY_TOOLPOS_STR = 'Bottom|Float|Top';
 var PROPERTY_HIDEFULLSOL = 'Mostrar la solución progresivamente';
 var PROPERTY_IMPPREV = 'Importar datos no actualizados';
 var PROPERTY_AUTOEXP = 'Auto Exportación (por 100 soluciones)';
-var PROPERTY_AUTOEXP_OPT = 'Nunca|A archivo|Con csTimer ID|Con cuenta WCA';
+var PROPERTY_AUTOEXP_OPT = 'Nunca|A archivo|Con csTimer ID|Con cuenta WCA|Con cuenta Google';
 var PROPERTY_SCRASIZE = 'Tamaño de la mezcla automático';
 var MODULE_NAMES = {
 	"kernel": 'Global',
@@ -507,6 +533,8 @@ var BGIMAGE_OPACITY = 'Opacidad de la imagen de fondo';
 var BGIMAGE_IMAGE = 'Imagen de fondo';
 var BGIMAGE_IMAGE_STR = 'ninguna|manual|CCT';
 var SHOW_AVG_LABEL = 'Mostrar la información de avg';
+var SHOW_DIFF_LABEL = 'Show Difference Label';
+var SHOW_DIFF_LABEL_STR = '-Green+Red|-Red+Green|Normal|None';
 var USE_LOGOHINT = 'Mensajes de sugerencias en el logo';
 var TOOLS_SCRGEN = 'Generador de mezcla';
 var SCRGEN_NSCR = 'Número de mezclas';
@@ -514,8 +542,8 @@ var SCRGEN_PRE = 'Prefijo';
 var SCRGEN_GEN = 'Generar mezclas';
 var VRCREPLAY_TITLE = 'Virtual Replay';
 var VRCREPLAY_ORI = 'raw ori|auto ori';
-var VRCREPLAY_SHARE = 'share link';
-var GIIKER_CONNECT = 'Click to connect';
+var VRCREPLAY_SHARE = 'compartir enlace';
+var GIIKER_CONNECT = 'Clica aquí para conectar';
 var GIIKER_RESET = 'Reset (Mark Solved)';
-var PROPERTY_SHOWAD = 'Show advistisements (take effect after reload)';
-var PROPERTY_GIIORI = 'Cube orientation';
+var PROPERTY_SHOWAD = 'Show advertisements (take effect after reload)';
+var PROPERTY_GIIORI = 'Orientación del cubo';

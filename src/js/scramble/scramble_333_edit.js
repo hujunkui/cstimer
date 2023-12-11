@@ -351,60 +351,56 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 	}
 
 	var f2l_map = [
-		0x2000, // Easy-01
-		0x1011, // Easy-02
-		0x2012, // Easy-03
-		0x1003, // Easy-04
-		0x2003, // RE-05
-		0x1012, // RE-06
-		0x2002, // RE-07
-		0x1013, // RE-08
-		0x2013, // REFC-09
-		0x1002, // REFC-10
-		0x2010, // REFC-11
-		0x1001, // REFC-12
-		0x2011, // REFC-13
-		0x1000, // REFC-14
-		0x2001, // SPGO-15
-		0x1010, // SPGO-16
-		0x0000, // SPGO-17
-		0x0011, // SPGO-18
-		0x0003, // PMS-19
-		0x0012, // PMS-20
-		0x0002, // PMS-21
-		0x0013, // PMS-22
-		0x0001, // Weird-23
-		0x0010, // Weird-24
-		0x0400, // CPEU-25
-		0x0411, // CPEU-26
-		0x1400, // CPEU-27
-		0x2411, // CPEU-28
-		0x1411, // CPEU-29
-		0x2400, // CPEU-30
-		0x0018, // EPCU-31
-		0x0008, // EPCU-32
-		0x2008, // EPCU-33
-		0x1008, // EPCU-34
-		0x2018, // EPCU-35
-		0x1018, // EPCU-36
-		0x0418, // ECP-37
-		0x1408, // ECP-38
-		0x2408, // ECP-39
-		0x1418, // ECP-40
-		0x2418, // ECP-41
-		0x0408	// Solved-42
+		[0x2000, 4, 'Easy-01'],
+		[0x1011, 4, 'Easy-02'],
+		[0x2012, 4, 'Easy-03'],
+		[0x1003, 4, 'Easy-04'],
+		[0x2003, 4, 'RE-05'],
+		[0x1012, 4, 'RE-06'],
+		[0x2002, 4, 'RE-07'],
+		[0x1013, 4, 'RE-08'],
+		[0x2013, 4, 'REFC-09'],
+		[0x1002, 4, 'REFC-10'],
+		[0x2010, 4, 'REFC-11'],
+		[0x1001, 4, 'REFC-12'],
+		[0x2011, 4, 'REFC-13'],
+		[0x1000, 4, 'REFC-14'],
+		[0x2001, 4, 'SPGO-15'],
+		[0x1010, 4, 'SPGO-16'],
+		[0x0000, 4, 'SPGO-17'],
+		[0x0011, 4, 'SPGO-18'],
+		[0x0003, 4, 'PMS-19'],
+		[0x0012, 4, 'PMS-20'],
+		[0x0002, 4, 'PMS-21'],
+		[0x0013, 4, 'PMS-22'],
+		[0x0001, 4, 'Weird-23'],
+		[0x0010, 4, 'Weird-24'],
+		[0x0400, 4, 'CPEU-25'],
+		[0x0411, 4, 'CPEU-26'],
+		[0x1400, 4, 'CPEU-27'],
+		[0x2411, 4, 'CPEU-28'],
+		[0x1411, 4, 'CPEU-29'],
+		[0x2400, 4, 'CPEU-30'],
+		[0x0018, 4, 'EPCU-31'],
+		[0x0008, 4, 'EPCU-32'],
+		[0x2008, 4, 'EPCU-33'],
+		[0x1008, 4, 'EPCU-34'],
+		[0x2018, 4, 'EPCU-35'],
+		[0x1018, 4, 'EPCU-36'],
+		[0x0418, 1, 'ECP-37'],
+		[0x1408, 1, 'ECP-38'],
+		[0x2408, 1, 'ECP-39'],
+		[0x1418, 1, 'ECP-40'],
+		[0x2418, 1, 'ECP-41'],
+		[0x0408, 1, 'Solved-42']
 	];
 
-	var f2lprobs = [
-		4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1, 1, 1, 1, 1, 1
-	];
+	var f2lprobs = mathlib.idxArray(f2l_map, 1);
 
-	var f2lfilter = [
-		'Easy-01', 'Easy-02', 'Easy-03', 'Easy-04', 'RE-05', 'RE-06', 'RE-07', 'RE-08', 'REFC-09', 'REFC-10', 'REFC-11', 'REFC-12', 'REFC-13', 'REFC-14', 'SPGO-15', 'SPGO-16', 'SPGO-17', 'SPGO-18', 'PMS-19', 'PMS-20', 'PMS-21', 'PMS-22', 'Weird-23', 'Weird-24', 'CPEU-25', 'CPEU-26', 'CPEU-27', 'CPEU-28', 'CPEU-29', 'CPEU-30', 'EPCU-31', 'EPCU-32', 'EPCU-33', 'EPCU-34', 'EPCU-35', 'EPCU-36', 'ECP-37', 'ECP-38', 'ECP-39', 'ECP-40', 'ECP-41', 'Solved-42'
-	];
+	var f2lfilter = mathlib.idxArray(f2l_map, 2);
 
 	function getLSLLScramble(type, length, cases) {
-		var caze = f2l_map[scrMgr.fixCase(cases, f2lprobs)];
+		var caze = f2l_map[scrMgr.fixCase(cases, f2lprobs)][0];
 		var ep = Math.pow(16, caze & 0xf);
 		var eo = 0xf ^ (caze >> 4 & 1);
 		var cp = Math.pow(16, caze >> 8 & 0xf);
@@ -416,7 +412,7 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 	var eolsprobs = [];
 	var eolsfilter = [];
 	for (var i = 0; i < f2l_map.length; i++) {
-		if (f2l_map[i] & 0xf0) {
+		if (f2l_map[i][0] & 0xf0) {
 			continue;
 		}
 		eols_map.push(f2l_map[i]);
@@ -435,7 +431,7 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 	function getF2LImage(piece0, stmap, stprobs, cases, canvas) {
 		var emap = [[5, 10], [7, 19], [3, -1], [1, -1], null, null, null, null, [23, 12]];
 		var cmap = [[8, 20, 9], [6, -1, 18], [0, -1, -1], [2, 11, -1], [-1, 15, 26]];
-		var caze = stmap[scrMgr.fixCase(cases, stprobs)];
+		var caze = stmap[scrMgr.fixCase(cases, stprobs)][0];
 		var ep = emap[caze & 0xf];
 		var eo = caze >> 4 & 1;
 		var cp = cmap[caze >> 8 & 0xf];
@@ -472,7 +468,7 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 		var caze = wvls_map[scrMgr.fixCase(cases, wvlsprobs)];
 		var fill = ['DGG', 'GDG', 'GGD'];
 		fill = fill[caze & 3] + fill[caze >> 8 & 3] + fill[caze >> 12 & 3];
-		image.llImage('3D6DDDBB0RR21G87G54GU'.replace(/[0-9]/g, function(v) {
+		image.llImage.drawImage('3D6DDDBB0RR21G87G54GU'.replace(/[0-9]/g, function(v) {
 			return fill[~~v];
 		}), null, canvas);
 	}
@@ -500,7 +496,7 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 		fillc = fillc[caze[0] & 3] + fillc[caze[0] >> 8 & 3] + fillc[caze[0] >> 12 & 3];
 		var fille = ['DG', 'GD'];
 		fille = fille[caze[1] & 3] + fille[caze[1] >> 8 & 3] + fille[caze[1] >> 12 & 3];
-		image.llImage('6a0eDR3cR4dUFF21b87f5'.replace(/[0-9]/g, function(v) {
+		image.llImage.drawImage('6a0eDR3cR4dUFF21b87f5'.replace(/[0-9]/g, function(v) {
 			return fillc[~~v];
 		}).replace(/[a-z]/g, function(v) {
 			return fille[v.charCodeAt(0) - 'a'.charCodeAt(0)];
@@ -512,54 +508,53 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 	}
 
 	var coll_map = [
-		[0x3210, 0x2121, 'FeFeeeBeBLGRDGDRGLDGD'], // H-BBFF
-		[0x2301, 0x1212, 'ReLeeeReLBGBDGDFGFDGD'], // H-FBFB
-		[0x1203, 0x1212, 'ReBeeeLeBFGRDGDLGFDGD'], // H-RFLF
-		[0x2013, 0x1212, 'LeReeeFeFRGLDGDBGBDGD'], // H-RLFF
-		[0x2301, 0x0102, 'DeBeeeLeDFGRFGRDGLBGD'], // L-FBRL
-		[0x3021, 0x1020, 'DeLeeeReDBGRFGBDGFLGD'], // L-LBFF
-		[0x2013, 0x0201, 'DeReeeReDBGLBGFDGFLGD'], // L-LFFB
-		[0x3102, 0x1020, 'DeLeeeLeDFGBRGBDGRFGD'], // L-LFFR
-		[0x3210, 0x1020, 'DeLeeeFeDRGFLGBDGBRGD'], // L-LRFF
-		[0x1203, 0x0201, 'DeReeeLeDFDBRDFDGLBGD'], // L-RFBL
-		[0x3102, 0x1122, 'BeFeeeFeBRGDLGLDGRDGD'], // Pi-BFFB
-		[0x1203, 0x1221, 'ReLeeeReLBGDFGBDGFDGD'], // Pi-FBFB
-		[0x2301, 0x2112, 'FeLeeeFeRRGDBGBDGLDGD'], // Pi-FRFL
-		[0x3021, 0x1122, 'BeReeeLeBFGDLGFDGRDGD'], // Pi-FRLF
-		[0x3210, 0x1122, 'LeFeeeReFBGDRGLDGBDGD'], // Pi-LFRF
-		[0x2013, 0x1221, 'BeLeeeLeFFGDRGBDGRDGD'], // Pi-RFFL
-		[0x1203, 0x2202, 'LeReeeFeDRGLBGDBGDFGD'], // S-FBBF
-		[0x3102, 0x2220, 'FeBeeeLeDFGBRGDLGDRGD'], // S-FBFB
-		[0x3210, 0x2220, 'ReBeeeFeDRGFLGDLGDBGD'], // S-FLFR
-		[0x2013, 0x2202, 'ReBeeeLeDFGRFGDLGDBGD'], // S-FLRF
-		[0x3021, 0x2220, 'BeReeeFeDRGFLGDBGDLGD'], // S-LFFR
-		[0x2301, 0x0222, 'BeReeeLeDFGRFGDBGDLGD'], // S-LFRF
-		[0x3210, 0x2100, 'FeFeeeDeDBGBRGDRGLDGL'], // T-BBFF
-		[0x2301, 0x0210, 'BeFeeeDeDBGFLGDRGRDGL'], // T-FBFB
-		[0x2013, 0x1002, 'BeBeeeDeDLGRFGDLGRDGF'], // T-FFLR
-		[0x1203, 0x1002, 'BeLeeeDeDBGRFGDFGRDGL'], // T-FLFR
-		[0x3102, 0x2100, 'ReBeeeDeDLGBRGDLGFDGF'], // T-RFLF
-		[0x3021, 0x2100, 'FeBeeeDeDRGRFGDLGLDGB'], // T-RLFF
-		[0x3021, 0x1200, 'FeFeeeDeDBGBRGLDGDRGL'], // D-BBFF
-		[0x2013, 0x2001, 'BeFeeeDeDFGBRGLDGDLGR'], // D-BFFB
-		[0x2301, 0x0120, 'LeLeeeDeDFGBRGBDGDFGR'], // D-FFLR
-		[0x1203, 0x2001, 'ReFeeeDeDBGRFGLDGDBGL'], // D-FRLF
-		[0x3102, 0x1200, 'LeBeeeDeDBGRFGRDGDFGL'], // D-LFFR
-		[0x3210, 0x1200, 'LeReeeDeDBGBRGFDGDFGL'], // D-LRFF
-		[0x3102, 0x1101, 'FeBeeeDeRBGFDGRDGLDGL'], // aS-FBBF
-		[0x1203, 0x1011, 'FeBeeeDeLFGBDGRDGLDGR'], // aS-FBFB
-		[0x2301, 0x1110, 'ReFeeeDeLRGBDGLDGFDGB'], // aS-FRFL
-		[0x3021, 0x1101, 'LeBeeeDeFFGLDGRDGBDGR'], // aS-FRLF
-		[0x3210, 0x1101, 'LeFeeeDeRRGFDGLDGBDGB'], // aS-LFRF
-		[0x2013, 0x1011, 'LeFeeeDeBFGRDGLDGBDGR'], // aS-RFFL
-		[0x3021, 0x0000, 'DeDeeeDeDBGRFGBRGFLGL'], // O-Adj
-		[0x2301, 0x0000, 'DeDeeeDeDBGFLGRFGBRGL'], // O-Diag
-		[0x3210, 0x0000, 'DeDeeeDeDBGBRGRFGFLGL']  // O-AUF
+		[0x3210, 0x2121, 'FeFeeeBeBLGRDGDRGLDGD', 2, 'H-1'],
+		[0x2301, 0x1212, 'ReLeeeReLBGBDGDFGFDGD', 2, 'H-2'],
+		[0x1203, 0x1212, 'ReBeeeLeBFGRDGDLGFDGD', 4, 'H-3'],
+		[0x2013, 0x1212, 'LeReeeFeFRGLDGDBGBDGD', 4, 'H-4'],
+		[0x3021, 0x1020, 'DeLeeeReDBGRFGBDGFLGD', 4, 'L-1'],
+		[0x1203, 0x0201, 'DeReeeLeDFDBRDFDGLBGD', 4, 'L-2'],
+		[0x2301, 0x0102, 'DeBeeeLeDFGRFGRDGLBGD', 4, 'L-3'],
+		[0x3210, 0x1020, 'DeLeeeFeDRGFLGBDGBRGD', 4, 'L-4'],
+		[0x3102, 0x1020, 'DeLeeeLeDFGBRGBDGRFGD', 4, 'L-5'],
+		[0x2013, 0x0201, 'DeReeeReDBGLBGFDGFLGD', 4, 'L-6'],
+		[0x3210, 0x1122, 'LeFeeeReFBGDRGLDGBDGD', 4, 'Pi-1'],
+		[0x2301, 0x2112, 'FeLeeeFeRRGDBGBDGLDGD', 4, 'Pi-2'],
+		[0x1203, 0x1221, 'ReLeeeReLBGDFGBDGFDGD', 4, 'Pi-3'],
+		[0x3102, 0x1122, 'BeFeeeFeBRGDLGLDGRDGD', 4, 'Pi-4'],
+		[0x2013, 0x1221, 'BeLeeeLeFFGDRGBDGRDGD', 4, 'Pi-5'],
+		[0x3021, 0x1122, 'BeReeeLeBFGDLGFDGRDGD', 4, 'Pi-6'],
+		[0x3210, 0x2220, 'ReBeeeFeDRGFLGDLGDBGD', 4, 'S-1'],
+		[0x2301, 0x0222, 'BeReeeLeDFGRFGDBGDLGD', 4, 'S-2'],
+		[0x3021, 0x2220, 'BeReeeFeDRGFLGDBGDLGD', 4, 'S-3'],
+		[0x2013, 0x2202, 'ReBeeeLeDFGRFGDLGDBGD', 4, 'S-4'],
+		[0x3102, 0x2220, 'FeBeeeLeDFGBRGDLGDRGD', 4, 'S-5'],
+		[0x1203, 0x2202, 'LeReeeFeDRGLBGDBGDFGD', 4, 'S-6'],
+		[0x1203, 0x1002, 'BeLeeeDeDBGRFGDFGRDGL', 4, 'T-1'],
+		[0x3102, 0x2100, 'ReBeeeDeDLGBRGDLGFDGF', 4, 'T-2'],
+		[0x2301, 0x0210, 'BeFeeeDeDBGFLGDRGRDGL', 4, 'T-3'],
+		[0x3210, 0x2100, 'FeFeeeDeDBGBRGDRGLDGL', 4, 'T-4'],
+		[0x2013, 0x1002, 'BeBeeeDeDLGRFGDLGRDGF', 4, 'T-5'],
+		[0x3021, 0x2100, 'FeBeeeDeDRGRFGDLGLDGB', 4, 'T-6'],
+		[0x2301, 0x0120, 'LeLeeeDeDFGBRGBDGDFGR', 4, 'U-1'],
+		[0x3210, 0x1200, 'LeReeeDeDBGBRGFDGDFGL', 4, 'U-2'],
+		[0x3021, 0x1200, 'FeFeeeDeDBGBRGLDGDRGL', 4, 'U-3'],
+		[0x2013, 0x2001, 'BeFeeeDeDFGBRGLDGDLGR', 4, 'U-4'],
+		[0x1203, 0x2001, 'ReFeeeDeDBGRFGLDGDBGL', 4, 'U-5'],
+		[0x3102, 0x1200, 'LeBeeeDeDBGRFGRDGDFGL', 4, 'U-6'],
+		[0x3210, 0x1101, 'LeFeeeDeRRGFDGLDGBDGB', 4, 'aS-1'],
+		[0x2301, 0x1110, 'ReFeeeDeLRGBDGLDGFDGB', 4, 'aS-2'],
+		[0x3021, 0x1101, 'LeBeeeDeFFGLDGRDGBDGR', 4, 'aS-3'],
+		[0x2013, 0x1011, 'LeFeeeDeBFGRDGLDGBDGR', 4, 'aS-4'],
+		[0x1203, 0x1011, 'FeBeeeDeLFGBDGRDGLDGR', 4, 'aS-5'],
+		[0x3102, 0x1101, 'FeBeeeDeRBGFDGRDGLDGL', 4, 'aS-6'],
+		[0x3021, 0x0000, 'DeDeeeDeDBGRFGBRGFLGL', 4, 'O-Adj'],
+		[0x2301, 0x0000, 'DeDeeeDeDBGFLGRFGBRGL', 1, 'O-Diag'],
+		[0x3210, 0x0000, 'DeDeeeDeDBGBRGRFGFLGL', 1, 'O-AUF']
 	];
 
-	var coprobs = [2, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1, 1];
-
-	var cofilter = ['H-BBFF', 'H-FBFB', 'H-RFLF', 'H-RLFF', 'L-FBRL', 'L-LBFF', 'L-LFFB', 'L-LFFR', 'L-LRFF', 'L-RFBL', 'Pi-BFFB', 'Pi-FBFB', 'Pi-FRFL', 'Pi-FRLF', 'Pi-LFRF', 'Pi-RFFL', 'S-FBBF', 'S-FBFB', 'S-FLFR', 'S-FLRF', 'S-LFFR', 'S-LFRF', 'T-BBFF', 'T-FBFB', 'T-FFLR', 'T-FLFR', 'T-RFLF', 'T-RLFF', 'U-BBFF', 'U-BFFB', 'U-FFLR', 'U-FRLF', 'U-LFFR', 'U-LRFF', 'aS-FBBF', 'aS-FBFB', 'aS-FRFL', 'aS-FRLF', 'aS-LFRF', 'aS-RFFL', 'O-Adj', 'O-Diag', 'O-AUF'];
+	var coprobs = mathlib.idxArray(coll_map, 3);
+	var cofilter = mathlib.idxArray(coll_map, 4);
 
 	function getZBLLScramble(type, length, cases) {
 		var cocase = coll_map[scrMgr.fixCase(cases, coprobs)];
@@ -576,9 +571,14 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 		return getAnyScramble(0xba98f6f4ffff, 0x0000f0f0ffff, cocase[0] + 0x76540000, cocase[1], presuff, aufsuff) + rlappsuff[rnd4];
 	}
 
+	function getSBRouxScramble(type, length, cases) {
+		var rnd4 = rn(4);
+		return getAnyScramble(0xfa9ff6ffffff, 0xf00ff0ffffff, 0xf65fffff, 0xf00fffff, [rlpresuff[rnd4]]) + rlappsuff[rnd4];
+	}
+
 	function getCOLLImage(efill, cases, canvas) {
 		var face = coll_map[cases][2].replace(/e/g, efill || 'U');
-		image.llImage(face, null, canvas);
+		image.llImage.drawImage(face, null, canvas);
 	}
 
 	function getZZLLScramble() {
@@ -685,7 +685,7 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 		if (!canvas) {
 			return llParam.concat([ttllfilter[cases]]);
 		}
-		image.llImage(llParam[0], llParam[1], canvas);
+		image.llImage.drawImage(llParam[0], llParam[1], canvas);
 	}
 
 	function getLSEScramble() {
@@ -755,10 +755,10 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 		['RBFLRRFFLBLB', [0, 6], [6, 8], [8, 0]],
 		['LBRFRBRFLBLF', [0, 6], [2, 8]],
 		['BFRFRBRBFLLL', [1, 7], [2, 8]],
-		['BRRFLBRBFLFL'],
-		['BFRFBBRLFLRL'],
-		['BFRFLBRRFLBL'],
-		['BLRFFBRBFLRL'],
+		['BRRFLBRBFLFL',[0, 2], [2, 6], [6, 0], [1, 3], [3, 5], [5, 1]],
+		['BFRFBBRLFLRL',[0, 6], [6, 2], [2, 0], [1, 3], [3, 5], [5, 1]],
+		['BFRFLBRRFLBL',[0, 6], [6, 8], [8, 0], [3, 5], [5, 7], [7, 3]],
+		['BLRFFBRBFLRL',[0, 2], [2, 6], [6, 0], [1, 3], [3, 7], [7, 1]],
 		['BBRFFBRRFLLL', [1, 5], [2, 8]],
 		['LBBRLLBRRFFF', [2, 8], [5, 7]],
 		['FBBRLLBFFLRR', [2, 6], [3, 5]],
@@ -784,7 +784,145 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 		if (!canvas) {
 			return llParam.concat([pllfilter[cases]]);
 		}
-		image.llImage(llParam[0], llParam[1], canvas);
+		image.llImage.drawImage(llParam[0], llParam[1], canvas);
+	}
+
+	/**
+	 * 获取pll svg 图片
+	 */
+	// function getPLLSvgImage(cases) {
+	// 	let pllCase = pllImgParam[cases];
+	// 	getPll(cases)
+	// 	return [pllfilter[cases],"UUUUUUUUU" + pllCase];
+	// }
+
+	function getPLLSvgImage(cases) {
+		let cord
+		if (pllImgParam[cases] != null || pllImgParam[cases] != undefined) {
+			cord = pllImgParam[cases].slice(1)
+		} else {
+			cord = []
+		}
+		return [pllfilter[cases],generate("UUUUUUUUU" + pllImgParam[cases], cord)];
+	}
+
+	/**
+	 * 获取oll svg 图片
+	 */
+	function getOllSvgImage(cases) {
+		var face = '';
+		var val = ollImgParam[cases];
+		for (var i = 0; i < 21; i++) {
+			if (i === 4) {
+				face += 'U';
+			} else {
+				face += (val & 1) ? 'U' : 'G';
+				val >>= 1;
+			}
+		}
+
+		return [ollfilter[cases],generate(face, [])];
+	}
+	function generate(face, coordinates) {
+		let svgTmp = "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' viewBox='-0.9 -0.9 1.8 1.8'>\n    <g style='stroke-width:0.1;stroke-linejoin:round;opacity:1'>\n        <polygon fill='#000000' stroke='#000000'\n                 points='-0.52222222222222,-0.52222222222222 0.52222222222222,-0.52222222222222 0.52222222222222,0.52222222222222 -0.52222222222222,0.52222222222222'/>\n    </g>\n    <g style='opacity:1;stroke-opacity:0.5;stroke-width:0;stroke-linejoin:round'>\n        <polygon fill='{0}' stroke='#000000'\n                 points='-0.52777777777778,-0.52777777777778 -0.21296296296296,-0.52777777777778 -0.21296296296296,-0.21296296296296 -0.52777777777778,-0.21296296296296'/>\n        <polygon fill='{1}' stroke='#000000'\n                 points='-0.15740740740741,-0.52777777777778 0.15740740740741,-0.52777777777778 0.15740740740741,-0.21296296296296 -0.15740740740741,-0.21296296296296'/>\n        <polygon fill='{2}' stroke='#000000'\n                 points='0.21296296296296,-0.52777777777778 0.52777777777778,-0.52777777777778 0.52777777777778,-0.21296296296296 0.21296296296296,-0.21296296296296'/>\n        <polygon fill='{3}' stroke='#000000'\n                 points='-0.52777777777778,-0.15740740740741 -0.21296296296296,-0.15740740740741 -0.21296296296296,0.15740740740741 -0.52777777777778,0.15740740740741'/>\n        <polygon fill='{4}' stroke='#000000'\n                 points='-0.15740740740741,-0.15740740740741 0.15740740740741,-0.15740740740741 0.15740740740741,0.15740740740741 -0.15740740740741,0.15740740740741'/>\n        <polygon fill='{5}' stroke='#000000'\n                 points='0.21296296296296,-0.15740740740741 0.52777777777778,-0.15740740740741 0.52777777777778,0.15740740740741 0.21296296296296,0.15740740740741'/>\n        <polygon fill='{6}' stroke='#000000'\n                 points='-0.52777777777778,0.21296296296296 -0.21296296296296,0.21296296296296 -0.21296296296296,0.52777777777778 -0.52777777777778,0.52777777777778'/>\n        <polygon fill='{7}' stroke='#000000'\n                 points='-0.15740740740741,0.21296296296296 0.15740740740741,0.21296296296296 0.15740740740741,0.52777777777778 -0.15740740740741,0.52777777777778'/>\n        <polygon fill='{8}' stroke='#000000'\n                 points='0.21296296296296,0.21296296296296 0.52777777777778,0.21296296296296 0.52777777777778,0.52777777777778 0.21296296296296,0.52777777777778'/>\n    </g>\n    <g style='opacity:1;stroke-opacity:1;stroke-width:0.02;stroke-linejoin:round'>\n\n        <polygon fill='{12}' stroke='#000000'\n                 points='0.5544061302682,0.54406130268199 0.5544061302682,0.19591315453384 0.7183908045977,0.18390804597701 0.7183908045977,0.50804597701149'/>\n        <polygon fill='{13}' stroke='#000000'\n                 points='0.5544061302682,0.17445721583653 0.5544061302682,-0.17369093231162 0.7183908045977,-0.16168582375479 0.7183908045977,0.16245210727969'/>\n        <polygon fill='{14}' stroke='#000000'\n                 points='0.5544061302682,-0.19514687100894 0.5544061302682,-0.54329501915709 0.7183908045977,-0.50727969348659 0.7183908045977,-0.18314176245211'/>\n        <polygon fill='{9}' stroke='#000000'\n                 points='-0.54406130268199,0.5544061302682 -0.19591315453384,0.5544061302682 -0.18390804597701,0.7183908045977 -0.50804597701149,0.7183908045977'/>\n        <polygon fill='{10}' stroke='#000000'\n                 points='-0.17445721583653,0.5544061302682 0.17369093231162,0.5544061302682 0.16168582375479,0.7183908045977 -0.16245210727969,0.7183908045977'/>\n        <polygon fill='{11}' stroke='#000000'\n                 points='0.19514687100894,0.5544061302682 0.54329501915709,0.5544061302682 0.50727969348659,0.7183908045977 0.18314176245211,0.7183908045977'/>\n        <polygon fill='{18}' stroke='#000000'\n                 points='-0.5544061302682,-0.54406130268199 -0.5544061302682,-0.19591315453384 -0.7183908045977,-0.18390804597701 -0.7183908045977,-0.50804597701149'/>\n        <polygon fill='{19}' stroke='#000000'\n                 points='-0.5544061302682,-0.17445721583653 -0.5544061302682,0.17369093231162 -0.7183908045977,0.16168582375479 -0.7183908045977,-0.16245210727969'/>\n        <polygon fill='{20}' stroke='#000000'\n                 points='-0.5544061302682,0.19514687100894 -0.5544061302682,0.54329501915709 -0.7183908045977,0.50727969348659 -0.7183908045977,0.18314176245211'/>\n        <polygon fill='{15}' stroke='#000000'\n                 points='0.54406130268199,-0.5544061302682 0.19591315453384,-0.5544061302682 0.18390804597701,-0.7183908045977 0.50804597701149,-0.7183908045977'/>\n        <polygon fill='{16}' stroke='#000000'\n                 points='0.17445721583653,-0.5544061302682 -0.17369093231162,-0.5544061302682 -0.16168582375479,-0.7183908045977 0.16245210727969,-0.7183908045977'/>\n        <polygon fill='{17}' stroke='#000000'\n                 points='-0.19514687100894,-0.5544061302682 -0.54329501915709,-0.5544061302682 -0.50727969348659,-0.7183908045977 -0.18314176245211,-0.7183908045977'/>\n</g>{svgTmp}</svg>\n"
+		let location = [
+			['-0.37037037037037', '-0.37037037037037'],
+			['0', '-0.37037037037037'],
+			['0.37037037037037', '-0.37037037037037'],
+			['-0.37037037037037', '-4.1633363423443E-17'],
+			['0', '-4.1633363423443E-17'],
+			['0.37037037037037', '-5.5511151231258E-17'],
+			['-0.37037037037037', '0.37037037037037'],
+			['0', '0.37037037037037'],
+			['0.37037037037037', '0.37037037037037'],
+		]
+
+		function calculateAngle(num1, num2) {
+			const position = {
+				0: {x: 0, y: 0},
+				1: {x: 1, y: 0},
+				2: {x: 2, y: 0},
+				3: {x: 0, y: 1},
+				4: {x: 1, y: 1},
+				5: {x: 2, y: 1},
+				6: {x: 0, y: 2},
+				7: {x: 1, y: 2},
+				8: {x: 2, y: 2},
+			};
+
+			const deltaX = position[num2].x - position[num1].x;
+			const deltaY = position[num2].y - position[num1].y;
+
+			const angleRad = Math.atan2(deltaY, deltaX);
+			let angleDeg = angleRad * (180 / Math.PI);
+			angleDeg = (angleDeg + 360) % 360; // Ensure the angle is positive
+			console.log(angleDeg)
+			return angleDeg;
+		}
+		function getRgb(operate) {
+			if ("R" === (operate)) {
+				return "#EE0000";
+			}
+			if ("L"=== (operate)) {
+				return "#FFA100";
+			}
+			if ("U"=== (operate)) {
+				return "#FEFE00";
+			}
+			if ("D"=== (operate)) {
+				return "#FFFFFF";
+			}
+			if ("B"=== (operate)) {
+				return "#00D800";
+			}
+			if ("F"=== (operate)) {
+				return "#0000F2";
+			}
+			return "#404040";
+		}
+		let res = "";
+		for (let i = 0; i < 21; i++) {
+			let regex = new RegExp('\\{' + i + '\\}', 'g');
+			svgTmp = svgTmp.replace(regex, getRgb(face[i]));
+		}
+		let line = ' <path d="M {0},{1} L {2},{3}" style="fill:none;stroke:#000000;stroke-opacity:1" />'
+		let arow = '<path transform=" translate({0},{1}) scale(0.011) rotate({2})" d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z" style="fill:#000000;stroke-width:0;stroke-linejoin:round"/>'
+		let cnt = coordinates.length;
+		for (let i = 0; i < coordinates.length; i++) {
+			let lineData = [location[coordinates[i][0]][0], location[coordinates[i][0]][1], location[coordinates[i][1]][0], location[coordinates[i][1]][1]]
+			let tmp = line;
+			for (let j = 0; j < 4; j++) {
+				let regex = new RegExp('\\{' + j + '\\}', 'g');
+				tmp = tmp.replace(regex, lineData[j])
+			}
+			res += tmp;
+			let arrData = []
+			arrData.push([
+				location[coordinates[i][1]][0],
+				location[coordinates[i][1]][1],
+				calculateAngle(coordinates[i][0], coordinates[i][1])
+			]);
+			if (cnt === 2) {
+				arrData.push([
+					location[coordinates[i][0]][0],
+					location[coordinates[i][0]][1],
+					calculateAngle(coordinates[i][1], coordinates[i][0])
+				]);
+			}
+			for (let j = 0; j < arrData.length; j++) {
+				let arowTmp = arow;
+				for (let k = 0; k < 3; k++) {
+					let regex = new RegExp('\\{' + k + '\\}', 'g');
+					arowTmp = arowTmp.replace(regex, arrData[j][k])
+				}
+				res += arowTmp;
+			}
+		}
+		if (cnt != 0) {
+			res = "<g style='opacity:1;stroke-opacity:1;stroke-width:0.04;stroke-linecap:round'>" +res + "</g>"
+		}
+		let regex = new RegExp('\\{' + "svgTmp" + '\\}', 'g');
+		return svgTmp.replace(regex, res)
 	}
 
 	/**
@@ -895,11 +1033,40 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 		if (!canvas) {
 			return [face, null, ollfilter[cases]];
 		}
-		image.llImage(face, null, canvas);
+		image.llImage.drawImage(face, null, canvas);
 	}
 
 	function getEOLineScramble() {
 		return getAnyScramble(0xffff7f5fffff, 0x000000000000, 0xffffffff, 0xffffffff);
+	}
+
+	var daufsuff = [[], [Dx1], [Dx2], [Dx3]];
+	var daufrot = ["", "y", "y2", "y'"];
+	function getMehta3QBScramble() {
+		var rnd4 = mathlib.rn(4);
+		return getAnyScramble(0xffff765fffff, 0xffff000fffff, 0xf65fffff, 0xf00fffff, [daufsuff[rnd4]]) + daufrot[rnd4];
+	}
+
+	function getMehtaEOLEScramble() {
+		var skip = mathlib.rn(4);
+		var rnd4 = mathlib.rn(4);
+		return getAnyScramble(0xba98765fffff + (0x4567 & (0xf << skip * 4)) * 0x100000000, 0x0000000fffff + (0xf << skip * 4) * 0x100000000, 0xf65fffff, 0xf00fffff, [daufsuff[rnd4]]) + daufrot[rnd4];
+	}
+
+	function getMehtaTDRScramble() {
+		return getAnyScramble(0xba98765fffff, 0x000000000000, 0xf65fffff, 0xf00fffff);
+	}
+
+	function getMehta6CPScramble() {
+		return getAnyScramble(0xba98765fffff, 0x000000000000, 0xf65fffff, 0x00000000);
+	}
+
+	function getMehtaL5EPScramble() {
+		return getAnyScramble(0xba98765fffff, 0x000000000000, 0x76543210, 0x00000000);
+	}
+
+	function getMehtaCDRLLScramble() {
+		return getAnyScramble(0xba98765fffff, 0x000000000000, 0x7654ffff, 0x0000ffff);
 	}
 
 	var customfilter = ['UR', 'UF', 'UL', 'UB', 'DR', 'DF', 'DL', 'DB', 'RF', 'LF', 'LB', 'RB', 'URF', 'UFL', 'ULB', 'UBR', 'DFR', 'DLF', 'DBL', 'DRB'];
@@ -974,6 +1141,13 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 		('pll', getPLLScramble, [pllfilter, pllprobs, getPLLImage])
 		('oll', getOLLScramble, [ollfilter, ollprobs, getOLLImage])
 		('2gll', get2GLLScramble)
+		('sbrx', getSBRouxScramble)
+		('mt3qb', getMehta3QBScramble)
+		('mteole', getMehtaEOLEScramble)
+		('mttdr', getMehtaTDRScramble)
+		('mt6cp', getMehta6CPScramble)
+		('mtl5ep', getMehtaL5EPScramble)
+		('mtcdrll', getMehtaCDRLLScramble)
 		('easyc', getEasyCrossScramble)
 		('easyxc', getEasyXCrossScramble)
 		('eoline', getEOLineScramble);
