@@ -353,6 +353,16 @@ var cubeutil = (function() {
 		return method ? identData[method] : identData;
 	}
 
+	function getIdentOPData(method) {
+		var identData = {
+			//name: [ident, genImg, startIdx, endIdx, stageIdx]
+			'PLL': [identPLL, scramble_333.getAllPLLImages(), 0, 21, 0],
+			'OLL': [identOLL, scramble_333.getAllOLLImages(), 1, 58, 1],
+			'CLL': [identC2CLL, scramble_222.getEGLLImage, 0, 40, 1]
+		};
+		return method ? identData[method] : identData;
+	}
+
 	function getScrambledState(scramble, reqFace) {
 		var scrType = scramble[0];
 		var scrSeq = scramble[1];
@@ -449,6 +459,7 @@ var cubeutil = (function() {
 		getScrambledState: getScrambledState,
 		identStep: identStep,
 		getIdentData: getIdentData,
+		getIdentOPData: getIdentOPData
 	}
 
 })();

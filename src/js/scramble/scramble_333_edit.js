@@ -787,14 +787,32 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 		image.llImage.drawImage(llParam[0], llParam[1], canvas);
 	}
 
-	/**
-	 * 获取pll svg 图片
-	 */
-	// function getPLLSvgImage(cases) {
-	// 	let pllCase = pllImgParam[cases];
-	// 	getPll(cases)
-	// 	return [pllfilter[cases],"UUUUUUUUU" + pllCase];
-	// }
+	function getAllPLLImages() {
+		let pllImgs = [];
+		for (let i = 0; i < 21; i++) {
+			let pllItem = getPLLSvgImage(i);
+			if (pllItem[0] !== undefined) {
+                pllImgs[i] = [];
+                pllImgs[i][0] = pllItem[0];
+                pllImgs[i][1] = "data:image/svg+xml;base64," + btoa(pllItem[1]);
+		    }
+		}
+		return pllImgs;
+	}
+
+	function getAllOLLImages() {
+		let ollImgs = [];
+		for (let i = 1; i < 58; i++) {
+			let ollItem = getOllSvgImage(i);
+            if (ollItem[0] !== undefined) {
+                ollImgs[i] = [];
+                ollImgs[i][0] = ollItem[0];
+                ollImgs[i][1] = "data:image/svg+xml;base64," + btoa(ollItem[1]);
+            }
+		}
+		return ollImgs;
+	}
+
 
 	function getPLLSvgImage(cases) {
 		let cord
@@ -820,7 +838,6 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 				val >>= 1;
 			}
 		}
-
 		return [ollfilter[cases],generate(face, [])];
 	}
 	function generate(face, coordinates) {
@@ -856,7 +873,6 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 			const angleRad = Math.atan2(deltaY, deltaX);
 			let angleDeg = angleRad * (180 / Math.PI);
 			angleDeg = (angleDeg + 360) % 360; // Ensure the angle is positive
-			console.log(angleDeg)
 			return angleDeg;
 		}
 		function getRgb(operate) {
@@ -923,31 +939,6 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 		}
 		let regex = new RegExp('\\{' + "svgTmp" + '\\}', 'g');
 		return svgTmp.replace(regex, res)
-	}
-
-	/**
-	 * 获取pll svg 图片
-	 */
-	function getPLLSvgImage(cases) {
-		let pllCase = pllImgParam[cases];
-		return [pllfilter[cases],"UUUUUUUUU" + pllCase];
-	}
-
-	/**
-	 * 获取oll svg 图片
-	 */
-	function getOllSvgImage(cases) {
-		var face = '';
-		var val = ollImgParam[cases];
-		for (var i = 0; i < 21; i++) {
-			if (i === 4) {
-				face += 'U';
-			} else {
-				face += (val & 1) ? 'U' : 'G';
-				val >>= 1;
-			}
-		}
-		return [ollfilter[cases],face];
 	}
 
 	var oll_map = [
@@ -1174,6 +1165,8 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 		getPLLSvgImage: getPLLSvgImage,
 		getOLLImage: getOLLImage,
 		getOllSvgImage: getOllSvgImage,
+		getAllPLLImages: getAllPLLImages,
+		getAllOLLImages: getAllOLLImages,
 		genFacelet: genFacelet,
 		solvFacelet: solvFacelet
 	};

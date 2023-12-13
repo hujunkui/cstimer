@@ -135,9 +135,12 @@ var recons = execMain(function() {
 		}
 
 		var trTpl =
-			'<tr style="$0" data="$1"><td rowspan=2 class="$8" style="padding-bottom:0;padding-top:0;">$1</td><td colspan=4 style="padding:0;">' +
-			'<span class="cntbar sty2" style="height:0.2em;float:left;border:none;width:$2%;">&nbsp;</span>' +
-			'<span class="cntbar" style="height:0.2em;float:left;border:none;width:$3%;">&nbsp;</span></td></tr>' +
+			'<tr style="$0" data="$1">' +
+				'<td rowspan=2 class="$8" style="padding-bottom:0;padding-top:0;">$1</td>' +
+				'<td colspan=4 style="padding:0;">' +
+				'<span class="cntbar sty2" style="height:0.2em;float:left;border:none;width:$2%;">&nbsp;</span>' +
+				'<span class="cntbar" style="height:0.2em;float:left;border:none;width:$3%;">&nbsp;</span></td>' +
+			'</tr>' +
 			'<tr style="$0" data="$1">' +
 			'<td style="padding-bottom:0;padding-top:0;">$4</td>' +
 			'<td style="padding-bottom:0;padding-top:0;">$5</td>' +
@@ -291,27 +294,6 @@ var recons = execMain(function() {
 		stepData[6][4] = pllFace[0];
 		stepData[5][4] = ollFace[1];
 		renderResult(stepData, value[1] + 1, isPercent, times[1], solve);
-	}
-	function getRgb(operate) {
-		if ("R" === (operate)) {
-			return "#EE0000";
-		}
-		if ("L"=== (operate)) {
-			return "#FFA100";
-		}
-		if ("U"=== (operate)) {
-			return "#FEFE00";
-		}
-		if ("D"=== (operate)) {
-			return "#FFFFFF";
-		}
-		if ("B"=== (operate)) {
-			return "#00D800";
-		}
-		if ("F"=== (operate)) {
-			return "#0000F2";
-		}
-		return "#404040";
 	}
 	/**
 	 * 实时复盘数据展示
@@ -564,26 +546,47 @@ var caseStat = execMain(function() {
 		var nsolv = stats.getTimesStatsTable().timesLen;
 		var nrec = nsolv;
 		var method = methodSelect.val() || 'PLL';
-		var ident = cubeutil.getIdentData(method);
+		var ident = cubeutil.getIdentOPData(method);
+		let pb = false;
+		if ('PLL-PB' === method) {
+			ident = cubeutil.getIdentOPData("PLL");
+			method = "PLL"
+			pb = true
+		}
+		if ('OLL-PB' === method) {
+			ident = cubeutil.getIdentOPData("OLL");
+			method = "OLL"
+			pb = true
+		}
 		var nvalid = 0;
 		var caseCnts = [];
-		for (var s = nsolv - 1; s >= nsolv - nrec; s--) {
-			var caseData = stats.getExtraInfo('recons_cf4op_' + method, s);
+		let min = Array(ident[3]).fill(88888);
+		for (let s = nsolv - 1; s >= nsolv - nrec; s--) {
+			let caseData = stats.getExtraInfo('recons_cf4op_' + method, s);
 			if (!caseData) {
 				continue;
 			}
 			nvalid++;
-			var cur = caseData[0];
+			let cur = caseData[0];
 			caseCnts[cur] = caseCnts[cur] || [0, 0, 0, 0];
-			var cumData = [1].concat(caseData.slice(1));
-			for (var i = 0; i < 4; i++) {
-				caseCnts[cur][i] += cumData[i];
+			let cumData = [1].concat(caseData.slice(1));
+			if (pb) {
+				caseCnts[cur][0] += cumData[0];
+				if (cumData[2] < min[cur]) {
+					min[cur] = cumData[2]
+					for (let i = 1; i < 4; i++) {
+						caseCnts[cur][i] = cumData[i];
+					}
+				}
+			} else {
+				for (let i = 0; i < 4; i++) {
+					caseCnts[cur][i] += cumData[i];
+				}
 			}
 		}
-
 		var trTpl =
 			'<tr><td rowspan=2 style="padding-bottom:0;padding-top:0;">$1</td>' +
-			'<td rowspan=2 style="padding:0;width:2em;"><canvas/></td>' +
+			'<td rowspan=2 style="padding:0;width:2em;"><img src="$9" style="display: block"></td>' +
 			'<td rowspan=2 style="padding-bottom:0;padding-top:0;">$2</td>' +
 			'<td colspan=4 style="padding:0;">' +
 			'<span class="cntbar sty2" style="height:0.25em;float:left;border:none;width:$3%;">&nbsp;</span>' +
@@ -604,25 +607,40 @@ var caseStat = execMain(function() {
 			}
 			maxSubt = Math.max(maxSubt, (caseCnts[i][1] + caseCnts[i][2]) / caseCnts[i][0]);
 		}
-
 		var trdata = [];
 		for (var i = ident[2]; i < ident[3]; i++) {
 			if (!caseCnts[i]) {
 				continue;
 			}
 			var caseCnt = caseCnts[i];
-			var param = ident[1](i);
-			trdata.push([
-				i,
-				param[2],
-				caseCnt[0],
-				caseCnt[1] / caseCnt[0] / maxSubt * 100,
-				caseCnt[2] / caseCnt[0] / maxSubt * 100,
-				kernel.pretty(caseCnt[1] / caseCnt[0]),
-				kernel.pretty(caseCnt[2] / caseCnt[0]),
-				Math.round(caseCnt[3] / caseCnt[0] * 10) / 10,
-				Math.round(caseCnt[3] / (caseCnt[1] + caseCnt[2]) * 10000) / 10
-			]);
+			var param = ident[1][i];
+			if (pb) {
+				trdata.push([
+					i,
+					param[0],
+					caseCnt[0],
+					caseCnt[1] / caseCnt[0] / maxSubt * 100,
+					caseCnt[2] / caseCnt[0] / maxSubt * 100,
+					kernel.pretty(caseCnt[1]),
+					kernel.pretty(caseCnt[2]),
+					Math.round(caseCnt[3] * 10) / 10,
+					Math.round(caseCnt[3] / (caseCnt[2]) * 10000) / 10,
+					param[1]
+				]);
+			} else {
+				trdata.push([
+					i,
+					param[0],
+					caseCnt[0],
+					caseCnt[1] / caseCnt[0] / maxSubt * 100,
+					caseCnt[2] / caseCnt[0] / maxSubt * 100,
+					kernel.pretty(caseCnt[1] / caseCnt[0]),
+					kernel.pretty(caseCnt[2] / caseCnt[0]),
+					Math.round(caseCnt[3] / caseCnt[0] * 10) / 10,
+					Math.round(caseCnt[3] / (caseCnt[2]) * 10000) / 10,
+					param[1]
+				]);
+			}
 		}
 
 		var sortCol = kernel.getProp('rcCaseSortCol', 2);
@@ -637,15 +655,6 @@ var caseStat = execMain(function() {
 			for (var j = 0; j < row.length; j++) {
 				curTr = curTr.replace(new RegExp('\\$' + j, 'g'), row[j]);
 			}
-			curTr = $(curTr);
-			var canvas = curTr.find('canvas');
-			canvas.css({
-				'width': '2em',
-				'height': '2em',
-				'display': 'block'
-			});
-			ident[1](row[0], canvas);
-			row.push(canvas.get(0).toDataURL());
 			table.append(curTr);
 		}
 		methodSelect.unbind('change').change(procMethodChange);
@@ -709,7 +718,7 @@ var caseStat = execMain(function() {
 			tools.regTool('casestat', TOOLS_RECONS + '>' + 'cases', execFunc);
 		}
 		stats.regUtil('casestat', update);
-		var methods = ['PLL', 'OLL'];
+		var methods = ['PLL', 'PLL-PB','OLL', 'OLL-PB'];
 		for (var i = 0; i < methods.length; i++) {
 			methodSelect.append('<option value="' + methods[i] + '">' + methods[i] + '</option>');
 			stats.regExtraInfo('recons_cf4op_' + methods[i], calcCaseExtra.bind(null, methods[i]));

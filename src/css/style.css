@@ -1096,6 +1096,15 @@ html.m .mhide, html:not(.m) .mshow {
 	white-space: nowrap;
 	box-sizing: border-box;
 }
+@media (max-width:600px) {
+	.m #stats {
+		bottom: 57.8vw;
+	}
+	#toolsDiv {
+		right: auto;
+		left: 0;
+	}
+}
 
 .m #stats table {
 	min-width: 0;
@@ -1260,7 +1269,7 @@ html.m .mhide, html:not(.m) .mshow {
 @media (max-width:1200px) {
 
 	#toolsDiv{
-		padding-top: 3%;
+		padding-top: 6%;
 	}
 
 	#toolsDiv .table tr:first-child{
