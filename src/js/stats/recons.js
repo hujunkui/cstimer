@@ -148,7 +148,7 @@ var recons = execMain(function() {
 			'<td style="padding-bottom:0;padding-top:0;">$6</td>' +
 			'<td style="padding-bottom:0;padding-top:0;">$7</td>' +
 			// '<td style="padding-bottom:0;padding-top:0;">$9</td>' +
-			'<td style="padding-bottom:0;padding-top:0;" width="50"><img src="$11" alt="" style="display: block"></td>' +
+			'<td style="padding-bottom:0;padding-top:0;" width="50"><img src="$11" alt="" style="display: block; width: 2em"></td>' +
 			'</tr>';
 
 		var str = [];
@@ -524,20 +524,10 @@ var caseStat = execMain(function() {
 		$('<th>').addClass('click').attr('data-sort-column', 2).append('N'),
 		$('<th>').addClass('click').attr('data-sort-column', 5).append(titleStr[0]),
 		$('<th>').addClass('click').attr('data-sort-column', 6).append(titleStr[1]),
+		$('<th>').addClass('click').attr('data-sort-column', 10).append(titleStr[2]),
 		$('<th>').addClass('click').attr('data-sort-column', 7).append(titleStr[3]),
 		$('<th>').addClass('click').attr('data-sort-column', 8).append(titleStr[4])
 	);
-	function sortBySecondDim(arr) {
-		arr.sort(function(a, b) {
-			if (a[2] / a[0] < b[2]/ a[0]) {
-				return 1;
-			}
-			if (a[2]/ a[0] > b[2]/ a[0]) {
-				return -1;
-			}
-			return 0;
-		});
-	}
 
 	function update() {
 		if (!isEnable) {
@@ -585,17 +575,18 @@ var caseStat = execMain(function() {
 			}
 		}
 		var trTpl =
-			'<tr><td rowspan=2 style="padding-bottom:0;padding-top:0;">$1</td>' +
-			'<td rowspan=2 style="padding:0;width:2em;"><img src="$9" style="display: block; width: 2em"></td>' +
-			'<td rowspan=2 style="padding-bottom:0;padding-top:0;">$2</td>' +
+			'<tr><td rowspan=2 style="padding-bottom:0;padding-top:0;">{1}</td>' +
+			'<td rowspan=2 style="padding:0;width:2em;"><img src="{9}" style="display: block; width: 2em"></td>' +
+			'<td rowspan=2 style="padding-bottom:0;padding-top:0;">{2}</td>' +
 			'<td colspan=4 style="padding:0;">' +
-			'<span class="cntbar sty2" style="height:0.25em;float:left;border:none;width:$3%;">&nbsp;</span>' +
-			'<span class="cntbar" style="height:0.25em;float:left;border:none;width:$4%;">&nbsp;</span></td></tr>' +
+			'<span class="cntbar sty2" style="height:0.25em;float:left;border:none;width:{3}%;">&nbsp;</span>' +
+			'<span class="cntbar" style="height:0.25em;float:left;border:none;width:{4}%;">&nbsp;</span></td></tr>' +
 			'<tr>' +
-			'<td style="padding-bottom:0;padding-top:0;">$5</td>' +
-			'<td style="padding-bottom:0;padding-top:0;">$6</td>' +
-			'<td style="padding-bottom:0;padding-top:0;">$7</td>' +
-			'<td style="padding-bottom:0;padding-top:0;">$8</td>' +
+			'<td style="padding-bottom:0;padding-top:0;">{5}</td>' +
+			'<td style="padding-bottom:0;padding-top:0;">{6}</td>' +
+			'<td style="padding-bottom:0;padding-top:0;">{10}</td>' +
+			'<td style="padding-bottom:0;padding-top:0;">{7}</td>' +
+			'<td style="padding-bottom:0;padding-top:0;">{8}</td>' +
 			'</tr>';
 
 		table.empty().append(tableTh.unbind('click').click(procHeaderClick));
@@ -625,7 +616,8 @@ var caseStat = execMain(function() {
 					kernel.pretty(caseCnt[2]),
 					Math.round(caseCnt[3] * 10) / 10,
 					Math.round(caseCnt[3] / (caseCnt[2]) * 10000) / 10,
-					param[1]
+					param[1],
+					kernel.pretty(caseCnt[1] + caseCnt[2]),
 				]);
 			} else {
 				trdata.push([
@@ -638,7 +630,8 @@ var caseStat = execMain(function() {
 					kernel.pretty(caseCnt[2] / caseCnt[0]),
 					Math.round(caseCnt[3] / caseCnt[0] * 10) / 10,
 					Math.round(caseCnt[3] / (caseCnt[2]) * 10000) / 10,
-					param[1]
+					param[1],
+					kernel.pretty((caseCnt[2] + caseCnt[1]) / caseCnt[0]),
 				]);
 			}
 		}
@@ -653,7 +646,7 @@ var caseStat = execMain(function() {
 		for (var row of trdata) {
 			var curTr = trTpl;
 			for (var j = 0; j < row.length; j++) {
-				curTr = curTr.replace(new RegExp('\\$' + j, 'g'), row[j]);
+				curTr = curTr.replace(new RegExp('\\{' + j + '\\}', 'g'), row[j]);
 			}
 			table.append(curTr);
 		}

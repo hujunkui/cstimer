@@ -896,6 +896,14 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 			}
 			return "#404040";
 		}
+		function reduceCoordinatesByX(angle, coord, x) {
+			const radianAngle = angle * Math.PI / 180;
+			const newX1 = parseFloat(coord[0]) + x * Math.cos(radianAngle);
+			const newY1 = parseFloat(coord[1]) + x * Math.sin(radianAngle);
+			const newX2 = parseFloat(coord[2]) - x * Math.cos(radianAngle);
+			const newY2 = parseFloat(coord[3]) - x * Math.sin(radianAngle);
+			return [newX1.toString(), newY1.toString(), newX2.toString(), newY2.toString()];
+		}
 		let res = "";
 		for (let i = 0; i < 21; i++) {
 			let regex = new RegExp('\\{' + i + '\\}', 'g');
@@ -905,24 +913,26 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 		let arow = '<path transform=" translate({0},{1}) scale(0.011) rotate({2})" d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z" style="fill:#000000;stroke-width:0;stroke-linejoin:round"/>'
 		let cnt = coordinates.length;
 		for (let i = 0; i < coordinates.length; i++) {
+			let angle = calculateAngle(coordinates[i][0], coordinates[i][1]);
 			let lineData = [location[coordinates[i][0]][0], location[coordinates[i][0]][1], location[coordinates[i][1]][0], location[coordinates[i][1]][1]]
+			let newLineData = reduceCoordinatesByX(angle ,lineData, 0.1);
 			let tmp = line;
 			for (let j = 0; j < 4; j++) {
 				let regex = new RegExp('\\{' + j + '\\}', 'g');
-				tmp = tmp.replace(regex, lineData[j])
+				tmp = tmp.replace(regex, newLineData[j])
 			}
 			res += tmp;
 			let arrData = []
 			arrData.push([
-				location[coordinates[i][1]][0],
-				location[coordinates[i][1]][1],
-				calculateAngle(coordinates[i][0], coordinates[i][1])
+				newLineData[2],
+				newLineData[3],
+				angle
 			]);
 			if (cnt === 2) {
 				arrData.push([
-					location[coordinates[i][0]][0],
-					location[coordinates[i][0]][1],
-					calculateAngle(coordinates[i][1], coordinates[i][0])
+					newLineData[0],
+					newLineData[1],
+					angle
 				]);
 			}
 			for (let j = 0; j < arrData.length; j++) {
