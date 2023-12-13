@@ -586,7 +586,7 @@ var caseStat = execMain(function() {
 		}
 		var trTpl =
 			'<tr><td rowspan=2 style="padding-bottom:0;padding-top:0;">$1</td>' +
-			'<td rowspan=2 style="padding:0;width:2em;"><img src="$9" style="display: block"></td>' +
+			'<td rowspan=2 style="padding:0;width:2em;"><img src="$9" style="display: block; width: 2em"></td>' +
 			'<td rowspan=2 style="padding-bottom:0;padding-top:0;">$2</td>' +
 			'<td colspan=4 style="padding:0;">' +
 			'<span class="cntbar sty2" style="height:0.25em;float:left;border:none;width:$3%;">&nbsp;</span>' +
