@@ -664,7 +664,16 @@ var caseStat = execMain(function() {
 				]);
 			}
 		}
-
+		let skip = 0;
+		for (let i = 0; i < trdata.length; i++) {
+			skip += trdata[i][2]
+		}
+		if ('PLL' === method) {
+			trdata.push([22, "Skip",nsolv - skip, 0,0,0,0,0,0,"data:image/svg+xml;base64," + btoa(scramble_333.getPLLSvgImage(-1)[1]),0])
+		}
+		if ('OLL' === method) {
+			trdata.push([0, "Skip",nsolv - skip, 0,0,0,0,0,0,"data:image/svg+xml;base64," + btoa(scramble_333.getOllSvgImage(0)[1]),0])
+		}
 		var sortCol = kernel.getProp('rcCaseSortCol', 2);
 		var sortDir = kernel.getProp('rcCaseSortDir', 'desc');
 		trdata.sort(function (a, b) {
