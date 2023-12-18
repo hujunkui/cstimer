@@ -313,7 +313,7 @@ var recons = execMain(function() {
 			var curData = data[i] || [0, 0, 0, 0];
 			stepData.push([steps[i], curData[1] - curData[0], curData[2] - curData[1], curData[3]]);
 		}
-		let solve = cubeutil.getPrettyReconstruction(rec.rawMoves, method).prettySolve;
+		let solve = gripRecons.getPrettyReconstruction(rec.rawMoves, method).prettySolve;
 		let pll = stats.getExtraInfo('recons_cf4op_' + 'PLL', value[1]);
 		let oll = stats.getExtraInfo('recons_cf4op_' + 'OLL', value[1]);
 		let ollFace = scramble_333.getOllSvgImage(oll[0]);
@@ -394,7 +394,7 @@ var recons = execMain(function() {
 			stepData[i][3] /= nvalid;
 		}
 		if (nrec == 1) {
-			var solve = cubeutil.getPrettyReconstruction(rec.rawMoves, method).prettySolve;
+			var solve = gripRecons.getPrettyReconstruction(rec.rawMoves, method).prettySolve;
 			stepData[6][4] = pllFace[0];
 			stepData[5][4] = ollFace[1];
 			renderResult(stepData, null, isPercent, stats.timesAt(nsolv - 1)[1], solve);
