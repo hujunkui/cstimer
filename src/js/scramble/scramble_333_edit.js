@@ -821,6 +821,9 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 		} else {
 			cord = []
 		}
+		if (pllfilter[cases] === undefined) {
+			return [pllfilter[cases],generate("UUUUUUUUUFFFRRRBBBLLL", cord)];
+		}
 		return [pllfilter[cases],generate("UUUUUUUUU" + pllImgParam[cases], cord)];
 	}
 
@@ -914,6 +917,7 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 		let cnt = coordinates.length;
 		for (let i = 0; i < coordinates.length; i++) {
 			let angle = calculateAngle(coordinates[i][0], coordinates[i][1]);
+			let antiAngle = calculateAngle(coordinates[i][1], coordinates[i][0]);
 			let lineData = [location[coordinates[i][0]][0], location[coordinates[i][0]][1], location[coordinates[i][1]][0], location[coordinates[i][1]][1]]
 			let newLineData = reduceCoordinatesByX(angle ,lineData, 0.1);
 			let tmp = line;
@@ -932,7 +936,7 @@ var scramble_333 = (function(getNPerm, setNPerm, set8Perm, getNParity, rn, rndEl
 				arrData.push([
 					newLineData[0],
 					newLineData[1],
-					angle
+					antiAngle
 				]);
 			}
 			for (let j = 0; j < arrData.length; j++) {
