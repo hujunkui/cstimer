@@ -446,7 +446,7 @@ var timer = execMain(function(regListener, regProp, getProp, pretty, ui, pushSig
 		}
 
 		function onkeydown(keyCode, isTrigger) {
-			if (DEBUG && !isTrigger) {
+			if (DEBUG && !isTrigger && keyCode >= 48 && keyCode <= 96) {
 				return;
 			}
 			var now = $.now();
@@ -1603,6 +1603,9 @@ var timer = execMain(function(regListener, regProp, getProp, pretty, ui, pushSig
 		if (status == -1 && keyCode == 27) {
 			lcd.renderUtil(true);
 		}
+		if (keyCode == 29) {
+			keyCode = 27;
+		}
 		switch (getProp('input')) {
 			case 't':
 			case 'l':
@@ -1692,7 +1695,7 @@ var timer = execMain(function(regListener, regProp, getProp, pretty, ui, pushSig
 				avgDiv.showAvgDiv(value[1]);
 			}
 			if (value[0] == 'giiVRC' && value[2] != 'set') {
-				giikerTimer.setEnable(getProp('input'));
+				giikerTimer.setVRC(getProp('input') == 'g' && value[1] != 'n');
 			}
 			if (['toolPos', 'scrHide', 'toolHide', 'statHide'].indexOf(value[0]) >= 0) {
 				updateTimerOffsetAsync(false);
@@ -1757,11 +1760,16 @@ var timer = execMain(function(regListener, regProp, getProp, pretty, ui, pushSig
 		}
 	}
 
+	function softESC() {
+		onkeydown({which: 29});
+	}
+
 	return {
 		onkeydown: onkeydown,
 		onkeyup: onkeyup,
 		showAvgDiv: avgDiv.showAvgDiv,
 		refocus: refocus,
+		softESC: softESC,
 		getStatus: function() {
 			return status;
 		},
