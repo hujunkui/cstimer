@@ -594,7 +594,7 @@ var kernel = execMain(function() {
 			"html,body,textarea,#leftbar{color:?;background-color:?}" +
 			".smrtScrCur{color:?;background-color:?}" +
 			"#leftbar{border-color:?}" +
-			"#logo{color:?;border-color:?;background-color:?}" +
+			"#logo,#astouch>span{color:?;border-color:?;background-color:?}" +
 			".mybutton,.tab,.cntbar{border-color:?}" +
 			"html:not(.m) .mybutton:hover,.mybutton:active,.tab:active,.mywindow,.popup,.dialog{background-color:?}" +
 			".mybutton.enable,.tab.enable,.cntbar,.selected,table.opttable tr th:first-child,div.helptable h2,div.helptable h3,.sflt div.sgrp{background-color:?}" +
@@ -1182,29 +1182,6 @@ var kernel = execMain(function() {
 		return cc.ori || 0;
 	}
 
-	var longTouch = (function() {
-		var longTouchTid = 0;
-
-		function startLongTouch() {
-			clearLongTouch();
-			longTouchTid = setTimeout(longTouchCallback, 2000);
-		}
-
-		function clearLongTouch() {
-			longTouchTid && clearTimeout(longTouchTid);
-		}
-
-		function longTouchCallback() {
-			clearLongTouch();
-			timer.onkeydown({which: 28});
-		}
-
-		return {
-			startLongTouch: startLongTouch,
-			clearLongTouch: clearLongTouch
-		};
-	})();
-
 	var keyback = true;
 
 	$(function() {
@@ -1232,13 +1209,16 @@ var kernel = execMain(function() {
 			if ($(e.target).is('.click')) {
 				return;
 			}
-			longTouch.startLongTouch();
+			shortcuts.onTouchStart(e);
 			refocus();
 			timer.onkeydown({which: 32});
 			e.preventDefault && e.preventDefault();
 		});
+		$('#container').bind('touchmove', function(e) {
+			shortcuts.onTouchMove(e);
+		});
 		$('#container').bind('touchend', function(e) {
-			longTouch.clearLongTouch();
+			shortcuts.onTouchEnd(e);
 			if ($(e.target).is('.click')) {
 				return;
 			}
@@ -1258,23 +1238,30 @@ var kernel = execMain(function() {
 		 * ontouch events might not work on microsoft surface pad or laptop,
 		 * so we add the mouse timer function to support such devices.
 		 */
+		var isValidDown = false;
 		$('#container').mousedown(function(e) {
 			$.waitUser.call();
 			if ($(e.target).is('.click')) {
 				return;
 			}
 			if (e.which == 1 && getProp('useMouse')) { //left button only
+				isValidDown = true;
+				shortcuts.onTouchStart(e);
 				timer.onkeydown({which: 32});
 				e.preventDefault && e.preventDefault();
 			}
 		});
-		$('#container').mouseup(function(e) {
-			if ($(e.target).is('.click')) {
-				return;
+		$('body').mousemove(function(e) {
+			if (e.which == 1 && isValidDown && getProp('useMouse')) {
+				shortcuts.onTouchMove(e);
 			}
-			if (e.which == 1 && getProp('useMouse')) {
+		});
+		$('body').mouseup(function(e) {
+			if (e.which == 1 && isValidDown && getProp('useMouse')) {
+				shortcuts.onTouchEnd(e);
 				timer.onkeyup({which: 32});
 				e.preventDefault && e.preventDefault();
+				isValidDown = false;
 			}
 		});
 
