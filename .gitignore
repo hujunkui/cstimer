@@ -1,3 +1,4 @@
-/dist
 /.idea
+.htaccess
+nginx.htaccess
 cstimer.iml

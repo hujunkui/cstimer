@@ -20,7 +20,7 @@
 	header("Access-Control-Allow-Origin: *");
 	$uid = $_POST['id'];
 
-	$db = new mysqli('localhost', 'cstimer', '', 'cstimer');
+	$db = new mysqli('localhost', 'cstimer', 'cstimer', 'cstimer');
 	if ($db->connect_errno) {
 		echo '{"retcode":500,"reason":"db connect error"}';
 		die('Could not connect: ' . $db->connect_error);
@@ -34,8 +34,7 @@
 		$data = $_POST['data'];
 		error_log("[" . date("Y-m-d H:i:sO") . "] SET $uid " . strlen($data) . "\n", 3, CSTIMER_USERDATA_LOGFILE);
 		$data_md5 = md5($data);
-		$data_len = strlen($data);
-		$sql = "INSERT INTO `export_data` (`uid`, `value_hash`, `value_len`, `value`) VALUES ('$uid', '$data_md5', '$data_len', '$data') ON DUPLICATE KEY UPDATE `upload_time` = CURRENT_TIMESTAMP";
+		$sql = "INSERT INTO `export_data` (`uid`, `value_hash`, `value`) VALUES ('$uid', '$data_md5', '$data')";
 		$ret = $db->query($sql);
 		if ($ret === true) {
 			echo '{"retcode":0}';
@@ -43,20 +42,15 @@
 			echo '{"retcode":500,"reason":"db insert error"}';
 		}
 	} else if (isset($_POST['cnt'])) {
-		$sql = "SELECT `value_len` AS size, unix_timestamp(`upload_time`) AS modifiedTime FROM `export_data` WHERE `uid` = '$uid' ORDER BY `upload_time` DESC";
+		$sql = "SELECT COUNT(*) AS cnt FROM `export_data` WHERE `uid` = '$uid'";
 		$ret = $db->query($sql);
 		if ($ret === false) {
 			echo '{"retcode":500,"reason":"db select error"}';
 			exit(0);
 		}
-		$arr = array();
-		while($row = $ret->fetch_assoc()) {
-			$row['modifiedTime'] = date("c", $row['modifiedTime']);
-			$arr[] = $row;
-		}
-		$ret = json_encode($arr);
+		$ret = $ret->fetch_assoc()['cnt'];
 		error_log("[" . date("Y-m-d H:i:sO") . "] CNT $uid " . $ret . "\n", 3, CSTIMER_USERDATA_LOGFILE);
-		echo '{"retcode":0,"data":"' . count($arr) . '","files":' . $ret . '}';
+		echo '{"retcode":0,"data":"' . $ret . '"}';
 	} else {//GET
 		$sql = "SELECT `value` FROM `export_data` WHERE `uid` = '$uid' ORDER BY `upload_time` DESC LIMIT $offset,1;";
 		$ret = $db->query($sql);
