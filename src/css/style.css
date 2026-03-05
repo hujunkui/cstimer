@@ -1481,3 +1481,15 @@ html.cspt:not(.m) .mywindow, html.cspt:not(.m) #leftbar {
 html.cspt:not(.m) .mywindow:hover, html.cspt:not(.m) #leftbar:hover {
     z-index: 1 !important;
 }
+#twistyPlayer1 {
+	width: 500px;
+	height: 500px;
+}
+
+.center-div {
+	display: flex;
+	justify-content: center; /* 水平居中 */
+	align-items: center; /* 垂直居中 */
+	height: 80vh; /* 使用视窗高度，使外层div占满整个屏幕高度 */
+	margin: 0;
+}

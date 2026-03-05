@@ -51,6 +51,53 @@ execMain(function() {
 
 	function onGyroEvent(event) {
 		var value = event.target.value;
+
+		let bytes = [];
+		for (let i = 0; i < value.length; i += 2) {
+			bytes.push(parseInt(value.substr(i, 2), 16));
+		}
+
+		function parseFourByteChunk(startIndex) {
+			let value = bytes[startIndex] | (bytes[startIndex + 1] << 8) |
+				(bytes[startIndex + 2] << 16) | (bytes[startIndex + 3] << 24);
+			// 如果最高位是1，则表示负数，需要处理为有符号整数
+			if (value & 0x80000000) {
+				value = -(0xFFFFFFFF - value + 1);
+			}
+			return value;
+		}
+
+		let wValue = parseFourByteChunk(1);
+		let xValue = parseFourByteChunk(5);
+		let zValue = parseFourByteChunk(9);
+		let yValue = parseFourByteChunk(13);
+
+
+		const DIVISOR = Math.pow(2, 30);
+		let qw = wValue / DIVISOR;
+		let qx = xValue / DIVISOR;
+		let qz = -zValue / DIVISOR;
+		let qy = yValue / DIVISOR;
+
+		let quaternion = {
+			x: (1 - (qx >> 15) * 2) * (qx & 0x7FFF) / 0x7FFF,
+			y: (1 - (qy >> 15) * 2) * (qy & 0x7FFF) / 0x7FFF,
+			z: (1 - (qz >> 15) * 2) * (qz & 0x7FFF) / 0x7FFF,
+			w: (1 - (qw >> 15) * 2) * (qw & 0x7FFF) / 0x7FFF
+		}
+		let velocity = {
+			x: (1 - (vx >> 3) * 2) * (vx & 0x7),
+			y: (1 - (vy >> 3) * 2) * (vy & 0x7),
+			z: (1 - (vz >> 3) * 2) * (vz & 0x7)
+		}
+		var prop = kernel.getProp("GRYO");
+		if (prop == "o" && !reseting) {
+			let quat = new THREE.Quaternion(quaternion.x, quaternion.z, -quaternion.y, quaternion.w).normalize();
+			if (!basis) {
+				basis = quat.clone().conjugate();
+			}
+			cubeQuaternion.copy(quat.premultiply(basis).premultiply(HOME_ORIENTATION));
+		}
 		giikerutil.log('[moyucube] Received gyro event', value);
 	}
 
@@ -72,9 +119,9 @@ execMain(function() {
 		for (var i = 0; i < n_moves; i++) {
 			var offset = 1 + i * 6;
 			var ts =  data.getUint8(offset + 1) << 24
-					| data.getUint8(offset + 0) << 16
-					| data.getUint8(offset + 3) << 8
-					| data.getUint8(offset + 2);
+				| data.getUint8(offset + 0) << 16
+				| data.getUint8(offset + 3) << 8
+				| data.getUint8(offset + 2);
 			ts = Math.round(ts / 65536 * 1000);
 			var face = data.getUint8(offset + 4);
 			var dir = Math.round(data.getUint8(offset + 5) / 36);

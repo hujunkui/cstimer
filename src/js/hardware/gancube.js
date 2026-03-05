@@ -566,6 +566,38 @@ execMain(function() {
 		value = value.join('');
 		var mode = parseInt(value.slice(0, 4), 2);
 		if (mode == 1) { // gyro
+			giikerutil.log('[gancube]', 'v2 received gyro event', value);
+			// Orientation Quaternion
+			let qw = getBitWord(value,4, 16,false);
+			let qx = getBitWord(value,20, 16,false);
+			let qy = getBitWord(value,36, 16,false);
+			let qz = getBitWord(value,52, 16,false);
+
+			// Angular Velocity
+			let vx = getBitWord(value,68, 4,false);
+			let vy = getBitWord(value,72, 4,false);
+			let vz = getBitWord(value,76, 4,false);
+
+
+			let quaternion = {
+				x: (1 - (qx >> 15) * 2) * (qx & 0x7FFF) / 0x7FFF,
+				y: (1 - (qy >> 15) * 2) * (qy & 0x7FFF) / 0x7FFF,
+				z: (1 - (qz >> 15) * 2) * (qz & 0x7FFF) / 0x7FFF,
+				w: (1 - (qw >> 15) * 2) * (qw & 0x7FFF) / 0x7FFF
+			}
+			let velocity = {
+				x: (1 - (vx >> 3) * 2) * (vx & 0x7),
+				y: (1 - (vy >> 3) * 2) * (vy & 0x7),
+				z: (1 - (vz >> 3) * 2) * (vz & 0x7)
+			}
+			var prop = kernel.getProp("GRYO");
+			if (prop == "o" && !reseting) {
+				let quat = new THREE.Quaternion(quaternion.x, quaternion.z, -quaternion.y, quaternion.w).normalize();
+				if (!basis) {
+					basis = quat.clone().conjugate();
+				}
+				cubeQuaternion.copy(quat.premultiply(basis).premultiply(HOME_ORIENTATION));
+			}
 		} else if (mode == 2) { // cube move
 			giikerutil.log('[gancube]', 'v2 received move event', value);
 			moveCnt = parseInt(value.slice(4, 12), 2);
@@ -637,6 +669,32 @@ execMain(function() {
 			giikerutil.updateBattery([batteryLevel, deviceName + '*']);
 		} else {
 			giikerutil.log('[gancube]', 'v2 received unknown event', value);
+		}
+	}
+	function getBitWord(bits, startBit, bitLength, littleEndian) {
+		if (littleEndian === undefined) {
+			littleEndian = false;
+		}
+
+		if (bitLength <= 8) {
+			return parseInt(bits.slice(startBit, startBit + bitLength), 2);
+		} else if (bitLength === 16 || bitLength === 32) {
+			const byteLength = bitLength / 8;
+			const buf = new Uint8Array(byteLength);
+
+			for (let i = 0; i < byteLength; i++) {
+				const start = 8 * i + startBit;
+				const end = start + 8;
+				const byteStr = bits.slice(start, end);
+				buf[i] = parseInt(byteStr, 2);
+			}
+
+			const dv = new DataView(buf.buffer);
+			return bitLength === 16
+				? dv.getUint16(0, littleEndian)
+				: dv.getUint32(0, littleEndian);
+		} else {
+			throw new Error('Unsupported bit word length');
 		}
 	}
 
@@ -981,6 +1039,36 @@ execMain(function() {
 			giikerutil.log('[gancube]', 'v4 battery level', batteryLevel);
 			giikerutil.updateBattery([batteryLevel, deviceName + '*']);
 		} else if (mode == 0xEC) { // gyro
+			let qw = getBitWord(value,16, 16,false);
+			let qx = getBitWord(value,32, 16,false);
+			let qy = getBitWord(value,48, 16,false);
+			let qz = getBitWord(value,64, 16,false);
+
+			// Angular Velocity
+			let vx = getBitWord(value,80, 4,false);
+			let vy = getBitWord(value,84, 4,false);
+			let vz = getBitWord(value,88, 4,false);
+
+
+			let quaternion = {
+				x: (1 - (qx >> 15) * 2) * (qx & 0x7FFF) / 0x7FFF,
+				y: (1 - (qy >> 15) * 2) * (qy & 0x7FFF) / 0x7FFF,
+				z: (1 - (qz >> 15) * 2) * (qz & 0x7FFF) / 0x7FFF,
+				w: (1 - (qw >> 15) * 2) * (qw & 0x7FFF) / 0x7FFF
+			}
+			let velocity = {
+				x: (1 - (vx >> 3) * 2) * (vx & 0x7),
+				y: (1 - (vy >> 3) * 2) * (vy & 0x7),
+				z: (1 - (vz >> 3) * 2) * (vz & 0x7)
+			}
+			var prop = kernel.getProp("GRYO");
+			if (prop == "o" && !reseting) {
+				let quat = new THREE.Quaternion(quaternion.x, quaternion.z, -quaternion.y, quaternion.w).normalize();
+				if (!basis) {
+					basis = quat.clone().conjugate();
+				}
+				cubeQuaternion.copy(quat.premultiply(basis).premultiply(HOME_ORIENTATION));
+			}
 		} else {
 			giikerutil.log('[gancube]', 'v4 received unknown event', mode, value);
 		}

@@ -71,9 +71,9 @@ var puzzleFactory = execMain(function() {
 			toInitCalls = init.bind(null, options, moveListener, parent, callback);
 			if (!isLoading && document.createElement('canvas').getContext) {
 				isLoading = true;
-				$.getScript("js/twisty.js", function() {
-					toInitCalls && toInitCalls();
-				});
+				// $.getScript("js/twisty.js", function() {
+				// 	toInitCalls && toInitCalls();
+				// });
 			} else {
 				callback(undefined, true);
 			}

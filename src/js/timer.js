@@ -29,9 +29,13 @@ var timer = execMain(function(regListener, regProp, getProp, pretty, ui, pushSig
 	function reset() {
 		var type = getProp('input');
 		setStatus(-1);
-
-		timer.virtual.setEnable(type == 'v' || type == 'q');
-		timer.virtual.reset();
+		if (type != 'v' && type != 'g') {
+			$(".center-div").hide();
+		} else {
+			$(".center-div").show();
+		}
+		timer.virtual.setEnable(false);
+		// timer.virtual.reset();
 		lcd.setEnable(type != 'i');
 		lcd.reset(/^[ilvq]$/.exec(type) || type == 'g' && getProp('giiVRC') != 'n', type == 'i');
 		keyboardTimer.reset(type);
@@ -468,6 +472,7 @@ var timer = execMain(function(regListener, regProp, getProp, pretty, ui, pushSig
 				lastDown = now;
 				curTime[status] = lastDown - startTime;
 				if (keyCode == 27) {
+					console.log("55555")
 					var times = [-1],
 						i = 1;
 					while (status < curTime.length) {
@@ -537,6 +542,7 @@ var timer = execMain(function(regListener, regProp, getProp, pretty, ui, pushSig
 		}
 
 		function resetTrain() {
+			console.log("888888")
 			if (!isTrain) {
 				return;
 			} else if (div.is(":hidden")) {
@@ -644,6 +650,7 @@ var timer = execMain(function(regListener, regProp, getProp, pretty, ui, pushSig
 			focusObj.blur();
 		}
 		if (status == -1 && keyCode == 27) {
+			console.log("77777")
 			lcd.renderUtil(true);
 		}
 		if (keyCode == 29) {
@@ -727,6 +734,13 @@ var timer = execMain(function(regListener, regProp, getProp, pretty, ui, pushSig
 				timer.virtual.setSize(value[1]);
 				timer.giiker.setSize(value[1]);
 			}
+			if (value[0] == 'giiVRCSize') {
+				$("#twistyPlayer1").css('width', value[1]);
+				$("#twistyPlayer1").css('height', value[1]);
+			}
+			if (value[0] == 'VRCSize') {
+				$(".center-div").css('height', value[1] + "vh");
+			}
 			if (value[0] == 'timerSize' || value[0] == 'phases') {
 				$('#multiphase').css('font-size', getProp('timerSize') / Math.max(getProp('phases'), 4) + 'em')
 			}
@@ -746,6 +760,16 @@ var timer = execMain(function(regListener, regProp, getProp, pretty, ui, pushSig
 				timer.virtual.setSize(getProp('timerSize'));
 				timer.giiker.setSize(getProp('timerSize'));
 			}
+			if (value[0] == 'vrcOri') {
+				resetGryo(value[1]);
+			}
+			if (value[0] == 'GRYO') {
+				if (getProp('input') == 'v' || getProp('input') == 'g') {
+					if (!animationActive) {
+						startAnimation()
+					}
+				}
+			}
 			if (['toolPos', 'scrHide', 'toolHide', 'statHide'].indexOf(value[0]) >= 0) {
 				updateTimerOffsetAsync(false);
 			}
@@ -758,7 +782,7 @@ var timer = execMain(function(regListener, regProp, getProp, pretty, ui, pushSig
 			if ($.inArray(value[0], resetCondition) != -1) {
 				reset();
 			}
-		}, /^(?:input|phases|scrType|preScrT?|isTrainScr|giiOri|timerSize|showAvg|showDiff|useMilli|smallADP|giiVRC|vrcOri|toolPos|scrHide|toolHide|statHide|useIns|showIns|col-timer)$/);
+		}, /^(?:input|phases|scrType|preScrT?|isTrainScr|giiOri|timerSize|giiVRCSize|GRYO|VRCSize|showAvg|showDiff|useMilli|smallADP|giiVRC|vrcOri|toolPos|scrHide|toolHide|statHide|useIns|showIns|col-timer)$/);
 		regListener('timer', 'ashow', function (signal, value) {
 			updateTimerOffsetAsync(!value);
 		});
@@ -767,15 +791,21 @@ var timer = execMain(function(regListener, regProp, getProp, pretty, ui, pushSig
 		regListener('timer', 'scrfix', updateTimerOffsetAsync.bind(null, false));
 		$(window).bind('resize', updateTimerOffsetAsync.bind(null, false));
 		regProp('vrc', 'vrcSpeed', 1, PROPERTY_VRCSPEED, [100, [0, 50, 100, 200, 500, 1000], '\u221E|20|10|5|2|1'.split('|')], 1);
-		regProp('vrc', 'vrcOri', 1, PROPERTY_VRCORI, ['6,12', ['6,12', '10,11'], ['UF', 'URF']], 1);
+		regProp('vrc', 'vrcOri', 1, PROPERTY_VRCORI, ['auto',
+			["auto", "", "y", "y2", "y'", "z2", "z2 y", "z2 y2", "z2 y'", "z'", "z' y", "z' y2", "z' y'", "z", "z y", "z y2", "z y'", "x'", "x' y", "x' y2", "x' y'", "x", "x y", "x y2", "x y'"],
+			["auto", "", "y", "y2", "y'", "z2", "z2 y", "z2 y2", "z2 y'", "z'", "z' y", "z' y2", "z' y'", "z", "z y", "z y2", "z y'", "x'", "x' y", "x' y2", "x' y'", "x", "x y", "x y2", "x y'"],
+		], 1)
 		regProp('vrc', 'vrcMP', 1, PROPERTY_VRCMP, ['n', ['n', 'cfop', 'fp', 'cf4op', 'cf4o2p2', 'roux'], PROPERTY_VRCMPS.split('|')], 1);
 		regProp('vrc', 'vrcAH', ~1, PROPERTY_VRCAH, ['11', ['00', '01', '10', '11'], PROPERTY_VRCAHS.split('|')], 1);
 		regProp('vrc', 'giiMode', 1, PROPERTY_GIIMODE, ['n', ['n', 't', 'at'], PROPERTY_GIIMODES.split('|')], 1);
-		regProp('vrc', 'giiVRC', 1, PROPERTY_GIIKERVRC, ['v', ['n', 'v', 'q', 'ql', 'q2'], ['None', 'Virtual', 'qCube', 'qLast', 'q2Look']], 1);
-		regProp('vrc', 'giiOri', 1, PROPERTY_GIIORI, ['auto',
-			["auto", "0", "3", "2", "1", "4", "5", "6", "7", "23", "14", "19", "8", "17", "10", "21", "12", "11", "22", "13", "18", "15", "16", "9", "20"],
-			["auto", "(UF)", "(UR) y", "(UB) y2", "(UL) y'", "(DF) z2", "(DL) z2 y", "(DB) z2 y2", "(DR) z2 y'", "(RF) z'", "(RD) z' y", "(RB) z' y2", "(RU) z' y'", "(LF) z", "(LU) z y", "(LB) z y2", "(LD) z y'", "(BU) x'", "(BR) x' y", "(BD) x' y2", "(BL) x' y'", "(FD) x", "(FR) x y", "(FU) x y2", "(FL) x y'"]
-		], 1);
+		regProp('vrc', 'giiVRC', 1, PROPERTY_GIIKERVRC, ['v', ['n', 'v', 'q', 'ql', 'q2'], ['None', '透明3D', 'qCube', 'qLast', 'q2Look']], 1);
+		regProp('vrc', 'GRYO', 1, "陀螺仪开关", ['c', ['o', 'c',], '开启|关闭'.split('|')], 1);
+		regProp('vrc', 'giiVRCSize', 2, "虚拟魔方大小", [400, 100, 1000], 1);
+		regProp('vrc', 'VRCSize', 2, "距上方高度", [90, 10, 1000], 1);
+		// regProp('vrc', 'giiOri', 1, PROPERTY_GIIORI, ['auto',
+		// 	["auto", "0", "3", "2", "1", "4", "5", "6", "7", "23", "14", "19", "8", "17", "10", "21", "12", "11", "22", "13", "18", "15", "16", "9", "20"],
+		// 	["auto", "(UF)", "(UR) y", "(UB) y2", "(UL) y'", "(DF) z2", "(DL) z2 y", "(DB) z2 y2", "(DR) z2 y'", "(RF) z'", "(RD) z' y", "(RB) z' y2", "(RU) z' y'", "(LF) z", "(LU) z y", "(LB) z y2", "(LD) z y'", "(BU) x'", "(BR) x' y", "(BD) x' y2", "(BL) x' y'", "(FD) x", "(FR) x y", "(FU) x y2", "(FL) x y'"]
+		// ], 1);
 		regProp('vrc', 'giiSD', 1, PROPERTY_GIISOK_DELAY, ['s', ['2', '3', '4', '5', 'n', 's'], PROPERTY_GIISOK_DELAYS.split('|')], 1);
 		regProp('vrc', 'giiSK', 0, PROPERTY_GIISOK_KEY, [true], 1);
 		regProp('vrc', 'giiSM', 1, PROPERTY_GIISOK_MOVE, ['n', ['x4', 'xi2', 'n'], PROPERTY_GIISOK_MOVES.split('|')], 1);

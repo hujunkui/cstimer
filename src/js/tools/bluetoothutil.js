@@ -144,6 +144,7 @@ var giikerutil = execMain(function(CubieCube) {
 	var connectClick = $('<span class="click"></span>');
 	var debugClick = $('<span class="click" style="font-family:iconfont;padding-left:0.5em;">\ue69d</span>');
 	var resetClick = $('<span>' + GIIKER_RESET + '</span>').addClass('click');
+	var resetGyroClick = $('<span>' + "重置陀螺仪" + '</span>').addClass('click');
 	var algCubingClick = $('<a target="_blank">Raw(N/A)</a>').addClass('click');
 	var lastSolveClick = $('<a target="_blank">Pretty(N/A)</a>').addClass('click');
 	var canvas = $('<canvas>').css({
@@ -222,8 +223,9 @@ var giikerutil = execMain(function(CubieCube) {
 		if (GiikerCube.isConnected() && deviceName) {
 			statusDiv.append($('<tr>').append(batteryTd, slopeTd))
 				.append($('<tr>').append($('<td colspan=2>').append(resetClick.unbind('click').click(markSolved))))
+				.append($('<tr>').append($('<td colspan=2>').append(resetGyroClick.unbind('click').click(resetGYRO))))
 				.append($('<tr>').append($('<td>').append(algCubingClick),$('<td>').append(lastSolveClick)))
-				.append(canvasTd);
+			// .append(canvasTd);
 			connectClick.html(deviceName).unbind('click').click(disconnect);
 			drawState();
 		} else {
@@ -352,6 +354,7 @@ var giikerutil = execMain(function(CubieCube) {
 	}
 
 	function markSolved() {
+		twistyPlayer.alg = '';
 		//mark current state as solved
 		solvedStateInv.invFrom(curRawCubie);
 		curState = mathlib.SOLVED_FACELET;
@@ -365,6 +368,54 @@ var giikerutil = execMain(function(CubieCube) {
 	var moveTsList = []; //[[move, deviceTime, locTime], ...], locTime might be null
 	var moveTsStart = 0;
 
+	function resetGYRO() {
+		let GRYO = kernel.getProp("GRYO");
+		let vrcOri = kernel.getProp("vrcOri");
+		if (GRYO == 'c') {
+			resetGryo(vrcOri)
+		} else {
+			reseting = true;
+			basis = null;
+
+			var quaternion = parseRotationString(vrcOri);
+			let quat = new THREE.Quaternion().setFromEuler(quaternion);
+			HOME_ORIENTATION = new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, 0));
+			HOME_ORIENTATION = HOME_ORIENTATION.premultiply(quat)
+			reseting = false;
+		}
+	}
+	class OperationQueue {
+		constructor(fn, limit) {
+			this.fn = fn; // 需要执行的函数
+			this.limit = limit; // 时间间隔(ms)，即每秒执行的最大次数N转换为时间间隔
+			this.queue = []; // 用于存放待处理的操作
+			this.isProcessing = false;
+		}
+
+		enqueue(operation) {
+			this.queue.push(operation);
+			if (!this.isProcessing) {
+				this.processQueue();
+			}
+		}
+
+		async processQueue() {
+			this.isProcessing = true;
+			while (this.queue.length > 0) {
+				const operation = this.queue.shift();
+				this.fn(operation);
+
+				// 如果还有更多的操作等待处理，则等待指定的时间间隔后继续
+				if (this.queue.length > 0) {
+					await new Promise(resolve => setTimeout(resolve, this.limit));
+				}
+			}
+			this.isProcessing = false;
+		}
+	}
+	const operationQueue = new OperationQueue((prevMove) => {
+		twistyPlayer.experimentalAddMove(String(prevMove.trim()), { cancel: false });
+	}, 1000 / 20); // N是你想每秒执行的最大次数
 	function giikerCallback(facelet, prevMoves, lastTs, hardware) {
 		var locTime = $.now();
 		lastTs = lastTs || [locTime, locTime];
@@ -380,6 +431,9 @@ var giikerutil = execMain(function(CubieCube) {
 		if (prevMoves.length > 0) {
 			var move = "URFDLB".indexOf(prevMoves[0][0]) * 3 + " 2'".indexOf(prevMoves[0][1]);
 			moveTsList.push([move, lastTs[0], lastTs[1]]);
+			var twistyPlayer = document.getElementById("twistyPlayer1");
+			operationQueue.enqueue(prevMoves[0]);
+			// twistyPlayer.experimentalAddMove(String(prevMoves[0].trim()), { cancel: false });
 		}
 		if (scrambleLength > 0) {
 			updateRawMovesClick();
@@ -671,6 +725,8 @@ var giikerutil = execMain(function(CubieCube) {
 			hackedCubie.invFrom(curCubie);
 			CubieCube.CubeMult(targetCubie, hackedCubie, hackedSolvedCubieInv);
 			moveTsStart = moveTsList.length;
+			var solvFacelet = scramble_333.genFacelet(targetCubie.toFaceCube());
+			twistyPlayer.alg = solvFacelet;
 			callback(targetCubie.toFaceCube(), [], [null, $.now()]);
 		}
 		scrambleLength = moveTsList.length - moveTsStart;
@@ -691,6 +747,8 @@ var giikerutil = execMain(function(CubieCube) {
 		}
 		hackedSolvedCubieInv = null;
 		callback(curState, [], [null, $.now()]);
+		let curFacelet = scramble_333.genFacelet(curState);
+		twistyPlayer.alg = curFacelet;
 	}
 
 	var debugInfo = (function() {
