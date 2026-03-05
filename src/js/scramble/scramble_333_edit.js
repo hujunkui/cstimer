@@ -724,10 +724,10 @@ var scramble_333 = (function(getNPerm, setNPerm, getNParity, rn, rndEl) {
 		['RBFLRRFFLBLB', [0, 6], [6, 8], [8, 0]],
 		['LBRFRBRFLBLF', [0, 6], [2, 8]],
 		['BFRFRBRBFLLL', [1, 7], [2, 8]],
-		['BRRFLBRBFLFL'],
-		['BFRFBBRLFLRL'],
-		['BFRFLBRRFLBL'],
-		['BLRFFBRBFLRL'],
+		['BRRFLBRBFLFL',[0, 2], [2, 6], [6, 0], [1, 3], [3, 5], [5, 1]],
+		['BFRFBBRLFLRL',[0, 6], [6, 2], [2, 0], [1, 3], [3, 5], [5, 1]],
+		['BFRFLBRRFLBL',[0, 6], [6, 8], [8, 0], [3, 5], [5, 7], [7, 3]],
+		['BLRFFBRBFLRL',[0, 2], [2, 6], [6, 0], [1, 3], [3, 7], [7, 1]],
 		['BBRFFBRRFLLL', [1, 5], [2, 8]],
 		['LBBRLLBRRFFF', [2, 8], [5, 7]],
 		['FBBRLLBFFLRR', [2, 6], [3, 5]],
@@ -738,10 +738,178 @@ var scramble_333 = (function(getNPerm, setNPerm, getNParity, rn, rndEl) {
 		['BBFLFRFRBRLL', [0, 8], [1, 5]],
 		['BBFLRRFLBRFL', [0, 8], [1, 3]]
 	];
+	var ollImgParam = [0x000ff, 0xeba00, 0xdda00, 0x5b620, 0x6d380, 0x8360b, 0x60b16, 0x1362a, 0x64392, 0x2538a, 0x9944c, 0x9160e, 0x44b13, 0x1a638, 0x2c398, 0x8a619, 0x28b1c, 0x4b381, 0x49705, 0xc9a05, 0x492a5, 0x1455a, 0xa445a, 0x140fa, 0x101de, 0x2047e, 0x2095e, 0x1247a, 0x012af, 0x1138e, 0x232aa, 0x50396, 0x0562b, 0x1839c, 0x2a2b8, 0x4a1d1, 0xc4293, 0x0338b, 0x11a2e, 0x18a3c, 0x8c299, 0x152aa, 0x0954d, 0xe0296, 0x03a2b, 0xa829c, 0x43863, 0x52b12, 0xa560a, 0xe4612, 0xec450, 0x1ab18, 0x53942, 0x54712, 0x1570a, 0x1c718, 0xaaa18, 0x082bd];
 
 	function getPLLScramble(type, length, cases, neut) {
 		var pllcase = pll_map[scrMgr.fixCase(cases, pllprobs)];
 		return getAnyScramble(pllcase[0] + 0xba9876540000, 0x000000000000, pllcase[1] + 0x76540000, 0x00000000, neut, aufsuff, aufsuff);
+	}
+	function getAllPLLImages() {
+		let pllImgs = [];
+		for (let i = 0; i < 21; i++) {
+			let pllItem = getPLLSvgImage(i);
+			if (pllItem[0] !== undefined) {
+				pllImgs[i] = [];
+				pllImgs[i][0] = pllItem[0];
+				pllImgs[i][1] = "data:image/svg+xml;base64," + btoa(pllItem[1]);
+			}
+		}
+		return pllImgs;
+	}
+
+	function getAllOLLImages() {
+		let ollImgs = [];
+		for (let i = 1; i < 58; i++) {
+			let ollItem = getOllSvgImage(i);
+			if (ollItem[0] !== undefined) {
+				ollImgs[i] = [];
+				ollImgs[i][0] = ollItem[0];
+				ollImgs[i][1] = "data:image/svg+xml;base64," + btoa(ollItem[1]);
+			}
+		}
+		return ollImgs;
+	}
+
+
+	function getPLLSvgImage(cases) {
+		let cord
+		if (pllImgParam[cases] != null || pllImgParam[cases] != undefined) {
+			cord = pllImgParam[cases].slice(1)
+		} else {
+			cord = []
+		}
+		if (pllfilter[cases] === undefined) {
+			return [pllfilter[cases],generate("UUUUUUUUUFFFRRRBBBLLL", cord)];
+		}
+		return [pllfilter[cases],generate("UUUUUUUUU" + pllImgParam[cases], cord)];
+	}
+
+	/**
+	 * 获取oll svg 图片
+	 */
+	function getOllSvgImage(cases) {
+		var face = '';
+		var val = ollImgParam[cases];
+		for (var i = 0; i < 21; i++) {
+			if (i === 4) {
+				face += 'U';
+			} else {
+				face += (val & 1) ? 'U' : 'G';
+				val >>= 1;
+			}
+		}
+		return [ollfilter[cases],generate(face, [])];
+	}
+	function generate(face, coordinates) {
+		let svgTmp = "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' viewBox='-0.9 -0.9 1.8 1.8'>\n    <g style='stroke-width:0.1;stroke-linejoin:round;opacity:1'>\n        <polygon fill='#000000' stroke='#000000'\n                 points='-0.52222222222222,-0.52222222222222 0.52222222222222,-0.52222222222222 0.52222222222222,0.52222222222222 -0.52222222222222,0.52222222222222'/>\n    </g>\n    <g style='opacity:1;stroke-opacity:0.5;stroke-width:0;stroke-linejoin:round'>\n        <polygon fill='{0}' stroke='#000000'\n                 points='-0.52777777777778,-0.52777777777778 -0.21296296296296,-0.52777777777778 -0.21296296296296,-0.21296296296296 -0.52777777777778,-0.21296296296296'/>\n        <polygon fill='{1}' stroke='#000000'\n                 points='-0.15740740740741,-0.52777777777778 0.15740740740741,-0.52777777777778 0.15740740740741,-0.21296296296296 -0.15740740740741,-0.21296296296296'/>\n        <polygon fill='{2}' stroke='#000000'\n                 points='0.21296296296296,-0.52777777777778 0.52777777777778,-0.52777777777778 0.52777777777778,-0.21296296296296 0.21296296296296,-0.21296296296296'/>\n        <polygon fill='{3}' stroke='#000000'\n                 points='-0.52777777777778,-0.15740740740741 -0.21296296296296,-0.15740740740741 -0.21296296296296,0.15740740740741 -0.52777777777778,0.15740740740741'/>\n        <polygon fill='{4}' stroke='#000000'\n                 points='-0.15740740740741,-0.15740740740741 0.15740740740741,-0.15740740740741 0.15740740740741,0.15740740740741 -0.15740740740741,0.15740740740741'/>\n        <polygon fill='{5}' stroke='#000000'\n                 points='0.21296296296296,-0.15740740740741 0.52777777777778,-0.15740740740741 0.52777777777778,0.15740740740741 0.21296296296296,0.15740740740741'/>\n        <polygon fill='{6}' stroke='#000000'\n                 points='-0.52777777777778,0.21296296296296 -0.21296296296296,0.21296296296296 -0.21296296296296,0.52777777777778 -0.52777777777778,0.52777777777778'/>\n        <polygon fill='{7}' stroke='#000000'\n                 points='-0.15740740740741,0.21296296296296 0.15740740740741,0.21296296296296 0.15740740740741,0.52777777777778 -0.15740740740741,0.52777777777778'/>\n        <polygon fill='{8}' stroke='#000000'\n                 points='0.21296296296296,0.21296296296296 0.52777777777778,0.21296296296296 0.52777777777778,0.52777777777778 0.21296296296296,0.52777777777778'/>\n    </g>\n    <g style='opacity:1;stroke-opacity:1;stroke-width:0.02;stroke-linejoin:round'>\n\n        <polygon fill='{12}' stroke='#000000'\n                 points='0.5544061302682,0.54406130268199 0.5544061302682,0.19591315453384 0.7183908045977,0.18390804597701 0.7183908045977,0.50804597701149'/>\n        <polygon fill='{13}' stroke='#000000'\n                 points='0.5544061302682,0.17445721583653 0.5544061302682,-0.17369093231162 0.7183908045977,-0.16168582375479 0.7183908045977,0.16245210727969'/>\n        <polygon fill='{14}' stroke='#000000'\n                 points='0.5544061302682,-0.19514687100894 0.5544061302682,-0.54329501915709 0.7183908045977,-0.50727969348659 0.7183908045977,-0.18314176245211'/>\n        <polygon fill='{9}' stroke='#000000'\n                 points='-0.54406130268199,0.5544061302682 -0.19591315453384,0.5544061302682 -0.18390804597701,0.7183908045977 -0.50804597701149,0.7183908045977'/>\n        <polygon fill='{10}' stroke='#000000'\n                 points='-0.17445721583653,0.5544061302682 0.17369093231162,0.5544061302682 0.16168582375479,0.7183908045977 -0.16245210727969,0.7183908045977'/>\n        <polygon fill='{11}' stroke='#000000'\n                 points='0.19514687100894,0.5544061302682 0.54329501915709,0.5544061302682 0.50727969348659,0.7183908045977 0.18314176245211,0.7183908045977'/>\n        <polygon fill='{18}' stroke='#000000'\n                 points='-0.5544061302682,-0.54406130268199 -0.5544061302682,-0.19591315453384 -0.7183908045977,-0.18390804597701 -0.7183908045977,-0.50804597701149'/>\n        <polygon fill='{19}' stroke='#000000'\n                 points='-0.5544061302682,-0.17445721583653 -0.5544061302682,0.17369093231162 -0.7183908045977,0.16168582375479 -0.7183908045977,-0.16245210727969'/>\n        <polygon fill='{20}' stroke='#000000'\n                 points='-0.5544061302682,0.19514687100894 -0.5544061302682,0.54329501915709 -0.7183908045977,0.50727969348659 -0.7183908045977,0.18314176245211'/>\n        <polygon fill='{15}' stroke='#000000'\n                 points='0.54406130268199,-0.5544061302682 0.19591315453384,-0.5544061302682 0.18390804597701,-0.7183908045977 0.50804597701149,-0.7183908045977'/>\n        <polygon fill='{16}' stroke='#000000'\n                 points='0.17445721583653,-0.5544061302682 -0.17369093231162,-0.5544061302682 -0.16168582375479,-0.7183908045977 0.16245210727969,-0.7183908045977'/>\n        <polygon fill='{17}' stroke='#000000'\n                 points='-0.19514687100894,-0.5544061302682 -0.54329501915709,-0.5544061302682 -0.50727969348659,-0.7183908045977 -0.18314176245211,-0.7183908045977'/>\n</g>{svgTmp}</svg>\n"
+		let location = [
+			['-0.37037037037037', '-0.37037037037037'],
+			['0', '-0.37037037037037'],
+			['0.37037037037037', '-0.37037037037037'],
+			['-0.37037037037037', '-4.1633363423443E-17'],
+			['0', '-4.1633363423443E-17'],
+			['0.37037037037037', '-5.5511151231258E-17'],
+			['-0.37037037037037', '0.37037037037037'],
+			['0', '0.37037037037037'],
+			['0.37037037037037', '0.37037037037037'],
+		]
+
+		function calculateAngle(num1, num2) {
+			const position = {
+				0: {x: 0, y: 0},
+				1: {x: 1, y: 0},
+				2: {x: 2, y: 0},
+				3: {x: 0, y: 1},
+				4: {x: 1, y: 1},
+				5: {x: 2, y: 1},
+				6: {x: 0, y: 2},
+				7: {x: 1, y: 2},
+				8: {x: 2, y: 2},
+			};
+
+			const deltaX = position[num2].x - position[num1].x;
+			const deltaY = position[num2].y - position[num1].y;
+
+			const angleRad = Math.atan2(deltaY, deltaX);
+			let angleDeg = angleRad * (180 / Math.PI);
+			angleDeg = (angleDeg + 360) % 360; // Ensure the angle is positive
+			return angleDeg;
+		}
+		function getRgb(operate) {
+			if ("R" === (operate)) {
+				return "#EE0000";
+			}
+			if ("L"=== (operate)) {
+				return "#FFA100";
+			}
+			if ("U"=== (operate)) {
+				return "#FEFE00";
+			}
+			if ("D"=== (operate)) {
+				return "#FFFFFF";
+			}
+			if ("B"=== (operate)) {
+				return "#00D800";
+			}
+			if ("F"=== (operate)) {
+				return "#0000F2";
+			}
+			return "#404040";
+		}
+		function reduceCoordinatesByX(angle, coord, x) {
+			const radianAngle = angle * Math.PI / 180;
+			const newX1 = parseFloat(coord[0]) + x * Math.cos(radianAngle);
+			const newY1 = parseFloat(coord[1]) + x * Math.sin(radianAngle);
+			const newX2 = parseFloat(coord[2]) - x * Math.cos(radianAngle);
+			const newY2 = parseFloat(coord[3]) - x * Math.sin(radianAngle);
+			return [newX1.toString(), newY1.toString(), newX2.toString(), newY2.toString()];
+		}
+		let res = "";
+		for (let i = 0; i < 21; i++) {
+			let regex = new RegExp('\\{' + i + '\\}', 'g');
+			svgTmp = svgTmp.replace(regex, getRgb(face[i]));
+		}
+		let line = ' <path d="M {0},{1} L {2},{3}" style="fill:none;stroke:#000000;stroke-opacity:1" />'
+		let arow = '<path transform=" translate({0},{1}) scale(0.011) rotate({2})" d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z" style="fill:#000000;stroke-width:0;stroke-linejoin:round"/>'
+		let cnt = coordinates.length;
+		for (let i = 0; i < coordinates.length; i++) {
+			let angle = calculateAngle(coordinates[i][0], coordinates[i][1]);
+			let antiAngle = calculateAngle(coordinates[i][1], coordinates[i][0]);
+			let lineData = [location[coordinates[i][0]][0], location[coordinates[i][0]][1], location[coordinates[i][1]][0], location[coordinates[i][1]][1]]
+			let newLineData = reduceCoordinatesByX(angle ,lineData, 0.1);
+			let tmp = line;
+			for (let j = 0; j < 4; j++) {
+				let regex = new RegExp('\\{' + j + '\\}', 'g');
+				tmp = tmp.replace(regex, newLineData[j])
+			}
+			res += tmp;
+			let arrData = []
+			arrData.push([
+				newLineData[2],
+				newLineData[3],
+				angle
+			]);
+			if (cnt === 2) {
+				arrData.push([
+					newLineData[0],
+					newLineData[1],
+					antiAngle
+				]);
+			}
+			for (let j = 0; j < arrData.length; j++) {
+				let arowTmp = arow;
+				for (let k = 0; k < 3; k++) {
+					let regex = new RegExp('\\{' + k + '\\}', 'g');
+					arowTmp = arowTmp.replace(regex, arrData[j][k])
+				}
+				res += arowTmp;
+			}
+		}
+		if (cnt != 0) {
+			res = "<g style='opacity:1;stroke-opacity:1;stroke-width:0.04;stroke-linecap:round'>" +res + "</g>"
+		}
+		let regex = new RegExp('\\{' + "svgTmp" + '\\}', 'g');
+		return svgTmp.replace(regex, res)
 	}
 
 	function getPLLImage(cases, canvas) {
@@ -1172,6 +1340,10 @@ var scramble_333 = (function(getNPerm, setNPerm, getNParity, rn, rndEl) {
 		getOLLImage: getOLLImage,
 		getCOLLImage: getCOLLImage,
 		getZBLLImage: getZBLLImage,
+		getOllSvgImage: getOllSvgImage,
+		getAllPLLImages: getAllPLLImages,
+		getAllOLLImages: getAllOLLImages,
+		getPLLSvgImage: getPLLSvgImage,
 		genFacelet: genFacelet,
 		solvFacelet: solvFacelet
 	};

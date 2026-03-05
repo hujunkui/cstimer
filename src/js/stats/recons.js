@@ -1,26 +1,28 @@
 var recons = execMain(function() {
+	let pllSvg = "";
+	let ollSvg = "";
 	var isEnable;
 	var titleStr = TOOLS_RECONS_TITLE.split('|');
 
-	var div = $('<div style="font-size:0.9em;">');
+	var div = $('<div style="font-size:0.9em;" />');
 	var reconsClick = $('<div>').append('<a target="_blank" class="exturl click"></a>');
 	var table = $('<table class="table">');
 	var rangeSelect = $('<select>');
 	var methodSelect = $('<select>');
-	var requestBack = $('<span class="click">');
+	var requestBack = $('<span class="click" />');
 	var tableTh = $('<tr>').append($('<th style="padding:0;">').append(methodSelect),
-		'<th>' + titleStr[0] + '</th><th>' + titleStr[1] + '</th><th>' + titleStr[2] + '</th><th>' + titleStr[3] + '</th>');
+		'<th>' + titleStr[0] + '</th><th>' + titleStr[1] + '</th><th>' + titleStr[2] + '</th><th>' + titleStr[3] + '</th><th>' + titleStr[4] + '</th><th>' + "Case" +'</th>');
 
 	function parseMove(moveStr) {
 		var movere = /^([URFDLB]w?|[EMSyxz]|2-2[URFDLB]w)(['2]?)@(\d+)$/;
 		return movere.exec(moveStr);
 	}
 
-	function MoveCounterHTM() {
+	function MoveCounter() {
 		this.clear();
 	}
 
-	MoveCounterHTM.prototype.push = function(move) {
+	MoveCounter.prototype.push = function(move) {
 		var axis = ~~(move / 3);
 		var amask = 1 << axis;
 		if (axis % 3 != this.lastMove % 3) {
@@ -32,41 +34,18 @@ var recons = execMain(function() {
 		this.moves.push(move);
 	}
 
-	MoveCounterHTM.prototype.clear = function() {
+	MoveCounter.prototype.clear = function() {
 		this.lastPow = 0;
 		this.lastMove = -3;
 		this.moveCnt = 0;
 		this.moves = [];
 	}
 
-	function MoveCounterLFMC() {
-		this.clear();
-	}
-
-	MoveCounterLFMC.prototype.push = function(move) {
-		var axis = ~~(move / 3);
-		var pow = move % 3 + 1;
-		if (axis != this.lastAxis) {
-			this.lastAxis = axis;
-			this.lastPow = 0;
-		}
-		var newPow = (this.lastPow + pow) % 4;
-		var axisCnt = axis >= 6 ? 2 : 1; // slice move counted as 2 moves
-		this.moveCnt += (newPow == 0 ? 0 : axisCnt) - (this.lastPow == 0 ? 0 : axisCnt);
-		this.lastPow = newPow;
-	}
-
-	MoveCounterLFMC.prototype.clear = function() {
-		this.lastPow = 0;
-		this.lastAxis = -3;
-		this.moveCnt = 0;
-	}
-
-	function getMoveCnt(sol, metric) {
+	function getMoveCnt(sol) {
 		sol = sol.split(/ +/);
 		var c = new mathlib.CubieCube();
 		c.ori = 0;
-		var cnter = metric == 'lfmc' ? new MoveCounterLFMC() : new MoveCounterHTM();
+		var cnter = new MoveCounter();
 		for (var i = 0; i < sol.length; i++) {
 			var effMove = c.selfMoveStr(sol[i], false);
 			if (effMove != undefined) {
@@ -89,14 +68,15 @@ var recons = execMain(function() {
 			c.selfMoveStr(solution[i], true);
 		}
 		c.selfConj();
+		var facelet = c.toFaceCube();
 		var data = []; //[[start, firstMove, end, moveCnt, stepTransCubie, stepMoves, effMoves], [...], ...]
-		var cnter = new MoveCounterHTM();
+		var cnter = new MoveCounter();
 		var startCubieI = new mathlib.CubieCube();
 		startCubieI.invFrom(c);
 		var tsStart = 0;
 		var tsFirst = 0;
 		var stepMoves = [];
-		var progress = cubeutil.getProgress(c, method);
+		var progress = cubeutil.getProgress(facelet, method);
 		for (var i = 0; i < solution.length; i++) {
 			var effMove = c.selfMoveStr(solution[i], false);
 			if (effMove != undefined) {
@@ -108,10 +88,11 @@ var recons = execMain(function() {
 					stepMoves.push(["DLBURF".charAt(axis % 6) + "'2 ".charAt(effMove % 3), c.tstamp]);
 				}
 			}
-			var curProg = cubeutil.getProgress(c, method);
+			var curProg = cubeutil.getProgress(c.toFaceCube(), method);
 			if (curProg < progress) {
 				var transCubie = new mathlib.CubieCube();
-				mathlib.CubieCube.CubeMult(startCubieI, c, transCubie);
+				mathlib.CubieCube.EdgeMult(startCubieI, c, transCubie);
+				mathlib.CubieCube.CornMult(startCubieI, c, transCubie);
 				data[--progress] = [tsStart, tsFirst, c.tstamp, cnter.moveCnt, transCubie, stepMoves, cnter.moves.slice()];
 				while (progress > curProg) {
 					data[--progress] = [c.tstamp, c.tstamp, c.tstamp, 0, new mathlib.CubieCube(), [], []];
@@ -171,11 +152,11 @@ var recons = execMain(function() {
 			var subt = stepData[i][1] + stepData[i][2];
 			sumSubt += subt;
 			var names = stepData[i][0].split('-');
-			if (stepSData.length == 0 || stepSData.at(-1)[0] != names[0]) {
+			if (stepSData.length == 0 || stepSData[stepSData.length - 1][0] != names[0]) {
 				stepSData.push([names[0], 0, 0, 0]);
 			}
 			sDataIdx[i] = stepSData.length - 1;
-			var lData = stepSData.at(-1);
+			var lData = stepSData[stepSData.length - 1];
 			for (var j = 1; j < 4; j++) {
 				lData[j] += stepData[i][j];
 			}
@@ -183,14 +164,20 @@ var recons = execMain(function() {
 		}
 
 		var trTpl =
-			'<tr style="{0}" data="{1}"><td rowspan=2 class="{8}" style="padding-bottom:0;padding-top:0;">{1}</td><td colspan=4 style="padding:0;">' +
-			'<span class="cntbar sty2" style="height:0.2em;float:left;border:none;width:{2}%;">&nbsp;</span>' +
-			'<span class="cntbar" style="height:0.2em;float:left;border:none;width:{3}%;">&nbsp;</span></td></tr>' +
-			'<tr style="{0}" data="{1}">' +
-			'<td style="padding-bottom:0;padding-top:0;">{4}</td>' +
-			'<td style="padding-bottom:0;padding-top:0;">{5}</td>' +
-			'<td style="padding-bottom:0;padding-top:0;">{6}</td>' +
-			'<td style="padding-bottom:0;padding-top:0;">{7}</td>' +
+			'<tr style="$0" data="$1">' +
+			'<td rowspan=2 class="$8" style="padding-bottom:0;padding-top:0;">$1</td>' +
+			'<td colspan=4 style="padding:0;">' +
+			'<span class="cntbar sty2" style="height:0.2em;float:left;border:none;width:$2%;">&nbsp;</span>' +
+			'<span class="cntbar" style="height:0.2em;float:left;border:none;width:$3%;">&nbsp;</span></td>' +
+			'</tr>' +
+			'<tr style="$0" data="$1">' +
+			'<td style="padding-bottom:0;padding-top:0;">$4</td>' +
+			'<td style="padding-bottom:0;padding-top:0;">$5</td>' +
+			'<td style="padding-bottom:0;padding-top:0;">$10</td>' +
+			'<td style="padding-bottom:0;padding-top:0;">$6</td>' +
+			'<td style="padding-bottom:0;padding-top:0;">$7</td>' +
+			// '<td style="padding-bottom:0;padding-top:0;">$9</td>' +
+			'<td style="padding-bottom:0;padding-top:0;" width="50"><img src="$11" alt="" style="display: block; width: 2em"></td>' +
 			'</tr>';
 
 		var str = [];
@@ -207,7 +194,7 @@ var recons = execMain(function() {
 			if (isSuperStep) {
 				curSIdx = sDataIdx[i];
 				var sval = stepSData[curSIdx];
-				str.push($.format(trTpl, [
+				let trsdata = [
 					'',
 					sval[0],
 					sval[1] / maxSubt * 100,
@@ -215,11 +202,29 @@ var recons = execMain(function() {
 					isPercent ? Math.round(sval[1] / sumSubt * 1000) / 10 + '%' : kernel.pretty(sval[1]),
 					isPercent ? Math.round(sval[2] / sumSubt * 1000) / 10 + '%' : kernel.pretty(sval[2]),
 					Math.round(sval[3] * 10) / 10,
-					sval[3] > 0 && sval[1] + sval[2] > 0 ? Math.round(sval[3] / (sval[1] + sval[2]) * 10000 ) / 10 : 'N/A',
-					'click sstep'
-				]));
+					sval[3] > 0 && sval[2] > 0 ? Math.round(sval[3] / (sval[2]) * 10000 ) / 10 : 'N/A',
+					'click sstep',
+					sval[4] === undefined ? "" : sval[4],
+					kernel.pretty(sval[1] + sval[2])
+				];
+				if (i == 6) {
+					trsdata[11] = "data:image/svg+xml;base64," + btoa(pllSvg)
+				}
+				else if (i == 5) {
+					trsdata[11] = "data:image/svg+xml;base64," + btoa(ollSvg)
+
+				} else  {
+					trsdata[11] = "/";
+				}
+				let curTr = trTpl;
+				curTr = curTr.replace(/\$\d+/g, function(match) {
+					let index = parseInt(match.substr(1));
+					return trsdata[index];
+				});
+				str.push(curTr);
 			}
-			str.push($.format(trTpl, [
+
+			let trdata = [
 				sDataIdx[i] == curSIdx ? 'display:none;' : '',
 				val[0],
 				val[1] / maxSubt * 100,
@@ -227,13 +232,30 @@ var recons = execMain(function() {
 				isPercent ? Math.round(val[1] / sumSubt * 1000) / 10 + '%' : kernel.pretty(val[1]),
 				isPercent ? Math.round(val[2] / sumSubt * 1000) / 10 + '%' : kernel.pretty(val[2]),
 				Math.round(val[3] * 10) / 10,
-				val[3] > 0 && val[1] + val[2] > 0 ? Math.round(val[3] / (val[1] + val[2]) * 10000 ) / 10 : 'N/A',
-				['oll', 'pll', 'zbll'].indexOf(val[0]) != -1 ? 'click' : ''
-			]));
+				val[3] > 0 && val[2] > 0 ? Math.round(val[3] / (val[2]) * 10000 ) / 10 : 'N/A',
+				['oll', 'pll'].indexOf(val[0]) != -1 ? 'click' : '',
+				val[4] === undefined ? "" : val[4],
+				kernel.pretty(val[1] + val[2]),
+			];
+			if (i == 6) {
+				trdata[11] = "data:image/svg+xml;base64," + btoa(pllSvg)
+			}
+			else if (i == 5) {
+				trdata[11] = "data:image/svg+xml;base64," + btoa(ollSvg)
+			} else  {
+				trdata[11] = "/";
+			}
+			let curTr = trTpl;
+			curTr = curTr.replace(/\$\d+/g, function(match) {
+				let index = parseInt(match.substr(1));
+				return trdata[index];
+			});
+			str.push(curTr);
 		}
 		var endTr = $('<tr>').append(tidx ? $('<td>').append(requestBack) : $('<td style="padding:0;">').append(rangeSelect),
 			'<td>' + (isPercent ? Math.round(totIns / sumSubt * 1000) / 10 + '%' : kernel.pretty(totIns)) + '</td>' +
-			'<td>' + (isPercent ? Math.round(totExec / sumSubt * 1000) / 10 + '%' : kernel.pretty(totExec)) + '</td>',
+			'<td>' + (isPercent ? Math.round(totExec / sumSubt * 1000) / 10 + '%' : kernel.pretty(totExec)) + '</td>' +
+			'<td>' + (isPercent ? Math.round(totExec / sumSubt * 1000) / 10 + '%' : kernel.pretty(totExec + totIns)) + '</td>',
 			$('<td>').append((scramble || solve) ? reconsClick : Math.round(totMov * 10) / 10),
 			'<td>' + (totMov > 0 && totIns + totExec > 0 ? Math.round(totMov / (totIns + totExec) * 10000 ) / 10 : 'N/A') + '</td>');
 		table.empty().append(tableTh);
@@ -291,10 +313,20 @@ var recons = execMain(function() {
 			var curData = data[i] || [0, 0, 0, 0];
 			stepData.push([steps[i], curData[1] - curData[0], curData[2] - curData[1], curData[3]]);
 		}
-		var solve = cubeutil.getPrettyReconstruction(rec.rawMoves, method).prettySolve;
+		let solve = cubeutil.getPrettyReconstruction(rec.rawMoves, method).prettySolve;
+		let pll = stats.getExtraInfo('recons_cf4op_' + 'PLL', value[1]);
+		let oll = stats.getExtraInfo('recons_cf4op_' + 'OLL', value[1]);
+		let ollFace = scramble_333.getOllSvgImage(oll[0]);
+		let pllFace = scramble_333.getPLLSvgImage(pll[0]);
+		pllSvg = pllFace[1];
+		ollSvg = ollFace[1];
+		stepData[6][4] = pllFace[0];
+		stepData[5][4] = ollFace[1];
 		renderResult(stepData, value[1] + 1, isPercent, times[1], solve);
 	}
-
+	/**
+	 * 实时复盘数据展示
+	 */
 	function update() {
 		if (!isEnable) {
 			return;
@@ -307,8 +339,16 @@ var recons = execMain(function() {
 			nrec = Math.min(5, nsolv);
 		} else if (nrec == 'mo12') {
 			nrec = Math.min(12, nsolv);
+		} else if (nrec == 'mo50') {
+			nrec = Math.min(50, nsolv);
 		} else if (nrec == 'mo100') {
 			nrec = Math.min(100, nsolv);
+		} else if (nrec == 'mo200') {
+			nrec = Math.min(200, nsolv);
+		} else if (nrec == 'mo500') {
+			nrec = Math.min(500, nsolv);
+		} else if (nrec == 'mo1000') {
+			nrec = Math.min(1000, nsolv);
 		} else {
 			nrec = nsolv;
 		}
@@ -322,6 +362,12 @@ var recons = execMain(function() {
 		var steps = cubeutil.getStepNames(method);
 		var nvalid = 0;
 		var stepData = [];
+		let pll = stats.getExtraInfo('recons_cf4op_' + 'PLL', nsolv - 1);
+		let oll = stats.getExtraInfo('recons_cf4op_' + 'OLL', nsolv - 1);
+		let ollFace = scramble_333.getOllSvgImage(oll[0]);
+		let pllFace = scramble_333.getPLLSvgImage(pll[0]);
+		pllSvg = pllFace[1];
+		ollSvg = ollFace[1];
 		for (var s = nsolv - 1; s >= nsolv - nrec; s--) {
 			var rec = stats.getExtraInfo('recons_' + method, s);
 			if (!rec) {
@@ -349,6 +395,8 @@ var recons = execMain(function() {
 		}
 		if (nrec == 1) {
 			var solve = cubeutil.getPrettyReconstruction(rec.rawMoves, method).prettySolve;
+			stepData[6][4] = pllFace[0];
+			stepData[5][4] = ollFace[1];
 			renderResult(stepData, null, isPercent, stats.timesAt(nsolv - 1)[1], solve);
 		} else {
 			renderResult(stepData, null, isPercent);
@@ -388,7 +436,7 @@ var recons = execMain(function() {
 	}
 
 	function showCasesDialog(method) {
-		kernel.setProp('rcCaseMthd', (method == 'ZBLL' ? 'cf3zb_' : 'cf4op_') + method);
+		kernel.setProp('rcCaseMthd', method);
 		caseStat.execFunc(casesDialogContent);
 		var onCloseDialog = function () {
 			caseStat.execFunc();
@@ -403,7 +451,7 @@ var recons = execMain(function() {
 			return;
 		}
 		var target = $(e.target);
-		if (['oll', 'pll', 'zbll'].indexOf(target.text()) != -1) {
+		if (['oll', 'pll'].indexOf(target.text()) != -1) {
 			return showCasesDialog(target.text().toUpperCase());
 		}
 		if (!target.is('.click') || target.is('.exturl')) {
@@ -449,26 +497,13 @@ var recons = execMain(function() {
 		if (typeof tools != "undefined") {
 			tools.regTool('recons', TOOLS_RECONS + '>' + 'step', execFunc);
 		}
-		kernel.regListener('recons', 'reqrec', reqRecons);
-		var ranges = ['single', 'mo5', 'mo12', 'mo100', 'all'];
-		for (var i = 0; i < ranges.length; i++) {
-			rangeSelect.append('<option value="' + ranges[i] + '">' + ranges[i] + '</option>');
-		}
-		var methods = [['cf4op', 'cfop'], ['roux', 'roux'], ['cf3zb', 'cfzb']];
-		for (var i = 0; i < methods.length; i++) {
-			methodSelect.append('<option value="' + methods[i][0] + '">' + methods[i][1] + '</option>');
-			methodSelect.append('<option value="' + methods[i][0] + '%">' + methods[i][1] + '%</option>');
-		}
-		methodSelect.val(kernel.getProp('rcMthd', 'cf4op'));
-
-	});
-
-	(function() {
 		stats.regUtil('recons', update);
-		stats.regExtraInfo('recons_n', (times) => calcRecons(times, 'n'));
-		stats.regExtraInfo('recons_cf4op', (times) => calcRecons(times, 'cf4op'));
-		stats.regExtraInfo('recons_roux', (times) => calcRecons(times, 'roux'));
-		stats.regExtraInfo('recons_cf3zb', (times) => calcRecons(times, 'cf3zb'));
+		stats.regExtraInfo('recons_cf4op', function(times) {
+			return calcRecons(times, 'cf4op');
+		});
+		stats.regExtraInfo('recons_roux', function(times) {
+			return calcRecons(times, 'roux');
+		});
 		stats.regExtraInfo('recons_cfop_ct',
 			substepMetric.bind(null, 'cf4op', [6, 0], [6, 2]),
 			['cross ' + STATS_TIME, kernel.pretty]);
@@ -487,30 +522,18 @@ var recons = execMain(function() {
 		stats.regExtraInfo('recons_cfop_et',
 			cumStepMetric.bind(null, 'cf4op', false),
 			['CFOP ' + titleStr[1], kernel.pretty]);
-		stats.regExtraInfo('mvcnt_htm', function(times, idx) {
-			return (!times || !times[4]) ? -1 : getMoveCnt(times[4][0]);
-		}, ['HTM', function(val) {
-			return "" + (val >= 0 ? val.toFixed(kernel.getProp('useMilli') ? 3 : 2).replace(/\.?0+$/, '') : 'N/A');
-		}, function(val) {
-			return "" + (val >= 0 ? val.toFixed(kernel.getProp('useMilli') ? 3 : 2) : 'N/A');
-		}]);
-		stats.regExtraInfo('recons_n_fps', function(times, idx) {
-			var moveCnt = stats.getExtraInfo('mvcnt_htm', idx);
-			if (!moveCnt || moveCnt == -1 || times[0][0] < 0) {
-				return -1;
-			}
-			return 1e9 - moveCnt / Math.max(1, times[0][1]) * 1000;
-		}, ['FPS', function(val) {
-			return "" + (val > 0 ? (1e9 - val).toFixed(kernel.getProp('useMilli') ? 3 : 2) : 'N/A');
-		}]);
-		stats.regExtraInfo('mvcnt_lfmc', function(times, idx) {
-			return (!times || !times[4]) ? -1 : getMoveCnt(times[4][0], 'lfmc');
-		}, ['Linear FMC', function(val) {
-			return "" + (val >= 0 ? val.toFixed(kernel.getProp('useMilli') ? 3 : 2).replace(/\.?0+$/, '') : 'N/A');
-		}, function(val) {
-			return "" + (val >= 0 ? val.toFixed(kernel.getProp('useMilli') ? 3 : 2) : 'N/A');
-		}]);
-	})();
+		kernel.regListener('recons', 'reqrec', reqRecons);
+		var ranges = ['single', 'mo5', 'mo12', 'mo50','mo100','mo200','mo500','mo1000', 'all'];
+		for (var i = 0; i < ranges.length; i++) {
+			rangeSelect.append('<option value="' + ranges[i] + '">' + ranges[i] + '</option>');
+		}
+		var methods = [['cf4op', 'cfop'], ['roux', 'roux']];
+		for (var i = 0; i < methods.length; i++) {
+			methodSelect.append('<option value="' + methods[i][0] + '">' + methods[i][1] + '</option>');
+			methodSelect.append('<option value="' + methods[i][0] + '%">' + methods[i][1] + '%</option>');
+		}
+		methodSelect.val(kernel.getProp('rcMthd', 'cf4op'));
+	});
 
 	return {
 		calcRecons: calcRecons,
@@ -522,16 +545,17 @@ var caseStat = execMain(function() {
 	var isEnable;
 	var titleStr = TOOLS_RECONS_TITLE.split('|');
 
-	var div = $('<div style="font-size:0.9em;">');
+	var div = $('<div style="font-size:0.9em;" />');
 	var table = $('<table class="table">');
-	var methodStepSelect = $('<select>');
+	var methodSelect = $('<select>');
 	var tableTh = $('<tr>').append(
-		$('<th>').attr('colspan', 2).css('padding', '0').append(methodStepSelect),
+		$('<th>').attr('colspan', 2).css('padding', '0').append(methodSelect),
 		$('<th>').addClass('click').attr('data-sort-column', 2).append('N'),
 		$('<th>').addClass('click').attr('data-sort-column', 5).append(titleStr[0]),
 		$('<th>').addClass('click').attr('data-sort-column', 6).append(titleStr[1]),
-		$('<th>').addClass('click').attr('data-sort-column', 7).append(titleStr[2]),
-		$('<th>').addClass('click').attr('data-sort-column', 8).append(titleStr[3])
+		$('<th>').addClass('click').attr('data-sort-column', 10).append(titleStr[2]),
+		$('<th>').addClass('click').attr('data-sort-column', 7).append(titleStr[3]),
+		$('<th>').addClass('click').attr('data-sort-column', 8).append(titleStr[4])
 	);
 
 	function update() {
@@ -540,28 +564,48 @@ var caseStat = execMain(function() {
 		}
 		var nsolv = stats.getTimesStatsTable().timesLen;
 		var nrec = nsolv;
-		var methodStep = methodStepSelect.val() || 'cf4op_PLL';
-		var step = methodStep.split('_')[1];
-		var ident = cubeutil.getIdentData(step);
+		var method = methodSelect.val() || 'PLL';
+		var ident = cubeutil.getIdentOPData(method);
+		let pb = false;
+		if ('PLL-PB' === method) {
+			ident = cubeutil.getIdentOPData("PLL");
+			method = "PLL"
+			pb = true
+		}
+		if ('OLL-PB' === method) {
+			ident = cubeutil.getIdentOPData("OLL");
+			method = "OLL"
+			pb = true
+		}
 		var nvalid = 0;
 		var caseCnts = [];
-		for (var s = nsolv - 1; s >= nsolv - nrec; s--) {
-			var caseData = stats.getExtraInfo('recons_' + methodStep, s);
+		let min = Array(ident[3]).fill(88888);
+		for (let s = nsolv - 1; s >= nsolv - nrec; s--) {
+			let caseData = stats.getExtraInfo('recons_cf4op_' + method, s);
 			if (!caseData) {
 				continue;
 			}
 			nvalid++;
-			var cur = caseData[0];
+			let cur = caseData[0];
 			caseCnts[cur] = caseCnts[cur] || [0, 0, 0, 0];
-			var cumData = [1].concat(caseData.slice(1));
-			for (var i = 0; i < 4; i++) {
-				caseCnts[cur][i] += cumData[i];
+			let cumData = [1].concat(caseData.slice(1));
+			if (pb) {
+				caseCnts[cur][0] += cumData[0];
+				if (cumData[2] < min[cur]) {
+					min[cur] = cumData[2]
+					for (let i = 1; i < 4; i++) {
+						caseCnts[cur][i] = cumData[i];
+					}
+				}
+			} else {
+				for (let i = 0; i < 4; i++) {
+					caseCnts[cur][i] += cumData[i];
+				}
 			}
 		}
-
 		var trTpl =
 			'<tr><td rowspan=2 style="padding-bottom:0;padding-top:0;">{1}</td>' +
-			'<td rowspan=2 style="padding:0;width:2em;"><img/></td>' +
+			'<td rowspan=2 style="padding:0;width:2em;"><img src="{9}" style="display: block; width: 2em"></td>' +
 			'<td rowspan=2 style="padding-bottom:0;padding-top:0;">{2}</td>' +
 			'<td colspan=4 style="padding:0;">' +
 			'<span class="cntbar sty2" style="height:0.25em;float:left;border:none;width:{3}%;">&nbsp;</span>' +
@@ -569,6 +613,7 @@ var caseStat = execMain(function() {
 			'<tr>' +
 			'<td style="padding-bottom:0;padding-top:0;">{5}</td>' +
 			'<td style="padding-bottom:0;padding-top:0;">{6}</td>' +
+			'<td style="padding-bottom:0;padding-top:0;">{10}</td>' +
 			'<td style="padding-bottom:0;padding-top:0;">{7}</td>' +
 			'<td style="padding-bottom:0;padding-top:0;">{8}</td>' +
 			'</tr>';
@@ -582,27 +627,53 @@ var caseStat = execMain(function() {
 			}
 			maxSubt = Math.max(maxSubt, (caseCnts[i][1] + caseCnts[i][2]) / caseCnts[i][0]);
 		}
-
 		var trdata = [];
 		for (var i = ident[2]; i < ident[3]; i++) {
 			if (!caseCnts[i]) {
 				continue;
 			}
 			var caseCnt = caseCnts[i];
-			var param = ident[1](i);
-			trdata.push([
-				i,
-				param[2],
-				caseCnt[0],
-				caseCnt[1] / caseCnt[0] / maxSubt * 100,
-				caseCnt[2] / caseCnt[0] / maxSubt * 100,
-				kernel.pretty(caseCnt[1] / caseCnt[0]),
-				kernel.pretty(caseCnt[2] / caseCnt[0]),
-				Math.round(caseCnt[3] / caseCnt[0] * 10) / 10,
-				Math.round(caseCnt[3] / (caseCnt[1] + caseCnt[2]) * 10000) / 10
-			]);
+			var param = ident[1][i];
+			if (pb) {
+				trdata.push([
+					i,
+					param[0],
+					caseCnt[0],
+					caseCnt[1] / caseCnt[0] / maxSubt * 100,
+					caseCnt[2] / caseCnt[0] / maxSubt * 100,
+					kernel.pretty(caseCnt[1]),
+					kernel.pretty(caseCnt[2]),
+					Math.round(caseCnt[3] * 10) / 10,
+					Math.round(caseCnt[3] / (caseCnt[2]) * 10000) / 10,
+					param[1],
+					kernel.pretty(caseCnt[1] + caseCnt[2]),
+				]);
+			} else {
+				trdata.push([
+					i,
+					param[0],
+					caseCnt[0],
+					caseCnt[1] / caseCnt[0] / maxSubt * 100,
+					caseCnt[2] / caseCnt[0] / maxSubt * 100,
+					kernel.pretty(caseCnt[1] / caseCnt[0]),
+					kernel.pretty(caseCnt[2] / caseCnt[0]),
+					Math.round(caseCnt[3] / caseCnt[0] * 10) / 10,
+					Math.round(caseCnt[3] / (caseCnt[2]) * 10000) / 10,
+					param[1],
+					kernel.pretty((caseCnt[2] + caseCnt[1]) / caseCnt[0]),
+				]);
+			}
 		}
-
+		let skip = 0;
+		for (let i = 0; i < trdata.length; i++) {
+			skip += trdata[i][2]
+		}
+		if ('PLL' === method) {
+			trdata.push([22, "Skip",nsolv - skip, 0,0,0,0,0,0,"data:image/svg+xml;base64," + btoa(scramble_333.getPLLSvgImage(-1)[1]),0])
+		}
+		if ('OLL' === method) {
+			trdata.push([0, "Skip",nsolv - skip, 0,0,0,0,0,0,"data:image/svg+xml;base64," + btoa(scramble_333.getOllSvgImage(0)[1]),0])
+		}
 		var sortCol = kernel.getProp('rcCaseSortCol', 2);
 		var sortDir = kernel.getProp('rcCaseSortDir', 'desc');
 		trdata.sort(function (a, b) {
@@ -611,27 +682,22 @@ var caseStat = execMain(function() {
 		});
 
 		for (var row of trdata) {
-			var curTr = $($.format(trTpl, row));
-			var img = curTr.find('img');
-			img.css({
-				'width': '2em',
-				'height': '2em',
-				'display': 'block'
-			});
-			ident[1](row[0], img);
-			row.push(img.attr('src'));
+			var curTr = trTpl;
+			for (var j = 0; j < row.length; j++) {
+				curTr = curTr.replace(new RegExp('\\{' + j + '\\}', 'g'), row[j]);
+			}
 			table.append(curTr);
 		}
-		methodStepSelect.unbind('change').change(procMethodChange);
+		methodSelect.unbind('change').change(procMethodChange);
 		if (nvalid == 0) {
 			tableTh.after('<tr><td colspan=7>' + TOOLS_RECONS_NODATA + '</td></tr>');
-			return [step, []];
+			return [method, []];
 		}
-		return [step, trdata];
+		return [method, trdata];
 	}
 
 	function procMethodChange(e) {
-		kernel.setProp('rcCaseMthd', methodStepSelect.val());
+		kernel.setProp('rcCaseMthd', methodSelect.val());
 		update();
 	}
 
@@ -655,18 +721,18 @@ var caseStat = execMain(function() {
 			return;
 		}
 		fdiv.empty().append(div.append(table));
-		methodStepSelect.val(kernel.getProp('rcCaseMthd', 'cf4op_PLL'));
+		methodSelect.val(kernel.getProp('rcCaseMthd', 'PLL'));
 		update();
 	}
 
 	var c;
 
-	function calcCaseExtra(method, step, time, idx) {
-		var rec = stats.getExtraInfo('recons_' + method, idx);
+	function calcCaseExtra(method, time, idx) {
+		var rec = stats.getExtraInfo('recons_cf4op', idx);
 		if (!rec) {
 			return;
 		}
-		var ident = cubeutil.getIdentData(step);
+		var ident = cubeutil.getIdentData(method);
 		var data = rec.data;
 		var sdata = data[ident[4]];
 		if (!sdata) {
@@ -683,11 +749,11 @@ var caseStat = execMain(function() {
 			tools.regTool('casestat', TOOLS_RECONS + '>' + 'cases', execFunc);
 		}
 		stats.regUtil('casestat', update);
-		var steps = [['cf4op', 'PLL'], ['cf4op', 'OLL'], ['cf3zb', 'ZBLL']];
-		steps.forEach((step) => {
-			methodStepSelect.append(`<option value="${step[0]}_${step[1]}">${step[1]}</option>`);
-			stats.regExtraInfo(`recons_${step[0]}_${step[1]}`, calcCaseExtra.bind(null, step[0], step[1]));
-		});
+		var methods = ['PLL', 'PLL-PB','OLL', 'OLL-PB'];
+		for (var i = 0; i < methods.length; i++) {
+			methodSelect.append('<option value="' + methods[i] + '">' + methods[i] + '</option>');
+			stats.regExtraInfo('recons_cf4op_' + methods[i], calcCaseExtra.bind(null, methods[i]));
+		}
 	});
 
 	return {
@@ -698,7 +764,7 @@ var caseStat = execMain(function() {
 });
 
 var scatter = execMain(function() {
-	var canvas = $('<canvas>'), ctx;
+	var canvas = $('<canvas />'), ctx;
 	var scatterDiv = $('<div style="text-align:center">');
 	var methodSelect = $('<select>');
 	var slowSpan = $('<span style="font-size:0.8em;">');
@@ -787,9 +853,9 @@ var scatter = execMain(function() {
 			ctx.closePath();
 		}
 		var spanT = '<span style="color:$">$</span>';
-		slowSpan.html(' ' + 
-			spanT.replace('$', '#f00').replace('$', kernel.pretty(slow0 * finalTime)) + ' ' + 
-			spanT.replace('$', '#00f').replace('$', kernel.pretty(slow1 * finalTime)) + ' ' + 
+		slowSpan.html(' ' +
+			spanT.replace('$', '#f00').replace('$', kernel.pretty(slow0 * finalTime)) + ' ' +
+			spanT.replace('$', '#00f').replace('$', kernel.pretty(slow1 * finalTime)) + ' ' +
 			spanT.replace('$', '#888').replace('$', kernel.pretty((1 - slow0 - slow1) * finalTime))
 		);
 	}
@@ -882,14 +948,14 @@ var scatter = execMain(function() {
 		}
 		var span = '<span class="click" data="%" style="font-family: iconfont, Arial;display:inline-block;width:2em;">$</span>';
 		fdiv.empty().append(methodSelect, slowSpan, scatterDiv.empty().append(canvas
-/*		, '<br>', [
-			span.replace('$', '\ue80e').replace('%', 'x'),
-			span.replace('$', '&lt;').replace('%', 'p'),
-			span.replace('$', '&gt;').replace('%', 'm'),
-			span.replace('$', '\ue80f').replace('%', 'l'),
-			span.replace('$', '\ue810').replace('%', 's')
-		].join('')
-*/		).unbind('click').click(procClick));
+			/*		, '<br>', [
+                        span.replace('$', '\ue80e').replace('%', 'x'),
+                        span.replace('$', '&lt;').replace('%', 'p'),
+                        span.replace('$', '&gt;').replace('%', 'm'),
+                        span.replace('$', '\ue80f').replace('%', 'l'),
+                        span.replace('$', '\ue810').replace('%', 's')
+                    ].join('')
+            */		).unbind('click').click(procClick));
 		methodSelect.unbind('change').change(procClick);
 		updateScatter();
 	}
@@ -902,7 +968,7 @@ var scatter = execMain(function() {
 		}
 		stats.regUtil('scatter', updateScatter);
 		kernel.regListener('scatter', 'reqrec', reqRecons);
-		var methods = [['cf4op', 'cfop'], ['roux', 'roux'], ['cf3zb', 'cfzb']];
+		var methods = [['cf4op', 'cfop'], ['roux', 'roux']];
 		for (var i = 0; i < methods.length; i++) {
 			methodSelect.append('<option value="' + methods[i][0] + '">' + methods[i][1] + '</option>');
 		}
