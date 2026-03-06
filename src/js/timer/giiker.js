@@ -266,6 +266,9 @@ execMain(function(timer) {
 			giikerVRC.resetVRC(true, true);
 		}
 	}
+	function hideVRC(enable) {
+		enable ? div.show() : div.hide();
+	}
 
 	$(function() {
 		div.appendTo("#container");
@@ -304,6 +307,9 @@ execMain(function(timer) {
 				giikerutil.stop();
 			}
 			setVRC(enable && kernel.getProp('giiVRC') != 'n');
+			if (enable && kernel.getProp('giiVRC') != 'n') {
+				hideVRC(!(enable && kernel.getProp('giiVRC') != 'n'))
+			}
 		},
 		onkeydown: function(keyCode) {
 			var now = $.now();
@@ -337,6 +343,7 @@ execMain(function(timer) {
 			}
 		},
 		setVRC: setVRC,
+		hideVRC: hideVRC,
 		setSize: giikerVRC.setSize
 	};
 }, [timer]);

@@ -753,8 +753,16 @@ var timer = execMain(function(regListener, regProp, getProp, pretty, ui, pushSig
 			if (value[0] == 'showAvg') {
 				avgDiv.showAvgDiv(value[1]);
 			}
-			if (value[0] == 'giiVRC' && value[2] != 'set') {
-				timer.giiker.setVRC(getProp('input') == 'g' && value[1] != 'n');
+			if (value[0] == 'giiVRC') {
+				timer.giiker.setVRC((getProp('input') == 'g' && value[1] != 'n'));
+				timer.giiker.hideVRC(!(getProp('input') == 'g' && value[1] != 'n'));
+
+				if (value[1] == 'q') {
+					twistyPlayer.setAttribute('visualization', 'PG3D');
+				}
+				if (value[1] == 'G') {
+					twistyPlayer.setAttribute('visualization', '3D');
+				}
 			}
 			if (value[0] == 'vrcOri' && value[2] != 'set') {
 				timer.virtual.setSize(getProp('timerSize'));
@@ -798,7 +806,7 @@ var timer = execMain(function(regListener, regProp, getProp, pretty, ui, pushSig
 		regProp('vrc', 'vrcMP', 1, PROPERTY_VRCMP, ['n', ['n', 'cfop', 'fp', 'cf4op', 'cf4o2p2', 'roux'], PROPERTY_VRCMPS.split('|')], 1);
 		regProp('vrc', 'vrcAH', ~1, PROPERTY_VRCAH, ['11', ['00', '01', '10', '11'], PROPERTY_VRCAHS.split('|')], 1);
 		regProp('vrc', 'giiMode', 1, PROPERTY_GIIMODE, ['n', ['n', 't', 'at'], PROPERTY_GIIMODES.split('|')], 1);
-		regProp('vrc', 'giiVRC', 1, PROPERTY_GIIKERVRC, ['v', ['n', 'v', 'q', 'ql', 'q2'], ['None', '透明3D', 'qCube', 'qLast', 'q2Look']], 1);
+		regProp('vrc', 'giiVRC', 1, PROPERTY_GIIKERVRC, ['v', ['n', 'v', 'q'], ['None', '透明3D', '普通3D']], 1);
 		regProp('vrc', 'GRYO', 1, "陀螺仪开关", ['c', ['o', 'c',], '开启|关闭'.split('|')], 1);
 		regProp('vrc', 'giiVRCSize', 2, "虚拟魔方大小", [400, 100, 1000], 1);
 		regProp('vrc', 'VRCSize', 2, "距上方高度", [90, 10, 1000], 1);
@@ -817,7 +825,7 @@ var timer = execMain(function(regListener, regProp, getProp, pretty, ui, pushSig
 		regProp('timer', 'showIns', 0, PROPERTY_SHOWINS, [true], 1);
 		regProp('timer', 'voiceIns', 1, PROPERTY_VOICEINS, ['1', ['n', '1', '2'], PROPERTY_VOICEINS_STR.split('|')], 1);
 		regProp('timer', 'voiceVol', 2, PROPERTY_VOICEVOL, [100, 1, 100], 1);
-		regProp('timer', 'input', 1, PROPERTY_ENTERING, ['t', ['t', 'i', 's', 'm', 'v', 'g', 'q', 'b', 'l'], PROPERTY_ENTERING_STR.split('|')], 1);
+		regProp('timer', 'input', 1, PROPERTY_ENTERING, ['t', ['t', 'i', 's', 'm', 'g', 'q', 'b', 'l'], PROPERTY_ENTERING_STR.split('|')], 1);
 		regProp('timer', 'intUN', 1, PROPERTY_INTUNIT, [20100, [1, 100, 1000, 10001, 10100, 11000, 20001, 20100, 21000], 'X|X.XX|X.XXX|X:XX|X:XX.XX|X:XX.XXX|X:XX:XX|X:XX:XX.XX|X:XX:XX.XXX'.split('|')], 1);
 		regProp('timer', 'timeU', 1, PROPERTY_TIMEU, ['c', ['u', 'c', 's', 'i', 'n'], PROPERTY_TIMEU_STR.split('|')], 1);
 		regProp('timer', 'preTime', 1, PROPERTY_PRETIME, [300, [0, 300, 550, 1000], '0|0.3|0.55|1'.split('|')], 1);
