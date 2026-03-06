@@ -307,7 +307,7 @@ execMain(function(timer) {
 		},
 		onkeydown: function(keyCode) {
 			var now = $.now();
-			if (keyCode == 27 || keyCode == 28) {
+			if (keyCode == 27 || keyCode == 28 || (keyCode == 32 && timer.status() != -1 && kernel.getProp('giiSK') && canStart(currentFacelet))) {
 				var recordDNF = timer.status() >= 1;
 				clearReadyTid();
 				timer.status(-1);
