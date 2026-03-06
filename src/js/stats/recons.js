@@ -183,7 +183,7 @@ var recons = execMain(function() {
 		}
 
 			var trTpl =
-			'<tr style="{0}" data="{1}"><td rowspan=2 class="{8}" style="padding-bottom:0;padding-top:0;">{1}</td><td colspan=4 style="padding:0;">' +
+			'<tr style="{0}" data="{1}"><td rowspan=2 class="{9}" style="padding-bottom:0;padding-top:0;">{1}</td><td colspan=4 style="padding:0;">' +
 			'<span class="cntbar sty2" style="height:0.2em;float:left;border:none;width:{2}%;">&nbsp;</span>' +
 			'<span class="cntbar" style="height:0.2em;float:left;border:none;width:{3}%;">&nbsp;</span></td></tr>' +
 			'<tr style="{0}" data="{1}">' +
@@ -535,7 +535,8 @@ var caseStat = execMain(function() {
 		$('<th>').addClass('click').attr('data-sort-column', 5).append(titleStr[0]),
 		$('<th>').addClass('click').attr('data-sort-column', 6).append(titleStr[1]),
 		$('<th>').addClass('click').attr('data-sort-column', 7).append(titleStr[2]),
-		$('<th>').addClass('click').attr('data-sort-column', 8).append(titleStr[3])
+		$('<th>').addClass('click').attr('data-sort-column', 8).append(titleStr[3]),
+		$('<th>').addClass('click').attr('data-sort-column', 9).append(titleStr[4])
 	);
 
 	function update() {
@@ -575,6 +576,7 @@ var caseStat = execMain(function() {
 			'<td style="padding-bottom:0;padding-top:0;">{6}</td>' +
 			'<td style="padding-bottom:0;padding-top:0;">{7}</td>' +
 			'<td style="padding-bottom:0;padding-top:0;">{8}</td>' +
+			'<td style="padding-bottom:0;padding-top:0;">{9}</td>' +
 			'</tr>';
 
 		table.empty().append(tableTh.unbind('click').click(procHeaderClick));
@@ -602,6 +604,7 @@ var caseStat = execMain(function() {
 				caseCnt[2] / caseCnt[0] / maxSubt * 100,
 				kernel.pretty(caseCnt[1] / caseCnt[0]),
 				kernel.pretty(caseCnt[2] / caseCnt[0]),
+				kernel.pretty(caseCnt[1] + caseCnt[2] / caseCnt[0])	,
 				Math.round(caseCnt[3] / caseCnt[0] * 10) / 10,
 				Math.round(caseCnt[3] / (caseCnt[1] + caseCnt[2]) * 10000) / 10
 			]);
