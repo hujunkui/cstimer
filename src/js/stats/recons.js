@@ -9,7 +9,7 @@ var recons = execMain(function() {
 	var methodSelect = $('<select>');
 	var requestBack = $('<span class="click">');
 	var tableTh = $('<tr>').append($('<th style="padding:0;">').append(methodSelect),
-		'<th>' + titleStr[0] + '</th><th>' + titleStr[1] + '</th><th>' + titleStr[2] + '</th><th>' + titleStr[3] + '</th>');
+		'<th>' + titleStr[0] + '</th><th>' + titleStr[1] + '</th><th>' + titleStr[2] + '</th><th>' + titleStr[3] + '</th><th>' + titleStr[4] + '</th>');
 
 	function parseMove(moveStr) {
 		var movere = /^([URFDLB]w?|[EMSyxz]|2-2[URFDLB]w)(['2]?)@(\d+)$/;
@@ -182,7 +182,7 @@ var recons = execMain(function() {
 			maxSubt = Math.max(lData[1] + lData[2], maxSubt);
 		}
 
-		var trTpl =
+			var trTpl =
 			'<tr style="{0}" data="{1}"><td rowspan=2 class="{8}" style="padding-bottom:0;padding-top:0;">{1}</td><td colspan=4 style="padding:0;">' +
 			'<span class="cntbar sty2" style="height:0.2em;float:left;border:none;width:{2}%;">&nbsp;</span>' +
 			'<span class="cntbar" style="height:0.2em;float:left;border:none;width:{3}%;">&nbsp;</span></td></tr>' +
@@ -191,6 +191,7 @@ var recons = execMain(function() {
 			'<td style="padding-bottom:0;padding-top:0;">{5}</td>' +
 			'<td style="padding-bottom:0;padding-top:0;">{6}</td>' +
 			'<td style="padding-bottom:0;padding-top:0;">{7}</td>' +
+			'<td style="padding-bottom:0;padding-top:0;">{8}</td>' +
 			'</tr>';
 
 		var str = [];
@@ -214,6 +215,7 @@ var recons = execMain(function() {
 					sval[2] / maxSubt * 100,
 					isPercent ? Math.round(sval[1] / sumSubt * 1000) / 10 + '%' : kernel.pretty(sval[1]),
 					isPercent ? Math.round(sval[2] / sumSubt * 1000) / 10 + '%' : kernel.pretty(sval[2]),
+					isPercent ? Math.round((sval[1] + sval[2]) / sumSubt * 1000) / 10 + '%' : kernel.pretty(sval[1] + sval[2]),
 					Math.round(sval[3] * 10) / 10,
 					sval[3] > 0 && sval[1] + sval[2] > 0 ? Math.round(sval[3] / (sval[1] + sval[2]) * 10000 ) / 10 : 'N/A',
 					'click sstep'
@@ -226,6 +228,7 @@ var recons = execMain(function() {
 				val[2] / maxSubt * 100,
 				isPercent ? Math.round(val[1] / sumSubt * 1000) / 10 + '%' : kernel.pretty(val[1]),
 				isPercent ? Math.round(val[2] / sumSubt * 1000) / 10 + '%' : kernel.pretty(val[2]),
+				isPercent ? Math.round((val[1] + val[2]) / sumSubt * 1000) / 10 + '%' : kernel.pretty(val[1] + val[2]),
 				Math.round(val[3] * 10) / 10,
 				val[3] > 0 && val[1] + val[2] > 0 ? Math.round(val[3] / (val[1] + val[2]) * 10000 ) / 10 : 'N/A',
 				['oll', 'pll', 'zbll'].indexOf(val[0]) != -1 ? 'click' : ''
@@ -234,10 +237,11 @@ var recons = execMain(function() {
 		var endTr = $('<tr>').append(tidx ? $('<td>').append(requestBack) : $('<td style="padding:0;">').append(rangeSelect),
 			'<td>' + (isPercent ? Math.round(totIns / sumSubt * 1000) / 10 + '%' : kernel.pretty(totIns)) + '</td>' +
 			'<td>' + (isPercent ? Math.round(totExec / sumSubt * 1000) / 10 + '%' : kernel.pretty(totExec)) + '</td>',
+			'<td>' + (isPercent ? Math.round((totIns + totExec) / sumSubt * 1000) / 10 + '%' : kernel.pretty(totIns + totExec)) + '</td>',
 			$('<td>').append((scramble || solve) ? reconsClick : Math.round(totMov * 10) / 10),
 			'<td>' + (totMov > 0 && totIns + totExec > 0 ? Math.round(totMov / (totIns + totExec) * 10000 ) / 10 : 'N/A') + '</td>');
 		table.empty().append(tableTh);
-		tableTh.after(str.join(''), endTr);
+			tableTh.after(str.join(''), endTr);
 		rangeSelect.unbind('change').change(procClick);
 		methodSelect.unbind('change').change(procClick);
 		table.unbind('click').click(procClick);
@@ -252,7 +256,7 @@ var recons = execMain(function() {
 		tableTh.after(
 			$('<tr>').append(
 				isRequest ? $('<td>').append(requestBack) : $('<td style="padding:0;">').append(rangeSelect),
-				'<td colspan=4>' + TOOLS_RECONS_NODATA + '</td>')
+				'<td colspan=5>' + TOOLS_RECONS_NODATA + '</td>')
 		);
 		rangeSelect.unbind('change').change(procClick);
 		methodSelect.unbind('change').change(procClick);
