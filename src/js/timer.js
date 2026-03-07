@@ -753,10 +753,10 @@ var timer = execMain(function(regListener, regProp, getProp, pretty, ui, pushSig
 			if (value[0] == 'showAvg') {
 				avgDiv.showAvgDiv(value[1]);
 			}
+			if (value[0] == 'giiVRC' && value[2] != 'set') {
+				timer.giiker.setVRC(getProp('input') == 'g' && value[1] != 'n');
+			}
 			if (value[0] == 'giiVRC') {
-				timer.giiker.setVRC((getProp('input') == 'g' && value[1] != 'n'));
-				timer.giiker.hideVRC(!(getProp('input') == 'g' && value[1] != 'n'));
-
 				if (value[1] == 'q') {
 					twistyPlayer.setAttribute('visualization', 'PG3D');
 				}
