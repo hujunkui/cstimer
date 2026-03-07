@@ -172,7 +172,7 @@ var exportFunc = execMain(function() {
 				}
 				ids.push(key);
 			}
-			return $.ppost('https://cstimer.net/userdata2.php', {
+			return $.ppost('https://cstimer.hjk666.cn/userdata2.php', {
 				'id': id,
 				'exists': ids.join(',')
 			}, 'json').then(function(val) {
@@ -189,7 +189,7 @@ var exportFunc = execMain(function() {
 					ids.push(key);
 					datas.push(slices[key]);
 				}
-				return $.ppost('https://cstimer.net/userdata2.php', {
+				return $.ppost('https://cstimer.hjk666.cn/userdata2.php', {
 					'id': id,
 					'ids': ids.join(','),
 					'datas': datas.join(',')
@@ -253,7 +253,7 @@ var exportFunc = execMain(function() {
 				}
 			}
 			target.html('Import Data...');
-			return $.ppost('https://cstimer.net/userdata2.php', {
+			return $.ppost('https://cstimer.hjk666.cn/userdata2.php', {
 				'id': id,
 				'offset': idx - 1
 			}, 'json').then(dataCallback);
@@ -300,7 +300,7 @@ var exportFunc = execMain(function() {
 					if (reqKeys.length == 0) {
 						return {'retcode':0,'datas':{}};
 					}
-					return $.ppost('https://cstimer.net/userdata2.php', {
+					return $.ppost('https://cstimer.hjk666.cn/userdata2.php', {
 						'id': id,
 						'ids': reqKeys.join(',')
 					}, 'json');
@@ -327,7 +327,7 @@ var exportFunc = execMain(function() {
 
 		var jobs = Promise.resolve({'data':1});
 		if (kernel.getProp('expp')) {
-			jobs = $.ppost('https://cstimer.net/userdata2.php', {
+			jobs = $.ppost('https://cstimer.hjk666.cn/userdata2.php', {
 				'id': id,
 				'cnt': 1
 			}, 'json');
